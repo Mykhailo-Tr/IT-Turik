@@ -3,7 +3,7 @@
 
 {% block content %}
 {% if request.user.is_authenticated %}
-    <h1>Login as: {{ request.user.username }}</h1>
+    <h1>Login as: {{ request.user.email }}</h1>
     <a href="{% url 'logout' %}">Logout</a>
 {% else %}
     <h1>Not Login</h1>
