@@ -1,14 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Register{% endblock %}
-
+{% block title %}Choose type of user{% endblock %}
 {% block content %}
-<h1>Register</h1>
+<h1>Choose type of user</h1>
 <div>
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Register">
-    </form>
-    <a href="{% url 'login' %}">Sign in</a>
+    <a href="{% url 'register_student' %}">I'm Student</a>
+    <a href="{% url 'register_teacher' %}">I'm Teacher</a>
+    <a href="{% url 'register_parent' %}">I'm Parent</a>
 </div>
 {% endblock %}

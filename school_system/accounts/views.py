@@ -1,9 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from .forms import CustomUserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views.generic import CreateView
+from .models import User
+from .forms import StudentSignUpForm, TeacherSignUpForm, ParentSignUpForm
 
+
+    
 
 def main_page(request):
     return render(request, 'home_page.html')
@@ -30,16 +34,64 @@ def logout_view(request):
     return redirect('home')
 
 
+# def register_view(request):
+#     if request.method == 'POST':
+#         form = CustomUserCreationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             login(request, user)
+#             messages.success(request, 'Registration successful.')
+#             return redirect('home')
+#         else:
+#             messages.error(request, 'Registration failed. Please try again.')
+
+#     return render(request, 'accounts/register.html', {"form": CustomUserCreationForm()})
+
+
 def register_view(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, 'Registration successful.')
-            return redirect('home')
-        else:
-            messages.error(request, 'Registration failed. Please try again.')
+    return render(request, 'accounts/register.html')
 
-    return render(request, 'accounts/register.html', {"form": CustomUserCreationForm()})
 
+class StudentSignUpView(CreateView):
+    model = User
+    form_class = StudentSignUpForm
+    template_name = 'accounts/signup_form.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['role'] = 'student'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
+
+
+class TeacherSignUpView(CreateView):
+    model = User
+    form_class = TeacherSignUpForm
+    template_name = 'accounts/signup_form.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['role'] = 'teacher'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
+    
+
+class ParentSignUpView(CreateView):
+    model = User
+    form_class = ParentSignUpForm
+    template_name = 'accounts/signup_form.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['role'] = 'parent'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
