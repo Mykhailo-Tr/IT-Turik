@@ -10,5 +10,6 @@ urlpatterns = [
     path('singup/student/', views.StudentSignUpView.as_view(), name='register_student'),
     path('signup/teacher/', views.TeacherSignUpView.as_view(), name='register_teacher'),
     path('signup/parent/', views.ParentSignUpView.as_view(), name='register_parent'),
+    path('delete-account/', views.delete_account_view, name='delete_account'),
 
 ]

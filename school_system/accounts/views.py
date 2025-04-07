@@ -37,6 +37,16 @@ def logout_view(request):
 def register_view(request):
     return render(request, 'accounts/register.html')
 
+@login_required(login_url='login')
+def delete_account_view(request):
+    if request.method == 'POST':
+        user = request.user
+        logout(request)
+        user.delete()
+        messages.success(request, 'Your account has been deleted successfully.')
+        return redirect('home')
+    return render(request, 'accounts/delete_account_form.html')
+
 
 class StudentSignUpView(CreateView):
     model = User
