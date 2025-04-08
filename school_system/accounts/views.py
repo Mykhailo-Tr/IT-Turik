@@ -24,8 +24,10 @@ def login_view(request):
         else:
             messages.error(request, 'Invalid email or password.')
             return redirect('login')
-        
-    return render(request, 'accounts/login_form.html')
+    context = {
+        'page': 'login',
+    }
+    return render(request, 'accounts/login_form.html', context)
 
 
 @login_required(login_url='login')
@@ -35,7 +37,10 @@ def logout_view(request):
 
 
 def register_view(request):
-    return render(request, 'accounts/register.html')
+    context = {
+        'page': 'register',
+    }
+    return render(request, 'accounts/register.html', context)
 
 @login_required(login_url='login')
 def delete_account_view(request):
@@ -45,7 +50,10 @@ def delete_account_view(request):
         user.delete()
         messages.success(request, 'Your account has been deleted successfully.')
         return redirect('home')
-    return render(request, 'accounts/delete_account_form.html')
+    context = {
+        'page': 'delete_account',
+    }
+    return render(request, 'accounts/delete_account_form.html', context)
 
 
 class StudentSignUpView(CreateView):
@@ -55,6 +63,7 @@ class StudentSignUpView(CreateView):
 
     def get_context_data(self, **kwargs):
         kwargs['role'] = 'student'
+        kwargs['page'] = 'register'
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
@@ -70,6 +79,7 @@ class TeacherSignUpView(CreateView):
 
     def get_context_data(self, **kwargs):
         kwargs['role'] = 'teacher'
+        kwargs['page'] = 'register'
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
@@ -85,6 +95,7 @@ class ParentSignUpView(CreateView):
 
     def get_context_data(self, **kwargs):
         kwargs['role'] = 'parent'
+        kwargs['page'] = 'register'
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):

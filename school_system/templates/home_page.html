@@ -3,12 +3,11 @@
 
 {% block content %}
 {% if request.user.is_authenticated %}
-    <h1>Login as: {{ request.user.email }} | {{ request.user.role }}</h1>
-    <a href="{% url 'logout' %}">Logout</a>
-    <a href="{% url 'delete_account' %}">Delete Account</a>
+    <h2>Login as: {{ request.user.email }} | {{ request.user.role }}</h2>
 {% else %}
-    <h1>Not Login</h1>
-    <a href="{% url 'login' %}">Login</a>
+    <h2>Not Login</h2>
 {% endif %}
+
+
 <h1>Welcome to the Home Page</h1>
 {% endblock %}
