@@ -3,6 +3,7 @@ from django.db import models
 from .managers import CustomUserManager
 
 
+
 class User(AbstractUser):
     class Role(models.TextChoices):
         STUDENT = 'student', 'Student'
@@ -12,6 +13,8 @@ class User(AbstractUser):
         
     username = None
     email = models.EmailField("email address", unique=True)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
     role = models.CharField(
         max_length=10,
         choices=Role.choices,
@@ -56,4 +59,13 @@ class Parent(models.Model):
     
     def __str__(self):
         return self.user.email
-
+    
+    
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
+    bio = models.TextField(null=True, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    
+    def __str__(self):
+        return self.user.email
