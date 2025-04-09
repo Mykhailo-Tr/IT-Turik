@@ -42,6 +42,7 @@ def register_view(request):
     }
     return render(request, 'accounts/register.html', context)
 
+
 @login_required(login_url='login')
 def delete_account_view(request):
     if request.method == 'POST':
@@ -56,49 +57,42 @@ def delete_account_view(request):
     return render(request, 'accounts/delete_account_form.html', context)
 
 
-class StudentSignUpView(CreateView):
+class UserSignUpView(CreateView):
     model = User
-    form_class = StudentSignUpForm
     template_name = 'accounts/signup_form.html'
+    form_class = None
+    success_url = '/'
+    redirect_authenticated_user = True
+    
+    def get_context_data(self, **kwargs):
+        kwargs['page'] = 'register'
+        return super().get_context_data(**kwargs)
+    
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
+
+
+class StudentSignUpView(UserSignUpView):
+    form_class = StudentSignUpForm
 
     def get_context_data(self, **kwargs):
         kwargs['role'] = 'student'
-        kwargs['page'] = 'register'
         return super().get_context_data(**kwargs)
 
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('home')
 
-
-class TeacherSignUpView(CreateView):
-    model = User
+class TeacherSignUpView(UserSignUpView):
     form_class = TeacherSignUpForm
-    template_name = 'accounts/signup_form.html'
 
     def get_context_data(self, **kwargs):
         kwargs['role'] = 'teacher'
-        kwargs['page'] = 'register'
         return super().get_context_data(**kwargs)
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('home')
     
 
-class ParentSignUpView(CreateView):
-    model = User
+class ParentSignUpView(UserSignUpView):
     form_class = ParentSignUpForm
-    template_name = 'accounts/signup_form.html'
 
     def get_context_data(self, **kwargs):
         kwargs['role'] = 'parent'
-        kwargs['page'] = 'register'
         return super().get_context_data(**kwargs)
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('home')
