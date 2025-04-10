@@ -22,11 +22,11 @@
                     <a class="nav-link" href="{% url 'login' %}">Login</a>
                 </li>
             {% endif %}
-            {% comment %} {% if request.user.is_authenticated %}
-                <li class="nav-item active {% if page == 'create_user' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'create_user' %}">Create User</a>
+            {% if request.user.is_authenticated and request.user.role == 'teacher' %}
+                <li class="nav-item active {% if page == 'dashboard' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
                 </li>
-            {% endif %} {% endcomment %}
+            {% endif %}
         </ul>
         {% comment %} <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
