@@ -74,6 +74,7 @@ class UserSignUpView(CreateView):
         return redirect('home')
 
 
+
 class StudentSignUpView(UserSignUpView):
     form_class = StudentSignUpForm
 
