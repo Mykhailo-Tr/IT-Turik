@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Account{% endblock %}
+{% block content %}
+
+<center>
+    <h1>Account</h1>
+</center>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active {% if page == 'profile' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+            <li class="nav-item {% if page == 'delete_account' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'delete_account' %}">Delete Account</a>
+            </li>
+            <li class="nav-item {% if page == 'edit_account' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'edit_account' %}">Edit Account</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div>
+    {% if user.profile.profile_picture %}
+        <div class="nav-avatar">
+            <img src="{{ user.profile.profile_picture.url }}" style="width: 40px; height: 40px; border-radius: 50%;">
+         </div>
+    {% endif %}
+    <p>Email: {{ user.email }}</p>
+    <p>First Name: {{ user.first_name }}</p>
+    <p>Last Name: {{ user.last_name }}</p>
+</div>
+
+{% endblock %}

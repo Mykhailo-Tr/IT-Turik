@@ -168,6 +168,14 @@ def teacher_delete_account_view(request, user_id):
 
 
 @login_required(login_url='login')
+def account_view(request):
+    context = {
+        'page': 'account',
+    }
+    return render(request, 'accounts/account.html', context)
+
+
+@login_required(login_url='login')
 def edit_account_view(request, user_id=None):
     if user_id and request.user.role in ['teacher', 'admin']:
         user = User.objects.get(id=user_id)
@@ -191,6 +199,15 @@ def edit_account_view(request, user_id=None):
 
 
 @login_required(login_url='login')
+def profile_view(request):
+    context = {
+        'page': 'profile',
+        'profile': request.user.profile,
+    }
+    return render(request, 'accounts/profile.html', context)
+
+
+@login_required(login_url='login')
 def edit_profile_view(request, user_id=None):
     if user_id and request.user.role in ['teacher', 'admin']:
         user = User.objects.get(id=user_id)
@@ -198,7 +215,7 @@ def edit_profile_view(request, user_id=None):
         user = request.user
         
     if request.method == 'POST':
-        form = UserProfileUpdateForm(request.POST, instance=user.profile)
+        form = UserProfileUpdateForm(request.POST, request.FILES, instance=user.profile)
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated.')

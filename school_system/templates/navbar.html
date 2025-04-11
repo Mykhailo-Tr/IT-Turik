@@ -12,16 +12,7 @@
             </li>
             {% if request.user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                </li>
-                <li class="nav-item {% if page == 'delete_account' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'delete_account' %}">Delete Account</a>
-                </li>
-                <li class="nav-item {% if page == 'edit_account' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'edit_account' %}">Edit Account</a>
-                </li>
-                <li class="nav-item {% if page == 'edit_profile' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'edit_profile' %}">Edit Profile</a>
+                    <a class="nav-link" href="{% url 'account' %}">Account</a>
                 </li>
             {% else %}
                 <li class="nav-item active {% if page == 'login' %}active{% endif %}">

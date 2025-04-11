@@ -3,7 +3,12 @@
 {% block content %}
 <h1>Edit Profile</h1>
 <div>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% if user.profile.profile_picture %}
+            <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" style="width: 100px; height: 100px;">
+        {% else %}
+            <p>No profile picture available.</p>
+        {% endif %}
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Update Profile">
