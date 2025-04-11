@@ -17,6 +17,9 @@
                 <li class="nav-item {% if page == 'delete_account' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'delete_account' %}">Delete Account</a>
                 </li>
+                <li class="nav-item {% if page == 'edit_account' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'edit_account' %}">Edit Account</a>
+                </li>
             {% else %}
                 <li class="nav-item active {% if page == 'login' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'login' %}">Login</a>

@@ -61,3 +61,30 @@ class ParentSignUpForm(BaseSignUpForm):
         user = self.save_user('parent')
         Parent.objects.create(user=user)
         return user
+    
+    
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email', 'first_name', 'last_name']
+        
+    @transaction.atomic
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+        return user
+        
+
+
+class UserProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_picture', 'bio', 'date_of_birth']
+        
+    def save(self, commit=True):
+        user_profile = super().save(commit=False)
+        if commit:
+            user_profile.save()
+        return user_profile
+    
