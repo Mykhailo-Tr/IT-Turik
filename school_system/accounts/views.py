@@ -168,15 +168,20 @@ def teacher_delete_account_view(request, user_id):
 
 
 @login_required(login_url='login')
-def edit_account_view(request):
+def edit_account_view(request, user_id=None):
+    if user_id and request.user.role in ['teacher', 'admin']:
+        user = User.objects.get(id=user_id)
+    else:
+        user = request.user
+        
     if request.method == 'POST':
-        form = UserUpdateForm(request.POST, instance=request.user)
+        form = UserUpdateForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Your account has been updated.')
             return redirect(request.META.get('HTTP_REFERER', 'home'))
     else:
-        form = UserUpdateForm(instance=request.user)
+        form = UserUpdateForm(instance=user)
         
     context = {
         'page': 'edit_account',
@@ -186,18 +191,24 @@ def edit_account_view(request):
 
 
 @login_required(login_url='login')
-def edit_profile_view(request):
+def edit_profile_view(request, user_id=None):
+    if user_id and request.user.role in ['teacher', 'admin']:
+        user = User.objects.get(id=user_id)
+    else:
+        user = request.user
+        
     if request.method == 'POST':
-        form = UserProfileUpdateForm(request.POST, instance=request.user.profile)
+        form = UserProfileUpdateForm(request.POST, instance=user.profile)
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated.')
             return redirect(request.META.get('HTTP_REFERER', 'home'))
     else:
-        form = UserProfileUpdateForm(instance=request.user.profile)
+        form = UserProfileUpdateForm(instance=user.profile)
         
     context = {
         'page': 'edit_profile',
         'form': form,
     }
     return render(request, 'accounts/edit_profile_form.html', context)
+

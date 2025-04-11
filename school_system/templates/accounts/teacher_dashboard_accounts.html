@@ -19,6 +19,8 @@
 <ul>
     {% for account in accounts %}
         <li>{{ account.first_name }} | {{ account.email }} | {{ account.role }}</li>
+        <a href="{% url 'teacher_edit_account' account.id %}">Edit Account</a>
+        <a href="{% url 'teacher_edit_profile' account.id %}">Edit Profile</a>
         <a href="{% url 'teacher_delete_account' account.id %}">Delete</a>
     {% endfor %}
 </ul>

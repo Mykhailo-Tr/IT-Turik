@@ -17,6 +17,8 @@ urlpatterns = [
     path('dashboard/', views.dashboard_view, name='dashboard'),
     path('dashboard/teacher/accounts/', views.teacher_accounts_view, name='teacher_accounts'),
     path('dashboard/teacher/create/<str:role>/', views.teacher_create_account_view, name='teacher_create_account'),
-    path('dashboard/teacher/<int:user_id>/delete/', views.teacher_delete_account_view, name='teacher_delete_account'),
+    path('dashboard/teacher/account/<int:user_id>/edit/', views.edit_account_view, name='teacher_edit_account'),
+    path('dashboard/teacher/profile/<int:user_id>/edit/', views.edit_profile_view, name='teacher_edit_profile'),
+    path('dashboard/teacher/account/<int:user_id>/delete/', views.teacher_delete_account_view, name='teacher_delete_account'),
 
 ]
