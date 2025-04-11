@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from .models import User
-from .forms import StudentSignUpForm, TeacherSignUpForm, ParentSignUpForm
+from .forms import StudentSignUpForm, TeacherSignUpForm, ParentSignUpForm, UserUpdateForm, UserProfileUpdateForm
+from django.urls import reverse_lazy
 from .decorators import student_required, teacher_required
 
 
@@ -98,6 +99,7 @@ class ParentSignUpView(UserSignUpView):
     def get_context_data(self, **kwargs):
         kwargs['role'] = 'parent'
         return super().get_context_data(**kwargs)
+    
 
 
 @login_required(login_url='login')
@@ -163,3 +165,21 @@ def teacher_delete_account_view(request, user_id):
     user = User.objects.get(id=user_id)
     user.delete()
     return redirect('teacher_dashboard')
+
+
+@login_required(login_url='login')
+def edit_account_view(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been updated.')
+            return redirect(request.META.get('HTTP_REFERER', 'home'))
+    else:
+        form = UserUpdateForm(instance=request.user)
+        
+    context = {
+        'page': 'edit_account',
+        'form': form,
+    }
+    return render(request, 'accounts/edit_account_form.html', context)
