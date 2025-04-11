@@ -11,6 +11,7 @@ urlpatterns = [
     path('signup/teacher/', views.TeacherSignUpView.as_view(), name='register_teacher'),
     path('signup/parent/', views.ParentSignUpView.as_view(), name='register_parent'),
     path('edit-account/', views.edit_account_view, name='edit_account'),
+    path('edit-profile/', views.edit_profile_view, name='edit_profile'),
     path('delete-account/', views.delete_account_view, name='delete_account'),
     
     path('dashboard/', views.dashboard_view, name='dashboard'),

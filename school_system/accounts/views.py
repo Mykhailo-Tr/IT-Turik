@@ -164,7 +164,7 @@ def teacher_create_account_view(request, role):
 def teacher_delete_account_view(request, user_id):
     user = User.objects.get(id=user_id)
     user.delete()
-    return redirect('teacher_dashboard')
+    return redirect('teacher_accounts')
 
 
 @login_required(login_url='login')
@@ -183,3 +183,21 @@ def edit_account_view(request):
         'form': form,
     }
     return render(request, 'accounts/edit_account_form.html', context)
+
+
+@login_required(login_url='login')
+def edit_profile_view(request):
+    if request.method == 'POST':
+        form = UserProfileUpdateForm(request.POST, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated.')
+            return redirect(request.META.get('HTTP_REFERER', 'home'))
+    else:
+        form = UserProfileUpdateForm(instance=request.user.profile)
+        
+    context = {
+        'page': 'edit_profile',
+        'form': form,
+    }
+    return render(request, 'accounts/edit_profile_form.html', context)

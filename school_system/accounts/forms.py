@@ -78,6 +78,12 @@ class UserUpdateForm(forms.ModelForm):
 
 
 class UserProfileUpdateForm(forms.ModelForm):
+    date_of_birth = forms.DateField(
+        required=True,
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        label='Date of Birth'
+    )
+    
     class Meta:
         model = UserProfile
         fields = ['profile_picture', 'bio', 'date_of_birth']
