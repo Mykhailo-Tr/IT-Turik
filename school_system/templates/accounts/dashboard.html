@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+{% include "accounts/dashboard_navbar.html" %}
+<h1>Dashboard</h1>
+<p>Welcome, {{ user.first_name }} | {{ user.email }}</p>
+<p>Your role: {{ user.role }}</p>
+{% endblock %} 

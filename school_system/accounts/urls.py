@@ -13,7 +13,7 @@ urlpatterns = [
     path('delete-account/', views.delete_account_view, name='delete_account'),
     
     path('dashboard/', views.dashboard_view, name='dashboard'),
-    path('dashboard/teacher/', views.teacher_dashboard_view, name='teacher_dashboard'),
+    path('dashboard/teacher/accounts/', views.teacher_accounts_view, name='teacher_accounts'),
     path('dashboard/teacher/create/<str:role>/', views.teacher_create_account_view, name='teacher_create_account'),
     path('dashboard/teacher/<int:user_id>/delete/', views.teacher_delete_account_view, name='teacher_delete_account'),
 

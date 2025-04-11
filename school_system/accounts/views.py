@@ -107,17 +107,25 @@ def dashboard_view(request):
     else:
         return redirect('home')
     
+    
+@login_required(login_url='login')
+def dashboard_view(request):
+    context = {
+        'page': 'dashboard',
+    }
+    return render(request, 'accounts/dashboard.html', context)    
+    
 
 @teacher_required(login_url='login')
-def teacher_dashboard_view(request):
+def teacher_accounts_view(request):
     accounts = User.objects.exclude(id=request.user.id)
     accounts_count = accounts.count()
     context = {
-        'page': 'teacher_dashboard',
+        'page': 'teacher_accounts',
         'accounts': accounts,
         'accounts_count': accounts_count,
     }
-    return render(request, 'accounts/teacher_dashboard.html', context)
+    return render(request, 'accounts/teacher_dashboard_accounts.html', context)
 
 
 @teacher_required(login_url='login')
@@ -138,7 +146,7 @@ def teacher_create_account_view(request, role):
         if form.is_valid():
             form.save() 
             messages.success(request, f'{role.capitalize()} успішно створено.')
-            return redirect('teacher_dashboard')
+            return redirect('teacher_accounts')
     else:
         form = form_class()
         
