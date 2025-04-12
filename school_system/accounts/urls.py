@@ -18,8 +18,6 @@ urlpatterns = [
     path('account/delete/', views.delete_account_view, name='delete_account'),
     path('profile/', views.profile_view, name='profile'),
     path('profile/edit/', views.edit_profile_view, name='edit_profile'),
-    
-    path('dashboard/', include('dashboard.urls'), name='dashboard'),
 ]
 
 if settings.DEBUG:
