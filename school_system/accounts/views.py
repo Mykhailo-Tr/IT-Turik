@@ -6,7 +6,7 @@ from django.views.generic import CreateView, UpdateView
 from .models import User
 from .forms import StudentSignUpForm, TeacherSignUpForm, ParentSignUpForm, UserUpdateForm, UserProfileUpdateForm
 from django.urls import reverse_lazy
-from .decorators import student_required, teacher_required
+from school_system.decorators import teacher_required, student_required
 
 
     
