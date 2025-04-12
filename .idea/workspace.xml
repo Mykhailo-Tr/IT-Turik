@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a000a1af-f48b-40dd-8902-6b42d11dc45c" name="Changes" comment="separated registration for students/parents/teachers">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/accounts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/accounts/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/school_system/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/school_system/urls.py" afterDir="false" />
-    </list>
+    <list default="true" id="a000a1af-f48b-40dd-8902-6b42d11dc45c" name="Changes" comment="separated registration for students/parents/teachers" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,6 +21,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Mykhailo-Tr"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Mykhailo-Tr/IT-Turik.git",
+    "accountId": "35729f4c-9502-4f7a-9cd2-f77d514fbdbd"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -40,7 +47,7 @@
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Develop/Dashboard"
+    "git-widget-placeholder": "main"
   }
 }]]></component>
   <component name="SharedIndexes">
