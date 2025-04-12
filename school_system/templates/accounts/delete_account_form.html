@@ -6,8 +6,7 @@
     <form action="" method="post">
         {% csrf_token %}
         <h2>{{ user.email }} | {{ user.role }}</h2>
-
-        <h1>Are you sure you want to delete your account?</h1>
+        <h1>Are you sure you want to delete account?</h1>
         <h2>This action cannot be undone.</h2>
         <a href="{% url 'home' %}">Cancel</a>
         <input type="submit" value="Delete Account">

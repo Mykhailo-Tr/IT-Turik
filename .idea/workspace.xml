@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a000a1af-f48b-40dd-8902-6b42d11dc45c" name="Changes" comment="separated registration for students/parents/teachers">
-      <change beforePath="$PROJECT_DIR$/school_system/accounts/decorators.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/school_system/accounts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/accounts/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/school_system/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/accounts/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/school_system/dashboard/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/dashboard/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/school_system/templates/accounts/dashboard.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

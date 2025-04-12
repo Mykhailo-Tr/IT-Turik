@@ -9,7 +9,6 @@ from django.urls import reverse_lazy
 from school_system.decorators import teacher_required, student_required
 
 
-    
 
 def main_page(request):
     return render(request, 'home_page.html')
@@ -99,72 +98,6 @@ class ParentSignUpView(UserSignUpView):
     def get_context_data(self, **kwargs):
         kwargs['role'] = 'parent'
         return super().get_context_data(**kwargs)
-    
-
-
-@login_required(login_url='login')
-def dashboard_view(request):
-    if request.user.role == 'teacher':
-        return redirect('teacher_dashboard')
-    else:
-        return redirect('home')
-    
-    
-@login_required(login_url='login')
-def dashboard_view(request):
-    context = {
-        'page': 'dashboard',
-    }
-    return render(request, 'accounts/dashboard.html', context)    
-    
-
-@teacher_required(login_url='login')
-def teacher_accounts_view(request):
-    accounts = User.objects.exclude(id=request.user.id)
-    accounts_count = accounts.count()
-    context = {
-        'page': 'teacher_accounts',
-        'accounts': accounts,
-        'accounts_count': accounts_count,
-    }
-    return render(request, 'accounts/teacher_dashboard_accounts.html', context)
-
-
-@teacher_required(login_url='login')
-def teacher_create_account_view(request, role):
-    if role == 'student':
-        form_class = StudentSignUpForm
-    elif role == 'parent':
-        form_class = ParentSignUpForm
-    elif role == 'teacher':
-        form_class = TeacherSignUpForm
-    else:
-        messages.error(request, 'Невідома роль.')
-        return redirect('teacher_dashboard')
-    
-    
-    if request.method == 'POST':
-        form = form_class(request.POST)
-        if form.is_valid():
-            form.save() 
-            messages.success(request, f'{role.capitalize()} успішно створено.')
-            return redirect('teacher_accounts')
-    else:
-        form = form_class()
-        
-    context = {
-        'page': 'teacher_create_account',
-        'form': form,
-        'role': role,
-    }
-    return render(request, 'accounts/teacher_create_user_form.html', context)
-
-
-@teacher_required(login_url='login')
-def teacher_delete_account_view(request, user_id):
-    user = User.objects.get(id=user_id)
-    user.delete()
-    return redirect('teacher_accounts')
 
 
 @login_required(login_url='login')
@@ -173,29 +106,6 @@ def account_view(request):
         'page': 'account',
     }
     return render(request, 'accounts/account.html', context)
-
-
-@login_required(login_url='login')
-def edit_account_view(request, user_id=None):
-    if user_id and request.user.role in ['teacher', 'admin']:
-        user = User.objects.get(id=user_id)
-    else:
-        user = request.user
-        
-    if request.method == 'POST':
-        form = UserUpdateForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your account has been updated.')
-            return redirect(request.META.get('HTTP_REFERER', 'home'))
-    else:
-        form = UserUpdateForm(instance=user)
-        
-    context = {
-        'page': 'edit_account',
-        'form': form,
-    }
-    return render(request, 'accounts/edit_account_form.html', context)
 
 
 @login_required(login_url='login')
@@ -208,20 +118,33 @@ def profile_view(request):
 
 
 @login_required(login_url='login')
-def edit_profile_view(request, user_id=None):
-    if user_id and request.user.role in ['teacher', 'admin']:
-        user = User.objects.get(id=user_id)
-    else:
-        user = request.user
-        
+def edit_account_view(request):      
     if request.method == 'POST':
-        form = UserProfileUpdateForm(request.POST, request.FILES, instance=user.profile)
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been updated.')
+            return redirect('account')
+    else:
+        form = UserUpdateForm(instance=request.user)
+        
+    context = {
+        'page': 'edit_account',
+        'form': form,
+    }
+    return render(request, 'accounts/edit_account_form.html', context)
+
+
+@login_required(login_url='login')
+def edit_profile_view(request):
+    if request.method == 'POST':
+        form = UserProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated.')
-            return redirect(request.META.get('HTTP_REFERER', 'home'))
+            return redirect('account')
     else:
-        form = UserProfileUpdateForm(instance=user.profile)
+        form = UserProfileUpdateForm(instance=request.user.profile)
         
     context = {
         'page': 'edit_profile',
