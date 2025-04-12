@@ -93,4 +93,4 @@ class UserProfileUpdateForm(forms.ModelForm):
         if commit:
             user_profile.save()
         return user_profile
-    
+
