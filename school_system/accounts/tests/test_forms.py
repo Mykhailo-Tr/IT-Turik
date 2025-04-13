@@ -4,6 +4,7 @@ from accounts.models import User
 from accounts.models import Subject
 from accounts.models import Student
 
+
 class SignUpFormsTest(TestCase):
     def test_student_signup_form_valid(self):
         form_data = {
