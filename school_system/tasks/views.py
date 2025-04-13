@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Task, UserTaskStatus
-from .forms import CreateTaskForm
+from .forms import CreateTaskForm, EditTaskForm
 
 
 
@@ -47,14 +47,15 @@ def edit_task_view(request, task_id):
     if request.user != task.author:
         messages.error(request, 'You do not have permission to edit this task.')
         return redirect('tasks')
+        
     if request.method == 'POST':
-        form = CreateTaskForm(request.POST, instance=task)
+        form = EditTaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
             messages.success(request, 'Task updated successfully.')
             return redirect('tasks')
     else:
-        form = CreateTaskForm(instance=task)
+        form = EditTaskForm(instance=task)
         
     context = {
         'page': 'edit_task',
