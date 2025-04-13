@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Tasks{% endblock %}
+{% block content %}
+{% include "tasks/navbar.html" %}
+<h1>Tasks</h1>
+<hr>
+<p>Here are the tasks you can perform:</p>
+<ul>
+    {% for task in tasks %}
+        <li>
+            <a href="{% url 'task_details' task.id %}">{{ task.title }}</a>
+            <a href="{% url 'delete_task' task.id %}">Delete</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
