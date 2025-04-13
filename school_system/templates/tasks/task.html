@@ -3,10 +3,15 @@
 {% block content %}
 <center>
     <h1>Task {{ task.title }}</h1>
-    <p>{{ task.description }}</p>
+    <p><strong>Author:</strong> {{ task.author.email }}</p>
+
+    <p>Description: {{ task.description }}</p>
     <p>Created on: {{ task.created_at }}</p>
     <p>Due date: {{ task.due_date }}</p>
     {% comment %} <a href="{% url 'edit_task' task.id %}">Edit Task</a> |  {% endcomment %}
-    <a href="{% url 'delete_task' task.id %}">Delete Task</a>
+    {% if request.user == task.author %}
+        <a href="{% url 'edit_task' task.id %}">Edit Task</a>
+        <a href="{% url 'delete_task' task.id %}">Delete Task</a>
+    {% endif %}
 </center>
 {% endblock %}

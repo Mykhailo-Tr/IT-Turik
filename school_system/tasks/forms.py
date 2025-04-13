@@ -17,6 +17,8 @@ class CreateTaskForm(forms.ModelForm):
             raise ValidationError("Task with this title already exists.")
         return title
     
+
+
     
 
     

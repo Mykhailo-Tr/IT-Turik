@@ -9,8 +9,17 @@
     {% for task in tasks %}
         <li>
             <a href="{% url 'task_details' task.id %}">{{ task.title }}</a>
-            <a href="{% url 'delete_task' task.id %}">Delete</a>
+            {% if task.id in user_taken_tasks %} 
+                {% if task.id in user_completed_tasks %}
+                    <a href="{% url 'uncomplete_task' task.id %}">Uncomplete</a>
+                {% else %}
+                    <a href="{% url 'complete_task' task.id %}">Complete</a>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'take_task' task.id %}">Take Task</a>
+            {% endif %}
         </li>
+        <hr>
     {% endfor %}
 </ul>
 {% endblock %}
