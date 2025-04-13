@@ -47,7 +47,7 @@ class Student(models.Model):
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    subjects = models.ManyToManyField(Subject, related_name='teachers')
+    subjects = models.ManyToManyField(Subject, related_name='teachers', blank=True, null=True)
     
     def __str__(self):
         return self.user.email

@@ -41,7 +41,9 @@ class StudentSignUpForm(BaseSignUpForm):
 
 
 class TeacherSignUpForm(BaseSignUpForm):
-    subjects = forms.ModelMultipleChoiceField(queryset=Subject.objects.all(), widget=forms.CheckboxSelectMultiple)
+    subjects = forms.ModelMultipleChoiceField(queryset=Subject.objects.all(), 
+                                              widget=forms.CheckboxSelectMultiple, 
+                                              required=False)
 
     @transaction.atomic
     def save(self):
