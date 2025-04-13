@@ -42,6 +42,8 @@ INSTALLED_APPS = [
 
     'accounts',
     'dashboard',
+    'events',
+    'tasks'
 ]
 
 MIDDLEWARE = [

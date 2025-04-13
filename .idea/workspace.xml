@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a000a1af-f48b-40dd-8902-6b42d11dc45c" name="Changes" comment="separated registration for students/parents/teachers" />
+    <list default="true" id="a000a1af-f48b-40dd-8902-6b42d11dc45c" name="Changes" comment="separated registration for students/parents/teachers">
+      <change afterPath="$PROJECT_DIR$/school_system/tasks/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/school_system/events/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/events/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/school_system/school_system/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/school_system/settings.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,8 +18,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -47,9 +52,15 @@
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main"
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/Cougar/Programing/IT-Turik/school_system/dashboard/tests"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Cougar\Programing\IT-Turik\school_system\dashboard\tests" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -117,15 +128,5 @@
     <MESSAGE value="added CustomUser model" />
     <MESSAGE value="separated registration for students/parents/teachers" />
     <option name="LAST_COMMIT_MESSAGE" value="separated registration for students/parents/teachers" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/school_system/accounts/views.py</url>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
