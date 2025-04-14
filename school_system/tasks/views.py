@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from .models import Task, UserTaskStatus
 from .forms import CreateTaskForm, EditTaskForm
+from accounts.models import User
 
 
 
@@ -12,11 +14,34 @@ def tasks_view(request, task_id=None):
         task = Task.objects.get(id=task_id)
         return render(request, 'tasks/task.html', {'task': task})
         
+    tasks = Task.objects.all().order_by('-date_posted')  # Якщо треба фільтрувати всіх, не лише свої
+    users = User.objects.all()
+    print(users, "ewsfsdfgsdfgdfs")
+    user_taken_tasks = UserTaskStatus.objects.filter(user=request.user).values_list('task_id', flat=True)
+    user_completed_tasks = UserTaskStatus.objects.filter(user=request.user, is_completed=True).values_list('task_id', flat=True)
+    
+    query = request.GET.get('q')
+    from_date = request.GET.get('from_date')
+    to_date = request.GET.get('to_date')
+    author = request.GET.get('author')
+    
+    if query:
+        tasks = tasks.filter(Q(title__icontains=query) | Q(content__icontains=query)).distinct()
+        
+    if from_date:
+        tasks = tasks.filter(due_date__gte=from_date)
+    if to_date:
+        tasks = tasks.filter(due_date__lte=to_date)
+        
+    if author:
+        tasks = tasks.filter(author__id=author)        
+        
     context = {
         'page': 'tasks',
-        'tasks': Task.objects.all(),
-        'user_taken_tasks': UserTaskStatus.objects.filter(user=request.user).values_list('task_id', flat=True),
-        'user_completed_tasks': UserTaskStatus.objects.filter(user=request.user, is_completed=True).values_list('task_id', flat=True),
+        'tasks': tasks,
+        'users': users,
+        'user_taken_tasks': user_taken_tasks,
+        'user_completed_tasks': user_completed_tasks,
     }
     return render(request, 'tasks/tasks.html', context)
 

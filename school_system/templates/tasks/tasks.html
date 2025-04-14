@@ -24,6 +24,8 @@
             {% endif %}
         </li>
         <hr>
+    {% empty %}
+        <li>No tasks found.</li>
     {% endfor %}
 </ul>
 {% endblock %}

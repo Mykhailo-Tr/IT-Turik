@@ -7,4 +7,5 @@ urlpatterns = [
     path('', include('accounts.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('tasks/', include('tasks.urls')),
+    # path('events/', include('events.urls')),
 ]
