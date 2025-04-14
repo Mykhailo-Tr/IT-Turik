@@ -57,3 +57,4 @@ class SignUpFormsTest(TestCase):
         self.assertTrue(form.is_valid(), form.errors)
         user = form.save()
         self.assertEqual(user.role, User.Role.PARENT)
+        
