@@ -19,6 +19,9 @@
             {% else %}
                 <a href="{% url 'take_task' task.id %}">Take Task</a>
             {% endif %}
+            {% if request.user == task.author %}
+                - You are author.
+            {% endif %}
         </li>
         <hr>
     {% endfor %}
