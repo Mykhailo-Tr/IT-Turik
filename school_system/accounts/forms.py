@@ -1,7 +1,28 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from .models import User, Student, Teacher, Parent, Subject, UserProfile
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db import transaction
+from .models import User, Student, Teacher, Parent, Subject, UserProfile
+
+
+
+class LoginForm(AuthenticationForm):
+    username = forms.EmailField(
+        required=True,
+        label='Email address',
+        max_length=254,
+        widget=forms.EmailInput(attrs={
+            'autocomplete': 'email', 
+            'autofocus': True
+        })
+    )
+    
+    password = forms.CharField(
+        label='Password',
+        strip=False,
+        widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'})
+    )
+    
+
 
 class BaseSignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)

@@ -3,8 +3,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView, UpdateView
+from django.contrib.auth.views import LoginView
 from .models import User
 from .forms import StudentSignUpForm, TeacherSignUpForm, ParentSignUpForm, UserUpdateForm, UserProfileUpdateForm
+from .forms import LoginForm
 from django.urls import reverse_lazy
 from school_system.decorators import teacher_required, student_required
 
@@ -14,21 +16,40 @@ def main_page(request):
     return render(request, 'home_page.html')
 
 
-def login_view(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        user = authenticate(request, email=email, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('home')
-        else:
-            messages.error(request, 'Invalid email or password.')
-            return redirect('login')
-    context = {
-        'page': 'login',
-    }
-    return render(request, 'accounts/login_form.html', context)
+class UserLoginView(LoginView):
+    template_name = 'accounts/login_form.html'
+    form_class = LoginForm
+    success_url = reverse_lazy('home')
+    redirect_authenticated_user = True
+
+    def get_context_data(self, **kwargs):
+        kwargs['page'] = 'login'
+        return super().get_context_data(**kwargs)
+    
+    def form_valid(self, form):
+        user = form.get_user()
+        login(self.request, user)
+        return redirect('home')
+    
+    def form_invalid(self, form):
+        messages.error(self.request, 'Invalid email or password.')
+        return redirect('login')
+
+# def login_view(request):
+#     if request.method == 'POST':
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')
+#         user = authenticate(request, email=email, password=password)
+#         if user is not None:
+#             login(request, user)
+#             return redirect('home')
+#         else:
+#             messages.error(request, 'Invalid email or password.')
+#             return redirect('login')
+#     context = {
+#         'page': 'login',
+#     }
+#     return render(request, 'accounts/login_form.html', context)
 
 
 @login_required(login_url='login')
