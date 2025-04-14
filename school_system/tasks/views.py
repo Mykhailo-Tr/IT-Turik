@@ -49,13 +49,13 @@ def edit_task_view(request, task_id):
         return redirect('tasks')
         
     if request.method == 'POST':
-        form = EditTaskForm(request.POST, instance=task)
+        form = CreateTaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
             messages.success(request, 'Task updated successfully.')
             return redirect('tasks')
     else:
-        form = EditTaskForm(instance=task)
+        form = CreateTaskForm(instance=task)
         
     context = {
         'page': 'edit_task',
@@ -81,6 +81,14 @@ def take_task_view(request, task_id):
     task = Task.objects.get(id=task_id)
     UserTaskStatus.objects.create(user=request.user, task=task)
     messages.success(request, 'Task taken successfully.')
+    return redirect('tasks')
+
+
+@login_required(login_url='login')
+def drop_task_view(request, task_id):
+    task = Task.objects.get(id=task_id)
+    UserTaskStatus.objects.filter(user=request.user, task=task).delete()
+    messages.success(request, 'Task unassigned successfully.')
     return redirect('tasks')
 
 

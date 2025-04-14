@@ -3,10 +3,10 @@
 {% block content %}
 <center>
     <h1>Task {{ task.title }}</h1>
-    <p><strong>Author:</strong> {{ task.author.email }}</p>
+    <p><strong>Author:</strong> {{ task.author }}</p>
 
-    <p>Description: {{ task.description }}</p>
-    <p>Created on: {{ task.created_at }}</p>
+    <p>Description: {{ task.content }}</p>
+    <p>Created on: {{ task.date_posted }}</p>
     <p>Due date: {{ task.due_date }}</p>
     {% comment %} <a href="{% url 'edit_task' task.id %}">Edit Task</a> |  {% endcomment %}
     {% if request.user == task.author %}

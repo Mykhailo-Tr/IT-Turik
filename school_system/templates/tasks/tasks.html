@@ -8,13 +8,14 @@
 <ul>
     {% for task in tasks %}
         <li>
-            <a href="{% url 'task_details' task.id %}">{{ task.title }}</a>
+            <a href="{% url 'task_details' task.id %}">{{ task }}</a>
             {% if task.id in user_taken_tasks %} 
                 {% if task.id in user_completed_tasks %}
                     <a href="{% url 'uncomplete_task' task.id %}">Uncomplete</a>
                 {% else %}
                     <a href="{% url 'complete_task' task.id %}">Complete</a>
                 {% endif %}
+                <a href="{% url 'drop_task' task.id %}">Drop Task</a>
             {% else %}
                 <a href="{% url 'take_task' task.id %}">Take Task</a>
             {% endif %}
