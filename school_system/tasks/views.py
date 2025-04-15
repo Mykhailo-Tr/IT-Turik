@@ -16,7 +16,6 @@ def tasks_view(request, task_id=None):
         
     tasks = Task.objects.all().order_by('-date_posted')  # Якщо треба фільтрувати всіх, не лише свої
     users = User.objects.all()
-    print(users, "ewsfsdfgsdfgdfs")
     user_taken_tasks = UserTaskStatus.objects.filter(user=request.user).values_list('task_id', flat=True)
     user_completed_tasks = UserTaskStatus.objects.filter(user=request.user, is_completed=True).values_list('task_id', flat=True)
     
