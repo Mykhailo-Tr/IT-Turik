@@ -35,22 +35,6 @@ class UserLoginView(LoginView):
         messages.error(self.request, 'Invalid email or password.')
         return redirect('login')
 
-# def login_view(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')
-#         user = authenticate(request, email=email, password=password)
-#         if user is not None:
-#             login(request, user)
-#             return redirect('home')
-#         else:
-#             messages.error(request, 'Invalid email or password.')
-#             return redirect('login')
-#     context = {
-#         'page': 'login',
-#     }
-#     return render(request, 'accounts/login_form.html', context)
-
 
 @login_required(login_url='login')
 def logout_view(request):
