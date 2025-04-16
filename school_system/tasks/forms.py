@@ -25,7 +25,7 @@ class CreateTaskForm(forms.ModelForm):
         due_date = self.cleaned_data.get('due_date')
         print("Due date:", due_date)
         print("Current time:", timezone.now())
-        if due_date and due_date > timezone.now():
+        if due_date and due_date < timezone.now():
                 raise ValidationError("Due date cannot be before task creation date.")
         return due_date
     

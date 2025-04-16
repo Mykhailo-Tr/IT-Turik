@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Event {{ event }}{% endblock %}
+{% block content %}
+{% include "events/navbar.html" %}
+<h1>Event {{ event }}</h1>
+<hr>
+<p><strong>Author:</strong> {{ event.author }}</p>
+<p><strong>Title:</strong> {{ event.title }}</p>
+<p><strong>Description:</strong> {{ event.description }}</p>
+<p><strong>Event Type:</strong> {{ event.event_type }}</p>
+<p><strong>Start Date:</strong> {{ event.start_date }}</p>
+<p><strong>End Date:</strong> {{ event.end_date }}</p>
+<p><strong>Location:</strong> {{ event.location }}</p>
+<p><strong>Tasks:</strong></p>
+<ul>
+    {% for task in event.tasks.all %}
+        <li><a href="{% url 'task_details' task.id %}">{{ task }}</a></li>
+    {% empty %}
+        <li>No tasks yet.</li>
+    {% endfor %}
+</ul>
+
+<p><strong>Participants:</strong></p>
+<ul>
+    {% for participant in event.participants.all %}
+        <li>{{ participant.email }}</li>
+    {% empty %}
+        <li>No participants yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

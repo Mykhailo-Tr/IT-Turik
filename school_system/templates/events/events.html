@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Events{% endblock %}
+{% block content %}
+{% include "events/navbar.html" %}
+<h1>Events</h1>
+<hr>
+<p>Here are the events you can perform:</p>
+<ul>
+    {% for event in events %}
+        <li>
+            <a href="{% url 'event_details' event.id %}">{{ event }}</a>
+        </li>
+        <hr>
+    {% empty %}
+        <li>No events found.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,17 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active {% if page == 'create_event' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'create_event' %}">Create Event</a>
+            </li>
+            {% if page == 'event_details' and request.user == event.author %}
+                <li class="nav-item {% if page == 'edit_event' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'edit_event' event.id %}">Edit Event</a>
+                </li>
+                <li class="nav-item {% if page == 'delete_event' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'delete_event' event.id %}">Delete Event</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

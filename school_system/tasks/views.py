@@ -116,13 +116,14 @@ def drop_task_view(request, task_id):
     return redirect('tasks')
 
 
+@login_required(login_url='login')
 def complete_task_view(request, task_id):
     task = Task.objects.get(id=task_id)
     UserTaskStatus.objects.filter(user=request.user, task=task).update(is_completed=True)
     messages.success(request, 'Task completed successfully.')
     return redirect('tasks')
 
-
+@login_required(login_url='login')
 def uncomplete_task_view(request, task_id):
     task = Task.objects.get(id=task_id)
     UserTaskStatus.objects.filter(user=request.user, task=task).update(is_completed=False)
