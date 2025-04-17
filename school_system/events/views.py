@@ -2,12 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.views.decorators.http import require_http_methods
 from .models import Event
 from .forms import CreateEventForm
 from accounts.models import User
 
 
 @login_required(login_url='login')
+@require_http_methods(["GET", "POST"])
 def events_view(request, event_id=None):
     if event_id:
         event = Event.objects.get(id=event_id)
@@ -21,6 +23,7 @@ def events_view(request, event_id=None):
 
 
 @login_required(login_url='login')
+@require_http_methods(["GET", "POST"])
 def create_event_view(request):
     if request.method == 'POST':
         form = CreateEventForm(request.POST)
@@ -44,6 +47,7 @@ def create_event_view(request):
 
 
 @login_required(login_url="login")
+@require_http_methods(["GET", "POST"])
 def edit_event_view(request, event_id):
     event = Event.objects.get(id=event_id)
     
@@ -76,6 +80,7 @@ def edit_event_view(request, event_id):
 
 
 @login_required(login_url="login")
+@require_http_methods(["GET", "POST"])
 def delete_event_view(request, event_id):
     if request.user != Event.objects.get(id=event_id).author:
         messages.error(request, 'You do not have permission to delete this event.')
