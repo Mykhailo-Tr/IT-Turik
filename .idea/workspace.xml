@@ -5,20 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a000a1af-f48b-40dd-8902-6b42d11dc45c" name="Changes" comment="Remove Code Smell">
-      <change afterPath="$PROJECT_DIR$/school_system/events/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/accounts/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/accounts/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/accounts/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/events/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/events/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/events/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/events/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/events/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/events/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/events/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/school_system/events/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/events/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/tasks/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/tasks/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/tasks/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/tasks/migrations/0002_task_date_posted.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/tasks/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/tasks/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/templates/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/templates/navbar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -2,14 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_GET, require_POST
 from .models import Event
 from .forms import CreateEventForm
 from accounts.models import User
 
 
 @login_required(login_url='login')
-@require_http_methods(["GET", "POST"])
+@require_GET
 def events_view(request, event_id=None):
     if event_id:
         event = Event.objects.get(id=event_id)
