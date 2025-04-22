@@ -58,10 +58,10 @@ def edit_event_view(request, event_id):
     if request.method == 'POST':
         form = CreateEventForm(request.POST, instance=event)
         if form.is_valid():
-            event = form.save(commit=False)  # ще не зберігаємо в БД
-            event.author = request.user      # призначаємо автора
-            event.save()                     # тепер зберігаємо
-            form.save_m2m()                  # зберігаємо ManyToMany поля
+            event = form.save(commit=False)
+            event.author = request.user
+            event.save()
+            form.save_m2m()
             messages.success(request, 'Event updated successfully.')
             return redirect('events')
     else:
