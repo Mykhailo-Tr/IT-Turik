@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from school_system.decorators import teacher_required, student_required
-from accounts.models import User
+from accounts.models import User, UserProfile
 from accounts.forms import StudentSignUpForm, TeacherSignUpForm, ParentSignUpForm, UserUpdateForm, UserProfileUpdateForm
 from django.urls import reverse_lazy
 
@@ -17,16 +17,32 @@ def dashboard_view(request):
     return render(request, 'dashboard/dashboard.html', context)    
 
 
-@teacher_required(login_url='login')
+@login_required(login_url='login')
 def accounts_view(request):
     accounts = User.objects.exclude(id=request.user.id)
+
+    if request.user.role in ['student', 'parent']:
+        accounts = accounts.exclude(role='admin')
+        
     accounts_count = accounts.count()
     context = {
-        'page': 'teacher_accounts',
+        'page': 'dashboard_accounts',
         'accounts': accounts,
         'accounts_count': accounts_count,
     }
     return render(request, 'dashboard/accounts.html', context)
+
+
+@login_required(login_url='login')
+def profile_view(request, user_id=None):
+    user = User.objects.get(id=user_id)
+    profile = UserProfile.objects.get(user=user)
+    context = {
+        'page': 'profile',
+        'user': user,
+        'profile': profile,
+    }
+    return render(request, 'dashboard/profile.html', context)
 
 
 @teacher_required(login_url='login')

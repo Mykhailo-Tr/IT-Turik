@@ -1,29 +1,32 @@
 {% extends "base.html" %} 
-{% block title %}Teacher Dashboard{% endblock %}
+{% block title %}Accounts Dashboard{% endblock %}
 
 {% block content %}
-<h1>Teacher Dashboard</h1>
-<p>Welcome, {{ user.first_name }} | {{ user.email }}</p>
-<p>Your role: {{ user.role }}</p>
+    <h1>Accounts Dashboard</h1>
+    <p>Welcome, {{ user.first_name }} | {{ user.email }}</p>
+    <p>Your role: {{ user.role }}</p>
 
-<hr>
-{% comment %} <a href="{% url 'create_account' %}">Create Account</a> {% endcomment %}
-<p>Number of accounts: {{ accounts_count }}</p>
+    <hr>
+    <p>Number of accounts: {{ accounts_count }}</p>
 
-<h3>Accounts</h3>
-<a href="{% url 'teacher_create_account' 'student'%}">Create Student</a>
-<a href="{% url 'teacher_create_account' 'parent'%}">Create Parent</a>
-<a href="{% url 'teacher_create_account' 'teacher'%}">Create Teacher</a>
+    <h3>Accounts</h3>
+    {% if user.role == 'teacher' or user.role == 'admin' %}
+        <a href="{% url 'dashboard_create_account' 'student'%}">Create Student</a>
+        <a href="{% url 'dashboard_create_account' 'parent'%}">Create Parent</a>
+        <a href="{% url 'dashboard_create_account' 'teacher'%}">Create Teacher</a>
+        <p>Click on the account to delete it.</p>
+    {% endif %}
 
-<p>Click on the account to delete it.</p>
-<ul>
-    {% for account in accounts %}
-        <li>{{ account.first_name }} | {{ account.email }} | {{ account.role }}</li>
-        <a href="{% url 'teacher_edit_account' account.id %}">Edit Account</a>
-        <a href="{% url 'teacher_edit_profile' account.id %}">Edit Profile</a>
-        <a href="{% url 'teacher_delete_account' account.id %}">Delete</a>
-    {% endfor %}
-</ul>
+    <ul>
+        {% for account in accounts %}
+            <li>{{ account.first_name }} | <a href="{% url 'dashboard_profile' account.id %}">{{ account.email }}</a> | {{ account.role }}</li>
+            {% if user.role == 'teacher' or user.role == 'admin' %}
+                <a href="{% url 'dashboard_edit_account' account.id %}">Edit Account</a>
+                <a href="{% url 'dashboard_edit_profile' account.id %}">Edit Profile</a>
+                <a href="{% url 'dashboard_delete_account' account.id %}">Delete</a>
+            {% endif %}
+        {% endfor %}
+    </ul>
 
 
 {% endblock %}
