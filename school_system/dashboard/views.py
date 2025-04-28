@@ -55,17 +55,17 @@ def create_account_view(request, role):
         form_class = TeacherSignUpForm
     else:
         messages.error(request, 'Невідома роль.')
-        return redirect('teacher_dashboard')
+        return redirect('dashboard')
     
     if request.method == 'POST':
         form = form_class(request.POST)
         if form.is_valid():
             form.save() 
             messages.success(request, f'{role.capitalize()} успішно створено.')
-            return redirect('teacher_accounts')
+            return redirect('dashboard_accounts')
     
     context = {
-        'page': 'teacher_create_account',
+        'page': 'dashboard_create_account',
         'form': form_class(),
         'role': role,
     }
@@ -81,7 +81,7 @@ def delete_account_view(request, user_id=None):
     if request.method == 'POST':
         user.delete()
         messages.success(request, 'Обліковий запис успішно видалено.')
-        return redirect('teacher_accounts')
+        return redirect('dashboard_accounts')
     
     context = {
         'page': 'delete_account',
@@ -96,14 +96,14 @@ def edit_account_view(request, user_id=None):
         user = User.objects.get(id=user_id)
     else:
         messages.error(request, 'Невірний запит.')
-        return redirect('teacher_accounts')
+        return redirect('dashboard_accounts')
     
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Your account has been updated.')
-            return redirect('teacher_accounts')
+            return redirect('dashboard_accounts')
     else:
         form = UserUpdateForm(instance=user)
         
@@ -120,14 +120,14 @@ def edit_profile_view(request, user_id=None):
         user = User.objects.get(id=user_id)
     else:
         messages.error(request, 'Невірний запит.')
-        return redirect('teacher_accounts')
+        return redirect('dashboard_accounts')
         
     if request.method == 'POST':
         form = UserProfileUpdateForm(request.POST, request.FILES, instance=user.profile)
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated.')
-            return redirect('teacher_accounts')
+            return redirect('dashboard_accounts')
     else:
         form = UserProfileUpdateForm(instance=user.profile)
         
