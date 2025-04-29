@@ -23,5 +23,6 @@ class UserTaskStatus(models.Model):
         unique_together = ('user', 'task')
 
     def __str__(self):
-        return f"{self.user.email} - {self.task.name} - {'✔️' if self.is_completed else '❌'}"
+        return f"{self.user.email} - {self.task.title} - {'✔️' if self.is_completed else '❌'}"
+
     

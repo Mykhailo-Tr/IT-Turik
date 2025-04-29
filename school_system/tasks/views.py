@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from .models import Task, UserTaskStatus
 from .forms import CreateTaskForm, EditTaskForm
 from accounts.models import User
@@ -11,7 +13,7 @@ from accounts.models import User
 @login_required(login_url='login')
 def tasks_view(request, task_id=None):
     if task_id:
-        task = Task.objects.get(id=task_id)
+        task = get_object_or_404(Task, id=task_id)
         return render(request, 'tasks/task.html', {'task': task})
         
     tasks = Task.objects.all().order_by('-date_posted')  # Якщо треба фільтрувати всіх, не лише свої
@@ -100,33 +102,25 @@ def delete_task_view(request, task_id):
     return redirect('tasks')
 
 
-@login_required(login_url='login')
-def take_task_view(request, task_id):
-    task = Task.objects.get(id=task_id)
-    UserTaskStatus.objects.create(user=request.user, task=task)
-    messages.success(request, 'Task taken successfully.')
+@login_required
+def toggle_task_completion_view(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    status, _ = UserTaskStatus.objects.get_or_create(user=request.user, task=task)
+    status.is_completed = not status.is_completed
+    status.completed_at = timezone.now() if status.is_completed else None
+    status.save()
     return redirect('tasks')
 
 
-@login_required(login_url='login')
-def drop_task_view(request, task_id):
-    task = Task.objects.get(id=task_id)
-    UserTaskStatus.objects.filter(user=request.user, task=task).delete()
-    messages.success(request, 'Task unassigned successfully.')
+@login_required
+def toggle_task_participation(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    status, created = UserTaskStatus.objects.get_or_create(user=request.user, task=task)
+
+    if not created:
+        status.delete()
+    else:
+        status.is_completed = False
+        status.save()
+
     return redirect('tasks')
-
-
-@login_required(login_url='login')
-def complete_task_view(request, task_id):
-    task = Task.objects.get(id=task_id)
-    UserTaskStatus.objects.filter(user=request.user, task=task).update(is_completed=True)
-    messages.success(request, 'Task completed successfully.')
-    return redirect('tasks')
-
-@login_required(login_url='login')
-def uncomplete_task_view(request, task_id):
-    task = Task.objects.get(id=task_id)
-    UserTaskStatus.objects.filter(user=request.user, task=task).update(is_completed=False)
-    messages.success(request, 'Task uncompleted successfully.')
-    return redirect('tasks')
-

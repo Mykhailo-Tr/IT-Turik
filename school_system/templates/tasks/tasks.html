@@ -1,31 +1,66 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Tasks{% endblock %}
+
 {% block content %}
 {% include "tasks/navbar.html" %}
-<h1>Tasks</h1>
-<hr>
-<p>Here are the tasks you can perform:</p>
-<ul>
-    {% for task in tasks %}
-        <li>
-            <a href="{% url 'task_details' task.id %}">{{ task }}</a>
-            {% if task.id in user_taken_tasks %} 
-                {% if task.id in user_completed_tasks %}
-                    <a href="{% url 'uncomplete_task' task.id %}">Uncomplete</a>
-                {% else %}
-                    <a href="{% url 'complete_task' task.id %}">Complete</a>
-                {% endif %}
-                <a href="{% url 'drop_task' task.id %}">Drop Task</a>
-            {% else %}
-                <a href="{% url 'take_task' task.id %}">Take Task</a>
-            {% endif %}
-            {% if request.user == task.author %}
-                - You are author.
-            {% endif %}
-        </li>
-        <hr>
-    {% empty %}
-        <li>No tasks found.</li>
-    {% endfor %}
-</ul>
+
+<div class="container mt-4">
+    <h1 class="mb-4">All Tasks</h1>
+
+    {% if tasks %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for task in tasks %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-secondary">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ task.title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                Author: {{ task.author.email }}
+                                {% if request.user == task.author %}
+                                    <span class="badge bg-info text-dark">You</span>
+                                {% endif %}
+                            </h6>
+                            <p class="card-text mt-2">
+                                {{ task.content|truncatewords:25 }}
+                            </p>
+                            <p class="card-text mt-auto">
+                                <small class="text-muted">
+                                    Due: {{ task.due_date|date:"M d, Y H:i" }}<br>
+                                    Posted: {{ task.date_posted|date:"M d, Y H:i" }}
+                                </small>
+                            </p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a href="{% url 'task_details' task.id %}" class="btn btn-outline-primary btn-sm">Details</a>
+                                
+                                {% if task.id in user_taken_tasks %}
+                                    <a href="{% url 'toggle_task_completion' task.id %}" 
+                                       class="btn {% if task.id in user_completed_tasks %}btn-warning{% else %}btn-success{% endif %} btn-sm">
+                                        {% if task.id in user_completed_tasks %}Uncomplete{% else %}Complete{% endif %}
+                                    </a>
+                                {% endif %}
+           
+                                <a href="{% url 'toggle_task_participation' task.id %}"
+                                    class="btn {% if task.id in user_taken_tasks %}btn-secondary{% else %}btn-primary{% endif %} btn-sm">
+                                    {% if task.id in user_taken_tasks %}Drop{% else %}Take{% endif %}
+                                </a>
+                            </div>
+                            
+                            {% if request.user == task.author %}
+                                <div class="btn-group">
+                                    <a href="{% url 'edit_task' task.id %}" class="btn btn-outline-info btn-sm">Edit</a>
+                                    <a href="{% url 'delete_task' task.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning mt-4">No tasks found.</div>
+    {% endif %}
+</div>
 {% endblock %}
