@@ -1,17 +1,32 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active {% if page == 'create_event' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'create_event' %}">Create Event</a>
-            </li>
-            {% if page == 'event_details' and request.user == event.author %}
-                <li class="nav-item {% if page == 'edit_event' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'edit_event' event.id %}">Edit Event</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'events' %}">📅 Events</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarEvents"
+                aria-controls="navbarEvents" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarEvents">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'create_event' %}active fw-bold{% endif %}" href="{% url 'create_event' %}">
+                        ➕ Create Event
+                    </a>
                 </li>
-                <li class="nav-item {% if page == 'delete_event' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'delete_event' event.id %}">Delete Event</a>
-                </li>
-            {% endif %}
-        </ul>
+
+                {% if page == 'event_details' and request.user == event.author %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if page == 'edit_event' %}active fw-bold{% endif %}" href="{% url 'edit_event' event.id %}">
+                            ✏️ Edit
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if page == 'delete_event' %}active fw-bold text-danger{% endif %}" href="{% url 'delete_event' event.id %}">
+                            🗑️ Delete
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
 </nav>

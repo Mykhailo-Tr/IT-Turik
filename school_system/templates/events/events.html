@@ -1,18 +1,56 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Events{% endblock %}
+
 {% block content %}
 {% include "events/navbar.html" %}
-<h1>Events</h1>
-<hr>
-<p>Here are the events you can perform:</p>
-<ul>
-    {% for event in events %}
-        <li>
-            <a href="{% url 'event_details' event.id %}">{{ event }}</a>
-        </li>
-        <hr>
-    {% empty %}
-        <li>No events found.</li>
-    {% endfor %}
-</ul>
+
+<div class="container mt-4">
+    <h1 class="mb-4">All Events</h1>
+
+    {% if events %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for event in events %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-primary">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ event.title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                {{ event.get_event_type_display }}
+                            </h6>
+                            <p class="card-text mt-2">
+                                {{ event.description|truncatewords:20 }}
+                            </p>
+                            <p class="card-text mt-auto">
+                                <small class="text-muted">
+                                    Location: {{ event.location }}<br>
+                                    Starts: {{ event.start_date|date:"M d, Y H:i" }}<br>
+                                    Ends: {{ event.end_date|date:"M d, Y H:i" }}
+                                </small>
+                            </p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a href="{% url 'event_details' event.id %}" class="btn btn-outline-primary btn-sm">Details</a>
+                                {% if request.user == event.author %}
+                                    <a href="{% url 'edit_event' event.id %}" class="btn btn-outline-info btn-sm">Edit</a>
+                                    <a href="{% url 'delete_event' event.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                                {% endif %}
+                            </div>
+                            <small class="text-muted">
+                                by {{ event.author.email }}
+                                {% if request.user == event.author %}
+                                    <span class="badge bg-info text-dark">You</span>
+                                {% endif %}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning mt-4">No events found.</div>
+    {% endif %}
+</div>
+
 {% endblock %}
