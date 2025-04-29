@@ -6,6 +6,12 @@ from accounts.models import User
 
 
 class CreateEventForm(forms.ModelForm):
+    participants = forms.ModelMultipleChoiceField(
+        queryset=User.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,  # Це поле не є обов'язковим
+        help_text="Select participants for the event"
+    )
     class Meta:
         model = Event
         fields = ['title', 'event_type', 'description', 'start_date', 'end_date', 'location', 'participants', 'tasks']
@@ -14,15 +20,9 @@ class CreateEventForm(forms.ModelForm):
             'end_date': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'location': forms.TextInput(attrs={'class': 'form-control'}),
-            'participants': forms.CheckboxSelectMultiple(),
             'tasks': forms.CheckboxSelectMultiple(),
         }
 
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
-        if user:
-            self.fields['participants'].queryset = User.objects.exclude(id=user.id)
 
     def clean_title(self):
         title = self.cleaned_data['title']

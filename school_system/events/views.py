@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.views.decorators.http import require_http_methods, require_GET, require_POST
 from django.shortcuts import get_object_or_404
-from .models import Event
+from .models import Event, EventParticipation, EventComment
 from .forms import CreateEventForm
 from accounts.models import User
 
@@ -24,18 +24,27 @@ def events_view(request, event_id=None):
 @require_http_methods(["GET", "POST"])
 def create_event_view(request):
     if request.method == 'POST':
-        form = CreateEventForm(request.POST, user=request.user)
+        form = CreateEventForm(request.POST)
         if form.is_valid():
+            # Зберігаємо подію без багатьох до багатьох полів
             event = form.save(commit=False)
             event.author = request.user
-            event.save()
+            event.save()  # Збереження події без учасників
+            
+            # Зберігаємо Many-to-Many (tasks) після збереження події
             form.save_m2m()
-            messages.success(request, 'Event created successfully.')
+
+            # Додаємо учасників через модель EventParticipation
+            participants = form.cleaned_data['participants']
+            for user in participants:
+                EventParticipation.objects.create(event=event, user=user)
+
             return redirect('events')
     else:
-        form = CreateEventForm(user=request.user)
+        form = CreateEventForm()
 
-    return render(request, 'events/forms/create.html', {'form': form, 'page': 'create_event'})
+    return render(request, 'events/forms/create.html', {'form': form})
+
 
 
 

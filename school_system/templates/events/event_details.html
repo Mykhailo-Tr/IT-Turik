@@ -46,11 +46,11 @@
 
         <div class="col-md-6">
             <h4>👥 Participants</h4>
-            {% if event.participants.all %}
+            {% if event.eventparticipation_set.all %}
                 <ul class="list-group">
-                    {% for participant in event.participants.all %}
+                    {% for participation in event.eventparticipation_set.all %}
                         <li class="list-group-item">
-                            {{ participant.get_full_name }} ({{ participant.email }})
+                            {{ participation.user.get_full_name }} ({{ participation.user.email }})
                         </li>
                     {% endfor %}
                 </ul>
