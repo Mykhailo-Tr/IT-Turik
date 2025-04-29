@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.files.storage import default_storage
 from django.db import models
 from .managers import CustomUserManager
 
@@ -71,3 +72,16 @@ class UserProfile(models.Model):
     
     def __str__(self):
         return self.user.email
+
+    
+    def save(self, *args, **kwargs):
+        try:
+            this = UserProfile.objects.get(pk=self.pk)
+            if this.profile_picture != self.profile_picture and this.profile_picture.name != 'profile_pictures/default.png':
+                # Видалити попереднє зображення
+                if default_storage.exists(this.profile_picture.path):
+                    default_storage.delete(this.profile_picture.path)
+        except UserProfile.DoesNotExist:
+            pass  # новий запис — нічого не видаляємо
+
+        super().save(*args, **kwargs)

@@ -4,12 +4,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.views import LoginView
-from .models import User
+from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
+from .models import User, UserProfile
 from .forms import StudentSignUpForm, TeacherSignUpForm, ParentSignUpForm, UserUpdateForm, UserProfileUpdateForm
 from .forms import LoginForm
-from django.urls import reverse_lazy
 from school_system.decorators import teacher_required, student_required
-
+import os
 
 
 def main_page(request):
@@ -140,20 +141,69 @@ def edit_account_view(request):
     return render(request, 'accounts/edit_account_form.html', context)
 
 
-@login_required(login_url='login')
-def edit_profile_view(request):
-    if request.method == 'POST':
-        form = UserProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your profile has been updated.')
-            return redirect('account')
-    else:
-        form = UserProfileUpdateForm(instance=request.user.profile)
+# @login_required(login_url='login')
+# def edit_profile_view(request):
+#     if request.method == 'POST':
+#         form = UserProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Your profile has been updated.')
+#             return redirect('account')
+#     else:
+#         form = UserProfileUpdateForm(instance=request.user.profile)
         
-    context = {
-        'page': 'edit_profile',
-        'form': form,
-    }
-    return render(request, 'accounts/edit_profile_form.html', context)
+#     context = {
+#         'page': 'edit_profile',
+#         'form': form,
+#     }
+#     return render(request, 'accounts/edit_profile_form.html', context)
 
+
+@login_required
+def edit_profile_view(request, user_id=None):
+    if user_id:
+        if not (request.user.role == 'admin' or request.user.role == 'teacher'):
+            return redirect('dashboard_accounts')
+        target_user = get_object_or_404(User, id=user_id)
+    else:
+        target_user = request.user
+
+    profile = get_object_or_404(UserProfile, user=target_user)
+    old_photo = profile.profile_picture.path if profile.profile_picture.name != 'profile_pictures/default.png' else None
+
+    if request.method == 'POST':
+        form = UserProfileUpdateForm(request.POST, request.FILES, instance=profile)
+
+        if form.is_valid():
+            if 'profile_picture' in request.FILES and old_photo and os.path.exists(old_photo):
+                os.remove(old_photo)
+
+            form.save()
+            return redirect('profile')
+    else:
+        form = UserProfileUpdateForm(instance=profile)
+
+    return render(request, 'accounts/edit_profile_form.html', {
+        'form': form,
+        'profile': profile,
+        'user': target_user
+    })
+    
+@login_required
+def delete_profile_photo_view(request, user_id=None):
+    if user_id:
+        if not (request.user.role == 'admin' or request.user.role == 'teacher'):
+            return redirect('dashboard_accounts')
+        target_user = get_object_or_404(User, id=user_id)
+    else:
+        target_user = request.user
+
+    profile = get_object_or_404(UserProfile, user=target_user)
+
+    if profile.profile_picture.name != 'profile_pictures/default.png':
+        if os.path.exists(profile.profile_picture.path):
+            os.remove(profile.profile_picture.path)
+        profile.profile_picture = 'profile_pictures/default.png'
+        profile.save()
+
+    return redirect('profile')
