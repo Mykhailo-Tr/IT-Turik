@@ -30,6 +30,7 @@ class EventParticipation(models.Model):
         UNANSWERED = 'unanswered', 'Unanswered'
         ACCEPTED = 'accepted', 'Accepted'
         DECLINED = 'declined', 'Declined'
+        LEAVED = 'leaved', 'Leaved'
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)

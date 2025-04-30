@@ -46,18 +46,31 @@
 
         <div class="col-md-6">
             <h4>👥 Participants</h4>
-            {% if event.eventparticipation_set.all %}
+            {% if request.user == event.author %}
                 <ul class="list-group">
                     {% for participation in event.eventparticipation_set.all %}
-                        <li class="list-group-item">
-                            {{ participation.user.get_full_name }} ({{ participation.user.email }})
+                        <li class="list-group-item d-flex justify-content-between">
+                            {{ participation.user.get_full_name }}
+                            <span class="badge 
+                                {% if participation.response == 'accepted' %}bg-success
+                                {% elif participation.response == 'declined' %}bg-danger
+                                {% else %}bg-secondary{% endif %}">
+                                {{ participation.get_response_display }}
+                            </span>
                         </li>
                     {% endfor %}
                 </ul>
             {% else %}
-                <div class="alert alert-warning mt-2">No participants yet.</div>
+                <ul class="list-group">
+                    {% for participation in event.eventparticipation_set.all %}
+                        {% if participation.response == 'accepted' %}
+                            <li class="list-group-item">{{ participation.user.get_full_name }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
             {% endif %}
         </div>
+        
     </div>
 </div>
 {% endblock %}

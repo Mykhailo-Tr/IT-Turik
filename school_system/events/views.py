@@ -10,14 +10,52 @@ from accounts.models import User
 
 
 @login_required(login_url='login')
-@require_GET
 def events_view(request, event_id=None):
     if event_id:
         event = get_object_or_404(Event, id=event_id)
-        return render(request, 'events/event_details.html', {"event": event, "page": "event_details"})
+        participation = EventParticipation.objects.filter(event=event, user=request.user).first()
+        return render(request, 'events/event_details.html', {
+            "event": event,
+            "participation": participation,
+            "page": "event_details"
+        })
 
-    events = Event.objects.all()
-    return render(request, 'events/events.html', {"events": events})
+    if request.user.role == 'admin':
+        created_events = Event.objects.all()
+        invited_events = Event.objects.none()
+    else:
+        created_events = Event.objects.filter(author=request.user)
+        invited_events = Event.objects.filter(eventparticipation__user=request.user).exclude(author=request.user)
+
+    participations = {
+        p.event_id: p.response for p in EventParticipation.objects.filter(user=request.user)
+    }
+
+    return render(request, 'events/events.html', {
+        "created_events": created_events,
+        "invited_events": invited_events,
+        "participations": participations,
+        "page": "events"
+    })
+    
+    
+@login_required
+@require_POST
+def respond_to_event(request, event_id, response):
+    event = get_object_or_404(Event, id=event_id)
+    if not EventParticipation.objects.filter(event=event, user=request.user).exists():
+        messages.error(request, "You are not invited to this event.")
+        return redirect('events')
+
+    if response not in [choice[0] for choice in EventParticipation.ResponseChoices.choices]:
+        messages.error(request, "Invalid response.")
+        return redirect('events')
+
+    participation = EventParticipation.objects.get(event=event, user=request.user)
+    participation.response = response
+    participation.save()
+    messages.success(request, f"You have {response} the event.")
+    return redirect('events')
 
 
 @login_required(login_url='login')
@@ -26,15 +64,12 @@ def create_event_view(request):
     if request.method == 'POST':
         form = CreateEventForm(request.POST)
         if form.is_valid():
-            # Зберігаємо подію без багатьох до багатьох полів
             event = form.save(commit=False)
             event.author = request.user
-            event.save()  # Збереження події без учасників
+            event.save()
             
-            # Зберігаємо Many-to-Many (tasks) після збереження події
             form.save_m2m()
 
-            # Додаємо учасників через модель EventParticipation
             participants = form.cleaned_data['participants']
             for user in participants:
                 EventParticipation.objects.create(event=event, user=user)
