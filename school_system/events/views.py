@@ -86,8 +86,8 @@ def create_event_view(request):
 @login_required(login_url="login")
 @require_http_methods(["GET", "POST"])
 def edit_event_view(request, event_id):
-    event = Event.objects.get(id=event_id)
-    
+    event = get_object_or_404(Event, id=event_id)
+
     if request.user != event.author:
         messages.error(request, 'You do not have permission to edit this event.')
         return redirect('events')
@@ -99,11 +99,24 @@ def edit_event_view(request, event_id):
             event.author = request.user
             event.save()
             form.save_m2m()
+
+            selected_participants = form.cleaned_data['participants']
+            current_participants = User.objects.filter(eventparticipation__event=event)
+
+            # Видаляємо учасників, яких зняли з події
+            for user in current_participants:
+                if user not in selected_participants:
+                    EventParticipation.objects.filter(event=event, user=user).delete()
+
+            # Додаємо нових учасників
+            for user in selected_participants:
+                EventParticipation.objects.get_or_create(event=event, user=user)
+
             messages.success(request, 'Event updated successfully.')
             return redirect('events')
     else:
         form = CreateEventForm(instance=event)
-        
+
     form.fields['participants'].queryset = User.objects.exclude(id=request.user.id)
 
     context = {
@@ -112,7 +125,6 @@ def edit_event_view(request, event_id):
         'event': event,
     }
     return render(request, 'events/forms/edit.html', context)
-
 
 
 
