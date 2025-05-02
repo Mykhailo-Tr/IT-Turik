@@ -3,17 +3,23 @@
         <h6 class="mb-0">Navigation</h6>
     </div>
     <div class="list-group list-group-flush">
-        <a href="{% url 'profile' %}" class="list-group-item list-group-item-action {% if page == 'profile' %}active{% endif %}">
-            <i class="feather feather-user me-2"></i> Profile
-        </a>
-        <a href="{% url 'edit_account' %}" class="list-group-item list-group-item-action {% if page == 'edit_account' %}active{% endif %}">
-            <i class="feather feather-edit me-2"></i> Edit Account
-        </a>
-        <a href="{% url 'delete_account' %}" class="list-group-item list-group-item-action {% if page == 'delete_account' %}active{% endif %}">
-            <i class="feather feather-trash-2 me-2"></i> Delete Account
-        </a>
-        <a href="{% url 'logout' %}" class="list-group-item list-group-item-action">
-            <i class="feather feather-log-out me-2"></i> Logout
-        </a>
+        {% if user_id == request.user.id %}
+            <a href="{% url 'profile' %}" class="list-group-item list-group-item-action {% if page == 'profile' %}active{% endif %}">
+                <i class="feather feather-user me-2"></i> Profile
+            </a>
+            <a href="{% url 'edit_account' %}" class="list-group-item list-group-item-action {% if page == 'edit_account' %}active{% endif %}">
+                <i class="feather feather-edit me-2"></i> Edit Account
+            </a>
+            <a href="{% url 'delete_account' %}" class="list-group-item list-group-item-action {% if page == 'delete_account' %}active{% endif %}">
+                <i class="feather feather-trash-2 me-2"></i> Delete Account
+            </a>
+            <a href="{% url 'logout' %}" class="list-group-item list-group-item-action">
+                <i class="feather feather-log-out me-2"></i> Logout
+            </a>
+        {% else %}
+            <a href="{% url 'dashboard_profile' user_id %}" class="list-group-item list-group-item-action {% if page == 'profile' %}active{% endif %}">
+                <i class="feather feather-user me-2"></i> Profile
+            </a>
+        {% endif %}
     </div>
 </div>

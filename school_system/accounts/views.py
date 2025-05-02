@@ -110,8 +110,10 @@ class ParentSignUpView(UserSignUpView):
 @login_required(login_url='login')
 def account_view(request, user_id=None):
     user = User.objects.get(id=request.user.id) if not user_id else get_object_or_404(User, id=user_id)
+    user_id = user.id if not user_id else user_id
+    print(user_id, '_______++++++')
     profile_user = get_object_or_404(User, id=user_id) if user_id else user
-
+    
     if request.method == "POST":
         if 'add_subject' in request.POST and user.role == 'teacher':
             form = AddSubjectForm(request.POST)
@@ -161,6 +163,7 @@ def account_view(request, user_id=None):
 
     context = {
         'user': user,
+        'user_id': user_id,
         'profile_user': profile_user,
         'add_subject_form': AddSubjectForm(user=request.user),
         'create_subject_form': CreateSubjectForm(),
