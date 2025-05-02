@@ -18,7 +18,7 @@ def main_page(request):
 
 
 class UserLoginView(LoginView):
-    template_name = 'accounts/login_form.html'
+    template_name = 'accounts/forms/login.html'
     form_class = LoginForm
     success_url = reverse_lazy('home')
     redirect_authenticated_user = True
@@ -47,7 +47,7 @@ def register_view(request):
     context = {
         'page': 'register',
     }
-    return render(request, 'accounts/register.html', context)
+    return render(request, 'accounts/forms/register.html', context)
 
 
 @login_required(login_url='login')
@@ -61,12 +61,12 @@ def delete_account_view(request):
     context = {
         'page': 'delete_account',
     }
-    return render(request, 'accounts/delete_account_form.html', context)
+    return render(request, 'accounts/forms/delete_account.html', context)
 
 
 class UserSignUpView(CreateView):
     model = User
-    template_name = 'accounts/signup_form.html'
+    template_name = 'accounts/forms/signup.html'
     form_class = None
     success_url = '/'
     redirect_authenticated_user = True
@@ -138,25 +138,7 @@ def edit_account_view(request):
         'page': 'edit_account',
         'form': form,
     }
-    return render(request, 'accounts/edit_account_form.html', context)
-
-
-# @login_required(login_url='login')
-# def edit_profile_view(request):
-#     if request.method == 'POST':
-#         form = UserProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Your profile has been updated.')
-#             return redirect('account')
-#     else:
-#         form = UserProfileUpdateForm(instance=request.user.profile)
-        
-#     context = {
-#         'page': 'edit_profile',
-#         'form': form,
-#     }
-#     return render(request, 'accounts/edit_profile_form.html', context)
+    return render(request, 'accounts/forms/edit_account.html', context)
 
 
 @login_required
@@ -183,7 +165,7 @@ def edit_profile_view(request, user_id=None):
     else:
         form = UserProfileUpdateForm(instance=profile)
 
-    return render(request, 'accounts/edit_profile_form.html', {
+    return render(request, 'accounts/forms/edit_profile.html', {
         'form': form,
         'profile': profile,
         'user': target_user
