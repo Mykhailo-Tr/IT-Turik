@@ -1,33 +1,34 @@
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{% url 'home' %}">ICON</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-  
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active {% if page == 'home' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'home' %}">Home</a>
-            </li>
-            {% if request.user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'account' %}">Account</a>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">ICON</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item {% if page == 'home' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'tasks' %}">Tasks</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'events' %}">Events</a>
-                </li>
-                <li class="nav-item active {% if page == 'dashboard' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
-                </li>
-            {% else %}
-                <li class="nav-item active {% if page == 'login' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
-                </li>
-            {% endif %}
-        </ul>
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'account' %}">Account</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'tasks' %}">Tasks</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'events' %}">Events</a></li>
+                    <li class="nav-item {% if page == 'dashboard' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item {% if page == 'login' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+
+            <!-- Theme toggle button aligned to right -->
+            <button id="theme-toggle" class="btn btn-outline-secondary btn-sm ms-auto me-2" type="button" title="Toggle Theme">
+                <span id="theme-icon">🌙</span>
+            </button>
+        </div>
     </div>
 </nav>

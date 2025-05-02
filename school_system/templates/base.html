@@ -1,44 +1,70 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="{{ request.COOKIES.theme|default:'light' }}">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Home{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% endblock %}
+
 </head>
 <body>
-    <body>
-        {% include "navbar.html" %}
-    
-        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="toast align-items-center text-bg-{% if message.tags == 'success' %}success{% elif message.tags == 'error' or message.tags == 'danger' %}danger{% elif message.tags == 'warning' %}warning{% else %}info{% endif %} border-0 show mb-2" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="d-flex">
-                            <div class="toast-body">
-                                {{ message }}
-                            </div>
-                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
+    {% include "navbar.html" %}
+
+    <!-- Toast Messages -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="toast align-items-center text-bg-{% if message.tags == 'success' %}success{% elif message.tags in 'error danger' %}danger{% elif message.tags == 'warning' %}warning{% else %}info{% endif %} border-0 show mb-2" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">{{ message }}</div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
                     </div>
-                {% endfor %}
-            {% endif %}
-        </div>
-    
-        <div class="content">
-            {% block content %}{% endblock %}
-        </div>
-    
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const toastElList = [].slice.call(document.querySelectorAll('.toast'))
-                toastElList.map(function (toastEl) {
-                    new bootstrap.Toast(toastEl, { delay: 5000 }).show()
-                });
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="container my-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Show toasts
+            document.querySelectorAll('.toast').forEach(el => {
+                new bootstrap.Toast(el, { delay: 5000 }).show();
             });
-        </script>
-    </body>
+
+            // Theme toggle
+            const toggleBtn = document.getElementById('theme-toggle');
+            const iconSpan = document.getElementById('theme-icon');
+
+            function setTheme(theme) {
+                document.documentElement.setAttribute('data-bs-theme', theme);
+                document.cookie = `theme=${theme};path=/;max-age=31536000`;
+                iconSpan.textContent = theme === 'dark' ? '☀️' : '🌙';
+            }
+
+            // Initialize icon
+            const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+            iconSpan.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+
+            toggleBtn.addEventListener('click', () => {
+                const newTheme = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+
+            // Auto-detect if no theme set
+            if (!document.cookie.includes('theme=')) {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                setTheme(prefersDark ? 'dark' : 'light');
+            }
+        });
+    </script>
+</body>
 </html>

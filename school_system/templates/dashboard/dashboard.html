@@ -4,6 +4,8 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+<!-- Include the navbar for the dashboard -->
+{% include "dashboard/navbar.html" with page="dashboard" %}
 <div class="container mt-5">
     <div class="alert alert-info d-flex justify-content-between align-items-center" role="alert">
         <div>
