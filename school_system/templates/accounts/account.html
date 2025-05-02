@@ -75,36 +75,75 @@
             </div>
 
             <!-- Children Card for Parents -->
-            {% if user.role == "parent" and user.parent.children.exists %}
+            {% if user.role == "parent" %}
             <div class="card shadow-sm mb-4">
                 <div class="card-header card-header-custom">Children</div>
                 <div class="card-body">
-                    <ul class="list-group list-group-flush">
+                    <ul class="list-group list-group-flush mb-3">
                         {% for child in user.parent.children.all %}
-                            <li class="list-group-item">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <a href="{% url 'account' child.user.id %}" class="child-link">
                                     {{ child.user.first_name }} {{ child.user.last_name }} ({{ child.user.email }})
                                 </a>
+                                <form method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="child_id" value="{{ child.user_id }}">
+                                    <button type="submit" name="remove_child" class="btn btn-sm btn-outline-danger">&times;</button>
+                                </form>
                             </li>
                         {% endfor %}
                     </ul>
+            
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ add_child_form.as_p }}
+                        <button type="submit" name="add_child" class="btn btn-sm btn-primary">Add Child</button>
+                    </form>
                 </div>
             </div>
             {% endif %}
+            
 
             <!-- Subjects Card for Teachers -->
-            {% if user.role == "teacher" and user.teacher.subjects.exists %}
+            {% if user.role == "teacher" %}
             <div class="card shadow-sm mb-4">
                 <div class="card-header card-header-custom">Subjects</div>
                 <div class="card-body">
-                    <ul class="list-group list-group-flush">
+                    <ul class="list-group list-group-flush mb-3">
                         {% for subject in user.teacher.subjects.all %}
-                            <li class="list-group-item">{{ subject.name }}</li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ subject.name }}
+                                <div>
+                                    <form method="post" class="d-inline">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="subject_id" value="{{ subject.id }}">
+                                        <button type="submit" name="remove_subject" class="btn btn-sm btn-outline-secondary" title="Unlink">
+                                            &times;
+                                        </button>
+                                        <button type="submit" name="delete_subject" class="btn btn-sm btn-outline-danger" title="Delete">
+                                            🗑️
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
                         {% endfor %}
                     </ul>
+            
+                    <form method="post" class="mb-2">
+                        {% csrf_token %}
+                        {{ add_subject_form.as_p }}
+                        <button type="submit" name="add_subject" class="btn btn-sm btn-primary">Add Existing Subject</button>
+                    </form>
+            
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ create_subject_form.as_p }}
+                        <button type="submit" name="create_subject" class="btn btn-sm btn-success">Create New Subject</button>
+                    </form>
                 </div>
             </div>
             {% endif %}
+            
         </div>
     </div>
 </div>
