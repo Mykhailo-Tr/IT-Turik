@@ -14,6 +14,7 @@ urlpatterns = [
     path('signup/parent/', views.ParentSignUpView.as_view(), name='register_parent'),
     
     path('account/', views.account_view, name='account'),
+    path('account/<int:user_id>/', views.account_view, name='account'),
     path('account/edit/', views.edit_account_view, name='edit_account'),
     path('account/delete/', views.delete_account_view, name='delete_account'),
     path('profile/', views.profile_view, name='profile'),

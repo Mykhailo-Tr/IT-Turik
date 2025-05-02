@@ -76,15 +76,18 @@ class TeacherSignUpForm(BaseSignUpForm):
 class ParentSignUpForm(BaseSignUpForm):
     children = forms.ModelMultipleChoiceField(
         queryset=Student.objects.all(),
-        widget=forms.CheckboxSelectMultiple
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label="Select Children"
     )
 
     @transaction.atomic
     def save(self):
         user = self.save_user('parent')
-        Parent.objects.create(user=user)
+        parent = Parent.objects.create(user=user)
+        parent.children.set(self.cleaned_data['children'])  # Додаємо зв'язок з дітьми
         return user
-    
+
     
 class UserUpdateForm(forms.ModelForm):
     class Meta:

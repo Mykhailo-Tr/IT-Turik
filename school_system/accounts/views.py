@@ -107,9 +107,13 @@ class ParentSignUpView(UserSignUpView):
 
 
 @login_required(login_url='login')
-def account_view(request):
+def account_view(request, user_id=None):
+    user = get_object_or_404(User, id=user_id) if user_id else request.user
+    profile = get_object_or_404(UserProfile, user=user)
     context = {
         'page': 'account',
+        'user': user,
+        'profile': profile,
     }
     return render(request, 'accounts/account.html', context)
 
