@@ -69,7 +69,7 @@ def create_account_view(request, role):
         'form': form_class(),
         'role': role,
     }
-    return render(request, 'dashboard/create_user_form.html', context)
+    return render(request, 'dashboard/forms/create_user.html', context)
 
 
 @teacher_required(login_url='login')
@@ -87,7 +87,7 @@ def delete_account_view(request, user_id=None):
         'page': 'delete_account',
         'user': user,
     }
-    return render(request, 'accounts/delete_account_form.html', context)
+    return render(request, 'accounts/forms/delete_account.html', context)
     
 
 @teacher_required(login_url='login')
@@ -111,7 +111,7 @@ def edit_account_view(request, user_id=None):
         'page': 'edit_account',
         'form': form,
     }
-    return render(request, 'accounts/edit_account_form.html', context)
+    return render(request, 'accounts/forms/edit_account.html', context)
 
 
 @teacher_required(login_url='login')
@@ -135,4 +135,4 @@ def edit_profile_view(request, user_id=None):
         'page': 'edit_profile',
         'form': form,
     }
-    return render(request, 'accounts/edit_profile_form.html', context)
+    return render(request, 'accounts/forms/edit_profile.html', context)
