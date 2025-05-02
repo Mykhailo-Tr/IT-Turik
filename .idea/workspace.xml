@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a000a1af-f48b-40dd-8902-6b42d11dc45c" name="Changes" comment="Remove Code Smell">
-      <change beforePath="$PROJECT_DIR$/school_system/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/accounts/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/templates/accounts/delete_account_form.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/templates/accounts/edit_account_form.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/templates/accounts/edit_profile_form.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/templates/accounts/login_form.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/templates/accounts/signup_form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/school_system/templates/accounts/forms/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/templates/accounts/forms/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/school_system/templates/accounts/forms/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/templates/accounts/forms/signup.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

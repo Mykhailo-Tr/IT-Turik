@@ -1,10 +1,27 @@
 {% extends "base.html" %}
-{% block title %}Choose type of user{% endblock %}
+{% load static %}
+
+{% block title %}Choose Type of User{% endblock %}
+
 {% block content %}
-<h1>Choose type of user</h1>
-<div>
-    <a href="{% url 'register_student' %}">I'm Student</a>
-    <a href="{% url 'register_teacher' %}">I'm Teacher</a>
-    <a href="{% url 'register_parent' %}">I'm Parent</a>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm text-center">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Choose Your Role</h4>
+                </div>
+                <div class="card-body">
+                    <p class="mb-4">Please select the type of user you want to register as:</p>
+                    
+                    <div class="d-grid gap-3">
+                        <a href="{% url 'register_student' %}" class="btn btn-outline-success btn-lg">I'm a Student</a>
+                        <a href="{% url 'register_teacher' %}" class="btn btn-outline-primary btn-lg">I'm a Teacher</a>
+                        <a href="{% url 'register_parent' %}" class="btn btn-outline-warning btn-lg">I'm a Parent</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
