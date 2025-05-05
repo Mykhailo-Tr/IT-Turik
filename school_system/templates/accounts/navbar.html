@@ -3,16 +3,16 @@
         <h6 class="mb-0">Navigation</h6>
     </div>
     <div class="list-group list-group-flush">
+        {% if user_id == request.user.id%}
+            <a href="{% url 'profile' %}" class="list-group-item list-group-item-action {% if page == 'profile' %}active{% endif %}">
+                <i class="feather feather-user me-2"></i> Profile
+            </a>
+        {% else %}
+            <a href="{% url 'dashboard_profile' user_id %}" class="list-group-item list-group-item-action {% if page == 'profile' %}active{% endif %}">
+                <i class="feather feather-user me-2"></i> Profile
+            </a>
+        {% endif %}
         {% if user_id == request.user.id or request.user.role == 'admin' or request.user.role == 'teacher' %}
-            {% if user_id == request.user.id %}
-                <a href="{% url 'profile' %}" class="list-group-item list-group-item-action {% if page == 'profile' %}active{% endif %}">
-                    <i class="feather feather-user me-2"></i> Profile
-                </a>
-            {% else %}
-                <a href="{% url 'dashboard_profile' user_id %}" class="list-group-item list-group-item-action {% if page == 'profile' %}active{% endif %}">
-                    <i class="feather feather-user me-2"></i> Profile
-                </a>
-            {% endif %}
             <a href="{% url 'edit_account' %}" class="list-group-item list-group-item-action {% if page == 'edit_account' %}active{% endif %}">
                 <i class="feather feather-edit me-2"></i> Edit Account
             </a>
