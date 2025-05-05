@@ -105,12 +105,10 @@ def edit_event_view(request, event_id):
             current_participants = User.objects.filter(eventparticipation__event=event)
             print(selected_participants, current_participants)
 
-            # Видаляємо учасників, яких зняли з події
             for user in current_participants:
                 if user not in selected_participants:
                     EventParticipation.objects.filter(event=event, user=user).delete()
 
-            # Додаємо нових учасників
             for user in selected_participants:
                 EventParticipation.objects.get_or_create(event=event, user=user)
 
