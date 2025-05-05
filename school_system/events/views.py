@@ -94,6 +94,7 @@ def edit_event_view(request, event_id):
 
     if request.method == 'POST':
         form = CreateEventForm(request.POST, instance=event)
+        print(form)
         if form.is_valid():
             event = form.save(commit=False)
             event.author = request.user
@@ -102,6 +103,7 @@ def edit_event_view(request, event_id):
 
             selected_participants = form.cleaned_data['participants']
             current_participants = User.objects.filter(eventparticipation__event=event)
+            print(selected_participants, current_participants)
 
             # Видаляємо учасників, яких зняли з події
             for user in current_participants:
@@ -116,6 +118,15 @@ def edit_event_view(request, event_id):
             return redirect('events')
     else:
         form = CreateEventForm(instance=event)
+
+        selected_participants = User.objects.filter(eventparticipation__event=event)
+
+        form.initial['participants'] = selected_participants
+
+        form.fields['participants'].queryset = (
+            User.objects.exclude(id=request.user.id) | selected_participants
+        ).distinct()
+
 
     form.fields['participants'].queryset = User.objects.exclude(id=request.user.id)
 

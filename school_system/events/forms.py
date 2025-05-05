@@ -9,7 +9,7 @@ class CreateEventForm(forms.ModelForm):
     participants = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        required=False,  # Це поле не є обов'язковим
+        required=False,
         help_text="Select participants for the event"
     )
     class Meta:
