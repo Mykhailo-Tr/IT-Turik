@@ -45,3 +45,36 @@
         </div>
     </div>
 </nav>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Show toasts
+        document.querySelectorAll('.toast').forEach(el => {
+            new bootstrap.Toast(el, { delay: 5000 }).show();
+        });
+
+        // Theme toggle
+        const toggleBtn = document.getElementById('theme-toggle');
+        const iconSpan = document.getElementById('theme-icon');
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-bs-theme', theme);
+            document.cookie = `theme=${theme};path=/;max-age=31536000`;
+            iconSpan.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        // Initialize icon
+        const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+        iconSpan.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+
+        toggleBtn.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        });
+
+        // Auto-detect if no theme set
+        if (!document.cookie.includes('theme=')) {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            setTheme(prefersDark ? 'dark' : 'light');
+        }
+    });
+</script>
