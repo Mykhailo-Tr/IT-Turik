@@ -3,32 +3,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/dashboard/profile.css' %}">
-<style>
-    .profile-img {
-        width: 120px;
-        height: 120px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 2px solid #ddd;
-    }
-    .card-header-custom {
-        background-color: #f8f9fa;
-        font-weight: bold;
-        font-size: 1.1rem;
-        border-bottom: 1px solid #ddd;
-    }
-    .list-group-item strong {
-        width: 150px;
-        display: inline-block;
-    }
-    .child-link {
-        text-decoration: none;
-        color: #007bff;
-    }
-    .child-link:hover {
-        text-decoration: underline;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/accounts/account.css' %}">
 {% endblock %}
 
 {% block title %}Account{% endblock %}

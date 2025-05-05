@@ -1,34 +1,47 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm rounded-bottom py-2">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'home' %}">ICON</a>
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold text-primary" href="{% url 'home' %}">
+            <img src="{% static 'svg/logo.svg' %}" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+            SchoolSys
+        </a>
+
+        <!-- Toggler for mobile -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        <!-- Navigation links -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item {% if page == 'home' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'home' %}active fw-bold text-primary{% endif %}" href="{% url 'home' %}">Home</a>
                 </li>
+
                 {% if request.user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'account' %}">Account</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'tasks' %}">Tasks</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'events' %}">Events</a></li>
-                    <li class="nav-item {% if page == 'dashboard' %}active{% endif %}">
-                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link {% if page == 'account' %}active{% endif %}" href="{% url 'account' %}">Account</a></li>
+                    <li class="nav-item"><a class="nav-link {% if page == 'tasks' %}active{% endif %}" href="{% url 'tasks' %}">Tasks</a></li>
+                    <li class="nav-item"><a class="nav-link {% if page == 'events' %}active{% endif %}" href="{% url 'events' %}">Events</a></li>
+                    <li class="nav-item"><a class="nav-link {% if page == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">Dashboard</a></li>
                 {% else %}
-                    <li class="nav-item {% if page == 'login' %}active{% endif %}">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link {% if page == 'login' %}active{% endif %}" href="{% url 'login' %}">Login</a></li>
                 {% endif %}
             </ul>
 
-            <!-- Theme toggle button aligned to right -->
-            <button id="theme-toggle" class="btn btn-outline-secondary btn-sm ms-auto me-2" type="button" title="Toggle Theme">
-                <span id="theme-icon">🌙</span>
-            </button>
+            <!-- Right-side buttons -->
+            <div class="d-flex align-items-center">
+                {% if request.user.is_authenticated %}
+                    <span class="me-3 text-muted small">{{ request.user.email }}</span>
+                    <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm me-2">Logout</a>
+                {% endif %}
+
+                <!-- Theme toggle -->
+                <button id="theme-toggle" class="btn btn-outline-secondary btn-sm" type="button" title="Toggle Theme">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
         </div>
     </div>
 </nav>
