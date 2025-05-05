@@ -19,6 +19,8 @@
             <a href="{% url 'delete_account' %}" class="list-group-item list-group-item-action {% if page == 'delete_account' %}active{% endif %}">
                 <i class="feather feather-trash-2 me-2"></i> Delete Account
             </a>
+        {% endif %}
+        {% if user_id == request.user.id %}
             <a href="{% url 'logout' %}" class="list-group-item list-group-item-action">
                 <i class="feather feather-log-out me-2"></i> Logout
             </a>
