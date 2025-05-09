@@ -55,12 +55,10 @@ def events_view(request, event_id=None):
     elif time_filter == 'past':
         invited_events = invited_events.filter(end_date__lt=now())
 
-    # Фільтр за статусом участі
     if status:
         invited_events = invited_events.filter(eventparticipation__user=request.user,
                                                eventparticipation__response=status)
 
-    # Словник статусів для відображення бейджів
     participations = {
         p.event_id: p.response for p in EventParticipation.objects.filter(user=request.user)
     }
