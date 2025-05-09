@@ -58,6 +58,22 @@ def respond_to_event(request, event_id, response):
     return redirect('events')
 
 
+@login_required
+@require_POST
+def leave_event_view(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    participation = get_object_or_404(EventParticipation, user=request.user, event=event)
+
+    if participation.response == EventParticipation.ResponseChoices.ACCEPTED:
+        participation.response = EventParticipation.ResponseChoices.LEAVED
+        participation.save()
+        messages.success(request, "You have left the event.")
+    else:
+        messages.warning(request, "You can only leave an event you have accepted.")
+
+    return redirect('events')
+
+
 @login_required(login_url='login')
 @require_http_methods(["GET", "POST"])
 def create_event_view(request):
@@ -147,3 +163,4 @@ def delete_event_view(request, event_id):
     event.delete()
     messages.success(request, 'Event deleted successfully.')
     return redirect('events')
+

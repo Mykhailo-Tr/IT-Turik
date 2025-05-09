@@ -70,7 +70,13 @@
                 </ul>
             {% endif %}
         </div>
-        
+        {% if participation and participation.response == 'accepted' %}
+            <form method="post" action="{% url 'leave_event' event.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger mt-3">🚪 Leave Event</button>
+            </form>
+        {% endif %}
+
     </div>
 </div>
 {% endblock %}

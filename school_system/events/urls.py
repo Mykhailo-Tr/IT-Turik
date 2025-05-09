@@ -8,5 +8,5 @@ urlpatterns = [
     path('edit/<int:event_id>', views.edit_event_view, name="edit_event"),
     path('delete/<int:event_id>', views.delete_event_view, name="delete_event"),
     path('respond/<int:event_id>/<str:response>/', views.respond_to_event, name='respond_to_event'),
-
+    path('leave/<int:event_id>/', views.leave_event_view, name='leave_event'),
 ]
