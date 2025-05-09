@@ -14,9 +14,11 @@ def events_view(request, event_id=None):
     if event_id:
         event = get_object_or_404(Event, id=event_id)
         participation = EventParticipation.objects.filter(event=event, user=request.user).first()
+        comments = EventComment.objects.filter(event=event)
         return render(request, 'events/event_details.html', {
             "event": event,
             "participation": participation,
+            "comments": comments,
             "page": "event_details"
         })
 
@@ -37,6 +39,48 @@ def events_view(request, event_id=None):
         "participations": participations,
         "page": "events"
     })
+    
+@login_required(login_url='login')
+@require_POST
+def add_event_comment(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+
+    is_author = event.author == request.user
+    participation = EventParticipation.objects.filter(
+        event=event,
+        user=request.user,
+        response=EventParticipation.ResponseChoices.ACCEPTED
+    ).first()
+
+    if not (participation or is_author):
+        messages.error(request, "Only participants who accepted the event or the author can comment.")
+        return redirect('event_details', event_id=event.id)
+
+    comment_text = request.POST.get('comment', '').strip()
+    if comment_text:
+        EventComment.objects.create(user=request.user, event=event, comment=comment_text)
+
+    return redirect('event_details', event_id=event.id)
+
+
+
+@login_required
+@require_POST
+def delete_event_comment(request, comment_id):
+    comment = get_object_or_404(EventComment, id=comment_id)
+    event = comment.event
+
+    is_author = event.author == request.user
+    is_comment_owner = comment.user == request.user
+
+    if not (is_comment_owner or is_author):
+        messages.error(request, "You don't have permission to delete this comment.")
+        return redirect('event_details', event_id=event.id)
+
+    comment.delete()
+    messages.success(request, "Comment deleted successfully.")
+    return redirect('event_details', event_id=event.id)
+
     
     
 @login_required

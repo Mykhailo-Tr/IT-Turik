@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from .models import Event
+from .models import Event, EventComment
 from accounts.models import User
 
 
@@ -29,5 +29,17 @@ class CreateEventForm(forms.ModelForm):
         if Event.objects.filter(title=title).exclude(id=self.instance.id).exists():
             raise forms.ValidationError("Event with this title already exists.")
         return title
+    
+
+
+class EventCommentForm(forms.ModelForm):
+    class Meta:
+        model = EventComment
+        fields = ['comment']
+        widgets = {
+            'comment': forms.Textarea(attrs={
+                'rows': 3, 'class': 'form-control', 'placeholder': 'Write a comment...'
+            })
+        }
 
     
