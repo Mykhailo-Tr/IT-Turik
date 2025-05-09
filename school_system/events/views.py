@@ -122,12 +122,11 @@ def leave_event_view(request, event_id):
 @require_http_methods(["GET", "POST"])
 def create_event_view(request):
     if request.method == 'POST':
-        form = CreateEventForm(request.POST)
+        form = CreateEventForm(request.POST, user=request.user)
         if form.is_valid():
             event = form.save(commit=False)
             event.author = request.user
             event.save()
-            
             form.save_m2m()
 
             participants = form.cleaned_data['participants']
@@ -136,11 +135,9 @@ def create_event_view(request):
 
             return redirect('events')
     else:
-        form = CreateEventForm()
+        form = CreateEventForm(user=request.user)
 
     return render(request, 'events/forms/create.html', {'form': form})
-
-
 
 
 @login_required(login_url="login")
