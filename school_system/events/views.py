@@ -8,6 +8,8 @@ from .models import Event, EventParticipation, EventComment
 from .forms import CreateEventForm
 from accounts.models import User
 
+from django.utils.timezone import now
+from django.db.models import Q
 
 @login_required(login_url='login')
 def events_view(request, event_id=None):
@@ -22,23 +24,62 @@ def events_view(request, event_id=None):
             "page": "event_details"
         })
 
-    if request.user.role == 'admin':
-        created_events = Event.objects.all()
-        invited_events = Event.objects.none()
-    else:
-        created_events = Event.objects.filter(author=request.user)
-        invited_events = Event.objects.filter(eventparticipation__user=request.user).exclude(author=request.user)
+    # Події, створені користувачем
+    created_events = Event.objects.filter(author=request.user) if request.user.role != 'admin' else Event.objects.all()
 
+    # Події, на які запрошений
+    invited_events = Event.objects.filter(eventparticipation__user=request.user).exclude(author=request.user)
+
+    # Отримання фільтрів
+    q = request.GET.get('q', '').strip()
+    from_date = request.GET.get('from_date')
+    to_date = request.GET.get('to_date')
+    time_filter = request.GET.get('time')
+    status = request.GET.get('status')
+
+    # Пошук по назві або автору
+    if q:
+        invited_events = invited_events.filter(
+            Q(title__icontains=q) | Q(author__first_name__icontains=q) | Q(author__last_name__icontains=q)
+        )
+
+    # Фільтр по датах
+    if from_date:
+        invited_events = invited_events.filter(start_date__date__gte=from_date)
+    if to_date:
+        invited_events = invited_events.filter(end_date__date__lte=to_date)
+
+    # Фільтр за часом
+    if time_filter == 'future':
+        invited_events = invited_events.filter(start_date__gte=now())
+    elif time_filter == 'past':
+        invited_events = invited_events.filter(end_date__lt=now())
+
+    # Фільтр за статусом участі
+    if status:
+        invited_events = invited_events.filter(eventparticipation__user=request.user,
+                                               eventparticipation__response=status)
+
+    # Словник статусів для відображення бейджів
     participations = {
         p.event_id: p.response for p in EventParticipation.objects.filter(user=request.user)
     }
 
-    return render(request, 'events/events.html', {
+    context = {
         "created_events": created_events,
         "invited_events": invited_events,
         "participations": participations,
-        "page": "events"
-    })
+        "page": "events",
+        "filter": {
+            "q": q,
+            "from_date": from_date,
+            "to_date": to_date,
+            "status": status,
+            "time": time_filter
+        }
+    }
+    return render(request, 'events/events.html', context)
+
     
 @login_required(login_url='login')
 @require_POST
