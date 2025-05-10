@@ -111,7 +111,6 @@ class ParentSignUpView(UserSignUpView):
 def account_view(request, user_id=None):
     user = User.objects.get(id=request.user.id) if not user_id else get_object_or_404(User, id=user_id)
     user_id = user.id if not user_id else user_id
-    print(user_id, '_______++++++')
     profile_user = get_object_or_404(User, id=user_id) if user_id else user
     
     if request.method == "POST":
