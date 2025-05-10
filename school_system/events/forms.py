@@ -19,6 +19,8 @@ class CreateEventForm(forms.ModelForm):
 
         if user:
             self.fields['participants'].queryset = User.objects.exclude(id=user.id)
+        else:
+            self.fields['participants'].queryset = User.objects.all()
 
     class Meta:
         model = Event
