@@ -24,32 +24,26 @@ def events_view(request, event_id=None):
             "page": "event_details"
         })
 
-    # Події, створені користувачем
     created_events = Event.objects.filter(author=request.user) if request.user.role != 'admin' else Event.objects.all()
 
-    # Події, на які запрошений
     invited_events = Event.objects.filter(eventparticipation__user=request.user).exclude(author=request.user)
 
-    # Отримання фільтрів
     q = request.GET.get('q', '').strip()
     from_date = request.GET.get('from_date')
     to_date = request.GET.get('to_date')
     time_filter = request.GET.get('time')
     status = request.GET.get('status')
 
-    # Пошук по назві або автору
     if q:
         invited_events = invited_events.filter(
             Q(title__icontains=q) | Q(author__first_name__icontains=q) | Q(author__last_name__icontains=q)
         )
 
-    # Фільтр по датах
     if from_date:
         invited_events = invited_events.filter(start_date__date__gte=from_date)
     if to_date:
         invited_events = invited_events.filter(end_date__date__lte=to_date)
 
-    # Фільтр за часом
     if time_filter == 'future':
         invited_events = invited_events.filter(start_date__gte=now())
     elif time_filter == 'past':
