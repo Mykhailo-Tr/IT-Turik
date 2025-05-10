@@ -33,6 +33,7 @@ def events_view(request, event_id=None):
     to_date = request.GET.get('to_date')
     time_filter = request.GET.get('time')
     status = request.GET.get('status')
+    author = request.GET.get('author')
 
     if q:
         invited_events = invited_events.filter(
@@ -52,15 +53,21 @@ def events_view(request, event_id=None):
     if status:
         invited_events = invited_events.filter(eventparticipation__user=request.user,
                                                eventparticipation__response=status)
+        
+    if author:
+        invited_events = invited_events.filter(author__id=author)
 
     participations = {
         p.event_id: p.response for p in EventParticipation.objects.filter(user=request.user)
     }
+    users = User.objects.all()
+
 
     context = {
         "created_events": created_events,
         "invited_events": invited_events,
         "participations": participations,
+        "users": users,
         "page": "events",
         "filter": {
             "q": q,
@@ -70,6 +77,9 @@ def events_view(request, event_id=None):
             "time": time_filter
         }
     }
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return render(request, 'events/event_list_partial.html', context)
+
     return render(request, 'events/events.html', context)
 
     

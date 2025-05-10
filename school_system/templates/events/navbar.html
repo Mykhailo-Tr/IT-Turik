@@ -1,48 +1,16 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-3">
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'events' %}">📅 Events</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarEvents"
-                aria-controls="navbarEvents" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand fw-bold" href="{% url 'events' %}">📅 Events</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#eventsNavbar"
+                aria-controls="eventsNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-                <form method="get" class="row g-2 mb-4">
-        <div class="col-md-3">
-            <input type="text" name="q" class="form-control" placeholder="Search by title or author" value="{{ filter.q }}">
-        </div>
-        <div class="col-md-2">
-            <input type="date" name="from_date" class="form-control" value="{{ filter.from_date }}">
-        </div>
-        <div class="col-md-2">
-            <input type="date" name="to_date" class="form-control" value="{{ filter.to_date }}">
-        </div>
-        <div class="col-md-2">
-            <select name="time" class="form-select">
-            <option value="">All time</option>
-            <option value="future" {% if filter.time == 'future' %}selected{% endif %}>Upcoming</option>
-            <option value="past" {% if filter.time == 'past' %}selected{% endif %}>Past</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <select name="status" class="form-select">
-            <option value="">All statuses</option>
-            <option value="accepted" {% if filter.status == 'accepted' %}selected{% endif %}>Accepted</option>
-            <option value="declined" {% if filter.status == 'declined' %}selected{% endif %}>Declined</option>
-            <option value="unanswered" {% if filter.status == 'unanswered' %}selected{% endif %}>Unanswered</option>
-            <option value="leaved" {% if filter.status == 'leaved' %}selected{% endif %}>Leaved</option>
-            </select>
-        </div>
-        <div class="col-md-1">
-            <button class="btn btn-primary w-100">Filter</button>
-        </div>
-        </form>
-        <div class="collapse navbar-collapse" id="navbarEvents">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link {% if page == 'create_event' %}active fw-bold{% endif %}" href="{% url 'create_event' %}">
-                        ➕ Create Event
-                    </a>
-                </li>
 
+        <div class="collapse navbar-collapse" id="eventsNavbar">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item {% if page == 'create_event' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'create_event' %}">➕ Create Event</a>
+                </li>
                 {% if page == 'event_details' and request.user == event.author %}
                     <li class="nav-item">
                         <a class="nav-link {% if page == 'edit_event' %}active fw-bold{% endif %}" href="{% url 'edit_event' event.id %}">

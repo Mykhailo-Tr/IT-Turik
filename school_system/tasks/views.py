@@ -16,7 +16,7 @@ def tasks_view(request, task_id=None):
         task = get_object_or_404(Task, id=task_id)
         return render(request, 'tasks/task.html', {'task': task})
         
-    tasks = Task.objects.all().order_by('-date_posted')  # Якщо треба фільтрувати всіх, не лише свої
+    tasks = Task.objects.all().order_by('-date_posted')
     users = User.objects.all()
     user_taken_tasks = UserTaskStatus.objects.filter(user=request.user).values_list('task_id', flat=True)
     user_completed_tasks = UserTaskStatus.objects.filter(user=request.user, is_completed=True).values_list('task_id', flat=True)

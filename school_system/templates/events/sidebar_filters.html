@@ -1,0 +1,52 @@
+<div class="col-md-3 mb-4 ps-0">
+    <div class="card shadow-sm">
+        <div class="card-header bg-light">
+            <strong>🔍 Filter Events</strong>
+        </div>
+        <div class="card-body">
+            <form method="get" action="{% url 'events' %}">
+                <div class="mb-3">
+                    <input type="search" name="q" class="form-control" placeholder="Search title..." value="{{ request.GET.q }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">From</label>
+                    <input type="date" name="from_date" class="form-control" value="{{ request.GET.from_date }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">To</label>
+                    <input type="date" name="to_date" class="form-control" value="{{ request.GET.to_date }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Time</label>
+                    <select name="time" class="form-select">
+                        <option value="">All time</option>
+                        <option value="future" {% if request.GET.time == 'future' %}selected{% endif %}>Upcoming</option>
+                        <option value="past" {% if request.GET.time == 'past' %}selected{% endif %}>Past</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select">
+                        <option value="">All statuses</option>
+                        <option value="accepted" {% if request.GET.status == 'accepted' %}selected{% endif %}>Accepted</option>
+                        <option value="declined" {% if request.GET.status == 'declined' %}selected{% endif %}>Declined</option>
+                        <option value="unanswered" {% if request.GET.status == 'unanswered' %}selected{% endif %}>Unanswered</option>
+                        <option value="leaved" {% if request.GET.status == 'leaved' %}selected{% endif %}>Leaved</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Author</label>
+                    <select name="author" class="form-select">
+                        <option value="">All authors</option>
+                        {% for author in users %}
+                            <option value="{{ author.id }}" {% if request.GET.author == author.id|stringformat:"s" %}selected{% endif %}>
+                                {{ author.email }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button class="btn btn-outline-primary w-100" type="submit">Apply Filters</button>
+            </form>
+        </div>
+    </div>
+</div>
