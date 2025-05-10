@@ -12,7 +12,12 @@
             <h6 class="card-subtitle mb-2 text-muted">
                 Type: <span class="badge bg-secondary">{{ event.get_event_type_display }}</span>
             </h6>
-            <p class="mb-1"><strong>Author:</strong> {{ event.author.get_full_name }}</p>
+            {% if request.user == event.author %}
+                <p class="mb-1"><strong>Author:</strong> {{ event.author.get_full_name }} <span class="badge bg-secondary">You</span></p>
+                
+            {% else %}
+                <p class="mb-1"><strong>Author:</strong> <a href="{% url 'account' event.author.id %}">{{ event.author.get_full_name }}</a></p>
+            {% endif %}
             <p class="mb-1"><strong>Location:</strong> {{ event.location }}</p>
             <p class="mb-1">
                 <strong>Start:</strong> {{ event.start_date|date:"d M Y H:i" }} <br>

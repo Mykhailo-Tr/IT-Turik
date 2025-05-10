@@ -71,6 +71,9 @@
                             <div class="btn-group">
                                 <a href="{% url 'event_details' event.id %}" class="btn btn-outline-primary btn-sm">Details</a>
                             </div>
+                            <small class="text-muted">
+                                by {{ event.author.email }}
+                            </small>
                             <div>
                                 {% with response=participations|get_item:event.id %}
                                     {% if response == 'accepted' %}
