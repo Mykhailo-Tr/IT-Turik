@@ -9,7 +9,12 @@
         <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% endblock %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    {% comment %} <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/calender.css' %}"> {% endcomment %}
 
+    {% block extracss %}
+    {% endblock extracss %}
 </head>
 <body>
     {% include "navbar.html" %}
@@ -31,9 +36,20 @@
     <div class="container my-4">
         {% block content %}{% endblock %}
     </div>
+    {% comment %} <main class="app-content">
+        <div class="app-title">
+            {% block breadcrumb %}
+            {% endblock breadcrumb %}
+        </div>
+        {% block content %}
+        {% endblock content %}
+    </main> {% endcomment %}
+    <!-- Essential javascripts for application to work-->
+    {% include 'base/js.html' %}
+    {% block extrascripts %}
+    {% endblock extrascripts %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-
 
 </body>
 </html>

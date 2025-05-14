@@ -1,5 +1,20 @@
 from django.db import models
 from accounts.models import User
+from django.urls import reverse
+
+
+class EventManager(models.Manager):
+    def get_all_events(self, user):
+        events = Event.objects.filter(author=user)
+        return events
+    
+    def get_running_events(self, user):
+        events = Event.objects.filter(author=user, start_date__gte=models.functions.Now())
+        return events
+    
+
+    
+
 
 class Event(models.Model):
     class EventType(models.TextChoices):
@@ -17,12 +32,19 @@ class Event(models.Model):
     location = models.CharField(max_length=255)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='events_created')
     tasks = models.ManyToManyField('tasks.Task', related_name='events', blank=True)
+    
+    objects = EventManager()
+
 
     def __str__(self):
         return f"{self.title} ({self.get_event_type_display()})"
 
     class Meta:
         ordering = ['start_date']
+        
+    def get_html_url(self):
+        url = reverse("callendar_event-detail", args=(self.id,))
+        return f'<a href="{url}"> {self.title} </a>'
 
 
 class EventParticipation(models.Model):
