@@ -1,23 +1,30 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/calendar.css' %}">
+{% endblock %}
+
+
 {% block title %}Calendar{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <a href="?{{ prev_month }}" class="btn btn-outline-primary">← Prev</a>
-        <h3 class="mb-0">📅 Calendar</h3>
-        <a href="?{{ next_month }}" class="btn btn-outline-primary">Next →</a>
-    </div>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a href="?{{ prev_month }}" class="btn btn-outline-primary">← Prev</a>
+            <h3 class="mb-0">📅 Calendar</h3>
+            <a href="?{{ next_month }}" class="btn btn-outline-primary">Next →</a>
+        </div>
 
-    <!-- Вибір перегляду -->
-    <div class="d-flex justify-content-center mb-4">
-        <a href="?view=month" class="btn btn-outline-secondary btn-sm {% if view_mode == 'month' %}active{% endif %}">Month</a>
-        <a href="?view=week" class="btn btn-outline-secondary btn-sm {% if view_mode == 'week' %}active{% endif %}">Week</a>
-        <a href="?view=day" class="btn btn-outline-secondary btn-sm {% if view_mode == 'day' %}active{% endif %}">Day</a>
-    </div>
+        <!-- Вибір перегляду -->
+        <div class="d-flex justify-content-center mb-4">
+            <a href="?view=month" class="btn btn-outline-secondary btn-sm {% if view_mode == 'month' %}active{% endif %}">Month</a> 
+            <a href="?view=week" class="btn btn-outline-secondary btn-sm {% if view_mode == 'week' %}active{% endif %}">Week</a> 
+            <a href="?view=day" class="btn btn-outline-secondary btn-sm {% if view_mode == 'day' %}active{% endif %}">Day</a>
+        </div>
 
-    <div class="table-responsive">
-        {{ calendar|safe }}
+        <div class="table-responsive">
+            {{ calendar|safe }}
+        </div>
     </div>
-</div>
 {% endblock %}
