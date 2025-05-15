@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a000a1af-f48b-40dd-8902-6b42d11dc45c" name="Changes" comment="Remove Code Smell">
-      <change beforePath="$PROJECT_DIR$/school_system/static/css/accounts.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/static/css/accounts/account.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/static/css/accounts/accounts.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/static/css/dashboard/profile.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/static/js/accounts.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/static/js/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/static/js/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/school_system/templates/calendarapp/calendar.html" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/templates/calendarapp/calendar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/school_system/static/css/calender.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/school_system/static/js/calender.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/school_system/static/js/main_old.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
