@@ -255,46 +255,7 @@
           
           });
       }});
-      
-      document.getElementById('add-to-next-week').addEventListener('click', function() {
-          const eventId = this.getAttribute('data-event-id-week');
-          if (confirm('Are you sure you want add this event to next week?')) {
-              $.ajax({
-                url: `/next_week/${eventId}/`,
-                  type: 'POST',
-                  data: {
-                      csrfmiddlewaretoken: '{{ csrf_token }}',
-                  },
-                  success: function(response) {
-                      alert(response.message);
-                      window.location.reload();
-                  },
-                  error: function(xhr, status, error) {
-                      alert('Error!');
-                  }
-              });
-          }
-  });
 
-  document.getElementById('add-to-next-day').addEventListener('click', function() {
-    const eventId = this.getAttribute('data-event-id-day');
-    if (confirm('Are you sure you want add this event to next day?')) {
-        $.ajax({
-          url: `/next_day/${eventId}/`,
-            type: 'POST',
-            data: {
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-            },
-            success: function(response) {
-                alert(response.message);
-                window.location.reload();
-            },
-            error: function(xhr, status, error) {
-                alert('Error!');
-            }
-        });
-    }
-});
 
 </script>
 {% endblock extrascripts %}
