@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a000a1af-f48b-40dd-8902-6b42d11dc45c" name="Changes" comment="Remove Code Smell">
-      <change beforePath="$PROJECT_DIR$/school_system/static/calender/main.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/school_system/templates/calendarapp/calendar.html" beforeDir="false" afterPath="$PROJECT_DIR$/school_system/templates/calendarapp/calendar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
