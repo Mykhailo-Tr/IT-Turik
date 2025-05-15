@@ -4,3 +4,38 @@
     right: 20px;
     z-index: 1051;
 }
+table.calendar {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+table.calendar th {
+    background-color: #f8f9fa;
+    padding: 10px;
+    font-weight: bold;
+}
+
+table.calendar td {
+    border: 1px solid #dee2e6;
+    height: 100px;
+    vertical-align: top;
+    padding: 5px;
+}
+
+table.calendar ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+table.calendar li {
+    font-size: 0.9rem;
+    margin-bottom: 3px;
+}
+
+table.calendar .date {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+}

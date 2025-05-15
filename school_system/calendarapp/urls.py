@@ -3,7 +3,7 @@ from . import views
 
 
 urlpatterns = [
-    path("", views.CalendarViewNew.as_view(), name="calendar"),
+    path("", views.CalendarView.as_view(), name="calendar"),
     # path('delete_event/<int:event_id>/', views.delete_event, name='delete_event'),
     # path('next_week/<int:event_id>/', views.next_week, name='next_week'),
     # path('next_day/<int:event_id>/', views.next_day, name='next_day'),
