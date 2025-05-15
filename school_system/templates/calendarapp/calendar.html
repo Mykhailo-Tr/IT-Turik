@@ -39,7 +39,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form method="post">
+                        <!-- <form method="post">
                             {% csrf_token %}
                             <div class="modal-body">
                                 <div class="form-group">
@@ -63,7 +63,8 @@
                                 <button id="modalClose2" type="button" class="btn btn-danger">Close</button>
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </div>
-                        </form>
+                        </form> -->
+                        {% include "events/forms/create.html" %}
                     </div>
                 </div>
             </div>
@@ -144,8 +145,6 @@
           console.log(arg.end)
           var modal = document.getElementById('eventModal')
           modal.style.display = 'block'
-          document.getElementById('id_start_date').value = converterDataParaDjangoFormat(arg.start);
-          document.getElementById('id_end_date').value = converterDataParaDjangoFormat(arg.end);
           calendar.unselect()
         },
         
