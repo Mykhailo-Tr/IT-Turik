@@ -6,11 +6,12 @@ from django.utils.timezone import make_aware, is_naive
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from datetime import datetime
+from django.template.loader import render_to_string
 
 from events.models import Event, EventParticipation
 from events.forms import CreateEventForm
 
+from datetime import datetime
 import json
 
 
@@ -35,22 +36,44 @@ def get_events_json(request):
     return JsonResponse(event_list, safe=False)
 
 
+def event_form_partial(request, event_id=None):
+    if event_id:
+        event = get_object_or_404(Event, id=event_id)
+    else:
+        event = None
+
+    form = CreateEventForm(instance=event)
+
+    context = {
+        'form': form,
+        'event': event,
+    }
+
+    return render(request, 'calendarapp/event_form_partial.html', context)
+
+
 @login_required(login_url="login")
 def create_event(request):
     if request.method == 'POST':
-        form = CreateEventForm(request.POST, user=request.user)
-        if form.is_valid():
-            event = form.save(commit=False)
-            event.author = request.user
-            event.save()
-            form.save_m2m()
+        try:
+            form = CreateEventForm(request.POST, request.FILES, user=request.user)
 
-            participants = form.cleaned_data['participants']
-            for user in participants:
-                EventParticipation.objects.create(event=event, user=user)
+            if form.is_valid():
+                event = form.save(commit=False)
+                event.author = request.user
+                event.save()
+                form.save_m2m()
 
-            return redirect('calendarapp:fullcalendar')
-    return redirect('calendarapp:fullcalendar')
+                return JsonResponse({"success": True})
+            else:
+                return JsonResponse({
+                    "success": False,
+                    "form_html": render_to_string("calendarapp/event_form_partial.html", {"form": form}, request=request)
+                })
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request."}, status=400)
 
 
 @login_required(login_url="login")

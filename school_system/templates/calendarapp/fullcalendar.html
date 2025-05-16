@@ -1,102 +1,131 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load widget_tweaks %}
+
 {% block title %}Calendar{% endblock %}
 
 {% block extracss %}
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' http://127.0.0.1:9999;">
-
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/main.min.css" rel="stylesheet">
-  <style>
-    #calendar {
-      max-width: 1100px;
-      margin: 40px auto;
-    }
-    .fc-event {
-      cursor: pointer;
-    }
-  </style>
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/main.min.css" rel="stylesheet">
+<style>
+  #calendar {
+    max-width: 1100px;
+    margin: 40px auto;
+  }
+  .fc-event {
+    cursor: pointer;
+  }
+</style>
 {% endblock %}
 
 {% block content %}
-  <div class="container mt-4">
-    <h2 class="text-center mb-4">Event Calendar</h2>
-    <div id="calendar"></div>
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Event Calendar</h2>
+  <div id="calendar"></div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventModalLabel">Create Event</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="eventModalBody">
+        <!-- AJAX form will be loaded here -->
+      </div>
+    </div>
   </div>
+</div>
 {% endblock %}
 
 {% block extrascripts %}
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const calendarEl = document.getElementById('calendar');
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-      },
-      editable: true,
-      selectable: true,
-      navLinks: true,
-      locale: 'en',
-      events: {
-        url: '{% url "calendarapp:events_json" %}',
-        method: 'GET',
-        failure: () => alert('There was an error while fetching events.')
-      },
-      select: function (info) {
-        const title = prompt('Enter event title:');
-        if (title) {
-          fetch('{% url "calendarapp:create_event" %}', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': '{{ csrf_token }}',
-            },
-            body: JSON.stringify({
-              title: title,
-              start: info.startStr,
-              end: info.endStr
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const calendarEl = document.getElementById('calendar');
+  const eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
+
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    editable: true,
+    selectable: true,
+    navLinks: true,
+    events: {
+      url: '{% url "calendarapp:events_json" %}',
+      method: 'GET',
+      failure: () => alert('There was an error while fetching events.')
+    },
+    select: function (info) {
+      fetch('{% url "calendarapp:create_event_form" %}?start=' + info.startStr + '&end=' + info.endStr)
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('eventModalBody').innerHTML = html;
+          eventModal.show();
+
+          const form = document.getElementById('event-form');
+          form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+
+            fetch('{% url "calendarapp:create_event" %}', {
+              method: 'POST',
+              body: formData,
+              headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+              }
             })
-          })
-          .then(response => response.json())
-          .then(() => calendar.refetchEvents());
-        }
-        calendar.unselect();
-      },
-      eventDrop: function (info) {
-        fetch(`/calendar/events/update/${info.event.id}/`, {
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                calendar.refetchEvents();
+                eventModal.hide();
+              } else {
+                document.getElementById('eventModalBody').innerHTML = data.form_html;
+              }
+            });
+          });
+        });
+      calendar.unselect();
+    },
+    eventClick: function (info) {
+      if (confirm(`Delete "${info.event.title}"?`)) {
+        fetch(`/calendar/events/delete/${info.event.id}/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': '{{ csrf_token }}',
-          },
-          body: JSON.stringify({
-            start: info.event.start.toISOString(),
-            end: info.event.end ? info.event.end.toISOString() : info.event.start.toISOString()
-          })
+          }
         })
         .then(response => response.json())
         .then(() => calendar.refetchEvents());
-      },
-      eventClick: function (info) {
-        if (confirm(`Delete "${info.event.title}"?`)) {
-          fetch(`/calendar/events/delete/${info.event.id}/`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': '{{ csrf_token }}',
-            }
-          })
-          .then(response => response.json())
-          .then(() => calendar.refetchEvents());
-        }
       }
-    });
-
-    calendar.render();
+    },
+    eventDrop: function (info) {
+      fetch(`/calendar/events/update/${info.event.id}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: JSON.stringify({
+          start: info.event.start.toISOString(),
+          end: info.event.end ? info.event.end.toISOString() : info.event.start.toISOString()
+        })
+      })
+      .then(response => response.json())
+      .then(() => calendar.refetchEvents());
+    }
   });
+
+  calendar.render();
+});
 </script>
 {% endblock %}

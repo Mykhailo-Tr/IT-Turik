@@ -1,0 +1,58 @@
+{% load widget_tweaks %}
+
+<form  method="post" id="event-form" >
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="mb-3">
+        <label class="form-label" for="{{ form.title.id_for_label }}">Title</label>
+        {{ form.title|add_class:"form-control" }}
+        {{ form.title.errors }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="{{ form.event_type.id_for_label }}">Event Type</label>
+        {{ form.event_type|add_class:"form-control" }}
+        {{ form.event_type.errors }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="{{ form.description.id_for_label }}">Description</label>
+        {{ form.description|add_class:"form-control" }}
+        {{ form.description.errors }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="{{ form.start_date.id_for_label }}">Start</label>
+        {{ form.start_date|add_class:"form-control" }}
+        {{ form.start_date.errors }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="{{ form.end_date.id_for_label }}">End</label>
+        {{ form.end_date|add_class:"form-control" }}
+        {{ form.end_date.errors }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="{{ form.location.id_for_label }}">Location</label>
+        {{ form.location|add_class:"form-control" }}
+        {{ form.location.errors }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Participants</label>
+        {{ form.participants }}
+        {{ form.participants.errors }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Tasks</label>
+        {{ form.tasks }}
+        {{ form.tasks.errors }}
+    </div>
+
+    <div class="text-end">
+        <button type="submit" class="btn btn-success">Save</button>
+    </div>
+</form>
