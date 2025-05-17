@@ -18,9 +18,9 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if page == 'delete_event' %}active fw-bold text-danger{% endif %}" href="{% url 'delete_event' event.id %}">
+                        <button class="nav-link active  text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-event-id="{{ event.id }}">
                             🗑️ Delete
-                        </a>
+                        </button>
                     </li>
                 {% endif %}
             </ul>
