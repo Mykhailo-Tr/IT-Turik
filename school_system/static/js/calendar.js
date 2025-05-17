@@ -1,49 +1,3 @@
-{% extends 'base.html' %}
-{% load static %}
-{% load widget_tweaks %}
-
-{% block title %}Calendar{% endblock %}
-
-{% block extracss %}
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/main.min.css" rel="stylesheet">
-<style>
-  #calendar {
-    max-width: 1100px;
-    margin: 40px auto;
-  }
-  .fc-event {
-    cursor: pointer;
-  }
-</style>
-{% endblock %}
-
-{% block content %}
-<div class="container mt-4">
-  <h2 class="text-center mb-4">Event Calendar</h2>
-  <div id="calendar"></div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="eventModalLabel">Create Event</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body" id="eventModalBody">
-        <!-- AJAX form will be loaded here -->
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
-
-{% block extrascripts %}
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
 document.addEventListener('DOMContentLoaded', function () {
   const calendarEl = document.getElementById('calendar');
   const eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
@@ -59,12 +13,12 @@ document.addEventListener('DOMContentLoaded', function () {
     selectable: true,
     navLinks: true,
     events: {
-      url: '{% url "calendarapp:events_json" %}',
+      url: window.calendarData.eventsUrl,
       method: 'GET',
       failure: () => alert('There was an error while fetching events.')
     },
     select: function (info) {
-      fetch('{% url "calendarapp:create_event_form" %}?start=' + info.startStr + '&end=' + info.endStr)
+      fetch(`${window.calendarData.eventFormUrl}?start=${info.startStr}&end=${info.endStr}`)
         .then(response => response.text())
         .then(html => {
           document.getElementById('eventModalBody').innerHTML = html;
@@ -75,11 +29,11 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             const formData = new FormData(form);
 
-            fetch('{% url "calendarapp:create_event" %}', {
+            fetch(window.calendarData.createEventUrl, {
               method: 'POST',
               body: formData,
               headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
+                'X-CSRFToken': window.calendarData.csrfToken
               }
             })
             .then(response => response.json())
@@ -103,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRFToken': '{{ csrf_token }}',
+          'X-CSRFToken': window.calendarData.csrfToken,
         },
         body: JSON.stringify({
           start: info.event.start.toISOString(),
@@ -117,5 +71,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
   calendar.render();
 });
-</script>
-{% endblock %}
