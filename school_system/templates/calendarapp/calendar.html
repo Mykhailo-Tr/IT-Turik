@@ -6,15 +6,7 @@
 
 {% block extracss %}
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/main.min.css" rel="stylesheet">
-<style>
-  #calendar {
-    max-width: 1100px;
-    margin: 40px auto;
-  }
-  .fc-event {
-    cursor: pointer;
-  }
-</style>
+<link href="css/calendar.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -32,7 +24,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body" id="eventModalBody">
-        <!-- AJAX form will be loaded here -->
       </div>
     </div>
   </div>
