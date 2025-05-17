@@ -22,7 +22,7 @@ class FullCalendarView(LoginRequiredMixin, View):
             "form": form,
             "page": "calendar",
         }
-        return render(request, "calendarapp/fullcalendar.html", context)
+        return render(request, "calendarapp/calendar.html", context)
 
 
 def get_events_json(request):
