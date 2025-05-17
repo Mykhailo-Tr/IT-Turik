@@ -96,17 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
       calendar.unselect();
     },
     eventClick: function (info) {
-      if (confirm(`Delete "${info.event.title}"?`)) {
-        fetch(`/calendar/events/delete/${info.event.id}/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}',
-          }
-        })
-        .then(response => response.json())
-        .then(() => calendar.refetchEvents());
-      }
+      window.location.href = info.event.url;
     },
     eventDrop: function (info) {
       fetch(`/calendar/events/update/${info.event.id}/`, {
