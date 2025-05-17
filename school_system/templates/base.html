@@ -3,38 +3,42 @@
 <html lang="en" data-bs-theme="{{ request.COOKIES.theme|default:'light' }}">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">  {# 💡 важливо для мобільної адаптації #}
     <title>{% block title %}Home{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
     {% block extra_css %}
         <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% endblock %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 <body>
     {% include "navbar.html" %}
 
-    <!-- Toast Messages -->
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="toast align-items-center text-bg-{% if message.tags == 'success' %}success{% elif message.tags in 'error danger' %}danger{% elif message.tags == 'warning' %}warning{% else %}info{% endif %} border-0 show mb-2" role="alert">
-                    <div class="d-flex">
-                        <div class="toast-body">{{ message }}</div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-                    </div>
+    <!-- ✅ Toast Container -->
+    {% if messages %}
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        {% for message in messages %}
+            <div class="toast align-items-center text-bg-{% if 'success' in message.tags %}success{% elif 'error' in message.tags or 'danger' in message.tags %}danger{% elif 'warning' in message.tags %}warning{% else %}info{% endif %} border-0 show mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">{{ message }}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
-            {% endfor %}
-        {% endif %}
+            </div>
+        {% endfor %}
     </div>
+    {% endif %}
 
-    <div class="container my-4">
+    <!-- ✅ Main Content -->
+    <main class="container my-4">
         {% block content %}{% endblock %}
-    </div>
+    </main>
 
-    {% block extrascripts %}
-    {% endblock extrascripts %}
-
+    <!-- ✅ Bootstrap Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 
+    {% block extrascripts %}{% endblock %}
 </body>
 </html>
