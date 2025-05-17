@@ -1,3 +1,19 @@
+:root {
+  --bg-light: rgba(235, 238, 255, 1);
+  --text-muted: #888ea8;
+  --text-light: #e0e6ed;
+  --primary-color: #009688;
+  --primary-dark: #0ba360;
+  --primary-gradient: linear-gradient(to right, #3cba92 0%, #0ba360 100%);
+  --white: #fff;
+
+  --shadow-soft: rgba(94, 92, 154, 0.06);
+  --shadow-hard: rgba(0, 0, 0, 0.14);
+  --shadow-hard-2: rgba(0, 0, 0, 0.12);
+  --shadow-hard-3: rgba(0, 0, 0, 0.2);
+}
+
+
 .theme-toggle-btn {
     position: fixed;
     bottom: 20px;
@@ -5,3 +21,38 @@
     z-index: 1051;
 }
 
+table.calendar {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+table.calendar th {
+    background-color: #f8f9fa;
+    padding: 10px;
+    font-weight: bold;
+}
+
+table.calendar td {
+    border: 1px solid #dee2e6;
+    height: 100px;
+    vertical-align: top;
+    padding: 5px;
+}
+
+table.calendar ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+table.calendar li {
+    font-size: 0.9rem;
+    margin-bottom: 3px;
+}
+
+table.calendar .date {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+}

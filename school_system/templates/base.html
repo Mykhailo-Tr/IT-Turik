@@ -30,16 +30,7 @@
     <div class="container my-4">
         {% block content %}{% endblock %}
     </div>
-    {% comment %} <main class="app-content">
-        <div class="app-title">
-            {% block breadcrumb %}
-            {% endblock breadcrumb %}
-        </div>
-        {% block content %}
-        {% endblock content %}
-    </main> {% endcomment %}
-    <!-- Essential javascripts for application to work-->
-    {% comment %} {% include 'base/js.html' %} {% endcomment %}
+    
     {% block extrascripts %}
     {% endblock extrascripts %}
 
