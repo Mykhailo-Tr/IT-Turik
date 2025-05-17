@@ -35,7 +35,7 @@
         <div class="col-lg-8">
             <!-- Account Info Card -->
             <div class="card shadow-sm mb-4">
-                <div class="card-header card-header-custom">Account Information</div>
+                <div class="card-header ">Account Information</div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><strong>First Name:</strong> {{ user.first_name }}</li>
@@ -55,7 +55,7 @@
             {% if user.role == "parent" %}
                 {% if request.user.id == user.id or request.user|is_staff_user %}
                     <div class="card shadow-sm mb-4">
-                        <div class="card-header card-header-custom">Children</div>
+                        <div class="card-header">Children</div>
                         <div class="card-body">
                             <ul class="list-group list-group-flush mb-3">
                                 {% for child in user.parent.children.all %}
@@ -87,7 +87,7 @@
             {% if user.role == "teacher" %}                
                 {% if request.user.id == user.id or request.user|is_staff_user %}
                     <div class="card shadow-sm mb-4">
-                        <div class="card-header card-header-custom">Subjects</div>
+                        <div class="card-header">Subjects</div>
                         <div class="card-body">
                             <ul class="list-group list-group-flush mb-3">
                                 {% for subject in user.teacher.subjects.all %}
