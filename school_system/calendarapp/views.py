@@ -18,7 +18,11 @@ import json
 class FullCalendarView(LoginRequiredMixin, View):
     def get(self, request):
         form = CreateEventForm(user=request.user)
-        return render(request, "calendarapp/fullcalendar.html", {"form": form})
+        context = {
+            "form": form,
+            "page": "calendar",
+        }
+        return render(request, "calendarapp/fullcalendar.html", context)
 
 
 def get_events_json(request):

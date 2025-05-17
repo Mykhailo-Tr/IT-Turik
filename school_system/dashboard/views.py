@@ -26,7 +26,7 @@ def accounts_view(request):
         
     accounts_count = accounts.count()
     context = {
-        'page': 'dashboard_accounts',
+        'page': 'dashboard',
         'accounts': accounts,
         'accounts_count': accounts_count,
     }
@@ -38,7 +38,7 @@ def profile_view(request, user_id=None):
     user = User.objects.get(id=user_id)
     profile = UserProfile.objects.get(user=user)
     context = {
-        'page': 'profile',
+        'page': 'dashboard',
         'user': user,
         'profile': profile,
     }
@@ -65,7 +65,7 @@ def create_account_view(request, role):
             return redirect('dashboard_accounts')
     
     context = {
-        'page': 'dashboard_create_account',
+        'page': 'dashboard',
         'form': form_class(),
         'role': role,
     }
@@ -84,7 +84,6 @@ def delete_account_view(request, user_id=None):
         return redirect('dashboard_accounts')
     
     context = {
-        'page': 'delete_account',
         'user': user,
     }
     return render(request, 'accounts/forms/delete_account.html', context)

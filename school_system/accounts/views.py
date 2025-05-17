@@ -15,7 +15,10 @@ import os
 
 
 def main_page(request):
-    return render(request, 'home_page.html')
+    context = {
+        'page': 'home',
+    }
+    return render(request, 'home_page.html', context)
 
 
 class UserLoginView(LoginView):
@@ -166,7 +169,8 @@ def account_view(request, user_id=None):
         'profile_user': profile_user,
         'add_subject_form': AddSubjectForm(user=request.user),
         'create_subject_form': CreateSubjectForm(),
-        'add_child_form': AddChildForm(user=request.user)
+        'add_child_form': AddChildForm(user=request.user),
+        'page': 'account',
     }
     return render(request, 'accounts/account.html', context)
 
