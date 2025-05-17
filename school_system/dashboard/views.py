@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.urls import reverse_lazy
+from django.db.models import Q
 
 from school_system.decorators import teacher_required, student_required
 from accounts.models import User, UserProfile
 from accounts.forms import StudentSignUpForm, TeacherSignUpForm, ParentSignUpForm, UserUpdateForm, UserProfileUpdateForm
-from django.urls import reverse_lazy
 
 
 
@@ -23,7 +24,15 @@ def accounts_view(request):
 
     if request.user.role in ['student', 'parent']:
         accounts = accounts.exclude(role='admin')
-        
+
+    query = request.GET.get('q')
+    if query:
+        accounts = accounts.filter(
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query) |
+            Q(email__icontains=query)
+        )
+
     accounts_count = accounts.count()
     context = {
         'page': 'dashboard',
