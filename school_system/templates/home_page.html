@@ -4,27 +4,29 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container py-5">
     {% if request.user.is_authenticated %}
-        <div class="alert alert-success d-flex justify-content-between align-items-center" role="alert">
+        <div class="alert alert-success d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2" role="alert">
             <div>
-                <strong>Logged in as:</strong> {{ request.user.get_full_name|default:request.user.email }} 
+                <strong>Logged in as:</strong>
+                {{ request.user.get_full_name|default:request.user.email }}
                 <span class="badge bg-primary text-uppercase ms-2">{{ request.user.get_role_display }}</span>
             </div>
-            <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Logout</a>
         </div>
     {% else %}
-        <div class="alert alert-warning" role="alert">
-            <strong>You are not logged in.</strong> <a href="{% url 'login' %}" class="alert-link">Login here</a>.
+        <div class="alert alert-warning text-center" role="alert">
+            <strong>You are not logged in.</strong><br class="d-md-none">
+            <a href="{% url 'login' %}" class="alert-link">Login here</a>.
         </div>
     {% endif %}
 
-    <div class="text-center mt-4">
-        <h1 class="display-4">Welcome to the School System</h1>
-        <p class="lead text-muted">Manage your events, subjects, and profiles all in one place.</p>
+    <section class="text-center mt-5 px-2">
+        <h1 class="display-5 fw-bold mb-3">Welcome to the School System</h1>
+        <p class="lead text-muted mb-4">Manage your events, subjects, and profiles all in one place.</p>
+
         {% if not request.user.is_authenticated %}
-            <a href="{% url 'login' %}" class="btn btn-primary btn-lg mt-3">Get Started</a>
+            <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-4 py-2 shadow-sm">Get Started</a>
         {% endif %}
-    </div>
+    </section>
 </div>
 {% endblock %}
