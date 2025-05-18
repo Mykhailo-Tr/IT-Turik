@@ -9,10 +9,15 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = ['title', 'content', 'due_date']
         widgets = {
-            'due_date': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'due_date': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['content'].required = False
+        self.fields['due_date'].required = False
 
     def clean_title(self):
         title = self.cleaned_data.get('title')
@@ -25,3 +30,4 @@ class TaskForm(forms.ModelForm):
         if due_date and due_date < timezone.now():
             raise ValidationError("Due date cannot be before current time.")
         return due_date
+
