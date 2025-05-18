@@ -1,43 +1,109 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block title %}Task: {{ task.title }}{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h2 class="card-title">{{ task.title }}</h2>
+<div class="container py-4">
 
+    <!-- Заголовок -->
+    <div class="border rounded shadow-sm p-4 mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+            <div>
+                <h1 class="h3 mb-2">{{ task.title }}</h1>
+                <p class="mb-1 text-muted">
+                    🗓️ Created: {{ task.date_posted|date:"d M Y H:i" }}<br>
+                    {% if task.due_date %}
+                        ⏰ Due: <span class="text-danger fw-semibold">{{ task.due_date|date:"d M Y H:i" }}</span>
+                    {% else %}
+                        ⏰ <span class="text-muted">No deadline</span>
+                    {% endif %}
+                </p>
+            </div>
             {% if request.user == task.author %}
-                <p class="mb-1"><strong>Author:</strong> {{ task.author.get_full_name }} <span class="badge bg-secondary">You</span></p>
-            {% else %}
-                <p class="mb-1"><strong>Author:</strong> <a href="{% url 'account' task.author.id %}">{{ task.author.get_full_name }}</a></p>
+                <span class="badge bg-warning text-dark mt-3 mt-md-0">You are the Author</span>
             {% endif %}
-
-            <p class="mb-1">
-                <strong>Created on:</strong> {{ task.date_posted|date:"d M Y H:i" }} <br>
-                <strong>Due date:</strong> 
-                {% if task.due_date %}
-                    {{ task.due_date|date:"d M Y H:i" }}
+        </div>
+            <div class="border-start border-4 border-primary rounded">
+            <p class="mb-0">
+                <strong>👤 Author:</strong>
+                {% if request.user == task.author %}
+                    {{ task.author.get_full_name }} <span class="badge bg-secondary">You</span>
                 {% else %}
-                    <span class="text-secondary">No deadline</span>
+                    <a href="{% url 'account' task.author.id %}">{{ task.author.get_full_name }}</a>
                 {% endif %}
             </p>
-
-            <p class="mt-3"><strong>Description:</strong></p>
-            <div class="border rounded p-2">{{ task.content|linebreaks }}</div>
         </div>
+    </div>
 
-        {% if request.user == task.author %}
-        <div class="card-footer d-flex justify-content-end">
-            <a href="{% url 'edit_task' task.id %}" class="btn btn-outline-info me-2">✏️ Edit</a>
-            <a href="{% url 'delete_task' task.id %}" class="btn btn-outline-danger">🗑️ Delete</a>
+
+
+    <!-- Опис -->
+    <div class="border rounded shadow-sm p-4 mb-4">
+        <h5 class="fw-bold mb-3">📝 Task Description</h5>
+        <div class="text-body" style="white-space: pre-wrap;">
+            {{ task.content }}
         </div>
+    </div>
+
+    <!-- Дії користувача -->
+    {% if request.user != task.author %}
+        <div class="border rounded shadow-sm p-4 mb-4">
+            <h5 class="fw-bold mb-3">🎯 Your Actions</h5>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="{% url 'toggle_task_participation' task.id %}"
+                   class="btn {% if task.id in user_taken_tasks %}btn-outline-secondary{% else %}btn-outline-primary{% endif %}">
+                    {% if task.id in user_taken_tasks %}❌ Drop Task{% else %}✅ Take Task{% endif %}
+                </a>
+
+                {% if task.id in user_taken_tasks %}
+                    <a href="{% url 'toggle_task_completion' task.id %}"
+                       class="btn {% if task.id in user_completed_tasks %}btn-outline-warning{% else %}btn-outline-success{% endif %}">
+                        {% if task.id in user_completed_tasks %}↩️ Uncomplete{% else %}🏁 Mark as Done{% endif %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Статус -->
+    <div class="border-start border-4 border-info rounded p-3 mb-4">
+        <h6 class="fw-semibold">📌 Your Task Status</h6>
+        {% if task.id in user_taken_tasks %}
+            <p class="mb-0 text-success">✅ You have taken this task.</p>
+            {% if task.id in user_completed_tasks %}
+                <p class="mb-0 text-success">🎉 You have marked it as completed.</p>
+            {% else %}
+                <p class="mb-0 text-warning">⏳ You haven't completed it yet.</p>
+            {% endif %}
+        {% else %}
+            <p class="mb-0 text-muted">You haven't taken this task yet.</p>
         {% endif %}
     </div>
 
-    <div class="mt-4">
+    <!-- Дії автора -->
+    <!-- Manage Task Section -->
+    {% if request.user == task.author %}
+        <div class="border rounded shadow-sm p-4 mb-4">
+            <h5 class="fw-bold mb-3">🛠️ Manage Task</h5>
+            <div class="d-flex gap-2">
+                <a href="{% url 'edit_task' task.id %}" class="btn btn-outline-info">✏️ Edit</a>
+
+                <!-- Trigger Modal -->
+                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                    🗑️ Delete
+                </button>
+            </div>
+        </div>
+    {% endif %}
+
+
+    <!-- Назад -->
+    <div class="text-end">
         <a href="{% url 'tasks' %}" class="btn btn-secondary">← Back to Task List</a>
     </div>
 </div>
+
+{% include "tasks/confirmation_modal.html"%}
+
 {% endblock %}

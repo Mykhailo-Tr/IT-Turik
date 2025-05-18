@@ -5,11 +5,7 @@
     <a class="navbar-brand fw-bold" href="{% url 'tasks' %}">Task Manager</a>
     
     <!-- Навігація -->
-    <ul class="navbar-nav flex-row flex-wrap">
-      <li class="nav-item me-3 {% if page == 'create_task' %}active{% endif %}">
-        <a class="nav-link" href="{% url 'create_task' %}">Create Task</a>
-      </li>
-    </ul>
+
 
     <!-- Форма фільтрів -->
     <form class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2" method="get" action="{% url 'tasks' %}">
@@ -26,8 +22,23 @@
         {% endfor %}
       </select>
 
+      <select name="status" class="form-select">
+        <option value="">All statuses</option>
+        <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Completed</option>
+        <option value="incomplete" {% if request.GET.status == 'incomplete' %}selected{% endif %}>Incomplete</option>
+      </select>
+      
+      <div class="form-check mt-1">
+        <input class="form-check-input" type="checkbox" name="today" value="1" id="todayCheck" {% if request.GET.today == '1' %}checked{% endif %}>
+        <label class="form-check-label" for="todayCheck">Today</label>
+      </div>
+
       <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
-
+    <ul class="navbar-nav flex-row flex-wrap">
+      <li class="nav-item me-3 {% if page == 'create_task' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'create_task' %}">➕ Create Task</a>
+      </li>
+    </ul>
   </div>
 </nav>

@@ -6,24 +6,26 @@
 
 {% block extracss %}
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/main.min.css" rel="stylesheet">
-<link href="css/calendar.css" rel="stylesheet">
+<link href="{% static 'css/calendar.css' %}" rel="stylesheet">
+
 {% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-  <h2 class="text-center mb-4">Event Calendar</h2>
-  <div id="calendar"></div>
+  <h2 class="text-center mb-4">📅 Event Calendar</h2>
+  <div id="calendar" class="shadow-sm rounded p-2"></div>
 </div>
 
 <!-- Modal -->
 <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="eventModalLabel">Create Event</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="eventModalBody">
+        <!-- Content loaded dynamically -->
       </div>
     </div>
   </div>
@@ -43,5 +45,4 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{% static 'js/calendar.js' %}"></script>
-
 {% endblock %}
