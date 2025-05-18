@@ -1,0 +1,16 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Delete Subject{% endblock %}
+
+{% block dashboard_content %}
+<div class="container mt-5">
+    <div class="alert alert-warning">
+        <h4 class="alert-heading">Confirm Deletion</h4>
+        <p>Are you sure you want to delete the subject <strong>{{ subject.name }}</strong>?</p>
+        <form method="post">
+            {% csrf_token %}
+            <a href="{% url 'dashboard_subjects' %}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
