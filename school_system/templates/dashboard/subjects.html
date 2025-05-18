@@ -6,51 +6,99 @@
 
 {% block dashboard_content %}
 <div class="container mt-4">
-    <h2 class="mb-3">Your Subjects</h2>
 
-    {% if my_subjects %}
-        <ul class="list-group mb-4">
-            {% for subject in my_subjects %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>{{ subject.name }}</strong><br>
-                        <small>{{ subject.description }}</small>
+    <!-- Розділ: Власні предмети -->
+    <div class="mb-5 p-4 border rounded shadow-sm bg-light">
+        <h2 class="mb-4">1. Your Subjects</h2>
+
+        {% if my_subjects %}
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+                {% for subject in my_subjects %}
+                    <div class="col">
+                        <div class="list-group-item border rounded p-3 h-100">
+                            <div class="d-flex justify-content-between align-items-start gap-2">
+                                <div>
+                                    <h5 class="mb-1">{{ forloop.counter }}. {{ subject.name }}</h5>
+                                    <p class="mb-2 text-muted small">{{ subject.description }}</p>
+                                </div>
+                                <div class="d-flex flex-column gap-1">
+                                    <a href="{% url 'detach_subject' subject.id %}" class="btn btn-sm btn-outline-warning">Detach</a>
+                                    {% if subject in my_subjects or user|is_staff_user %}
+                                        <a href="{% url 'delete_subject' subject.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <a href="{% url 'detach_subject' subject.id %}" class="btn btn-outline-danger btn-sm">Detach</a>
-                    {% if subject in my_subjects or user|is_staff_user %}
-                        <a href="{% url 'delete_subject' subject.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
-                    {% endif %}
-                </li>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">You have no assigned subjects.</p>
+        {% endif %}
+    </div>
+
+    <!-- Розділ: Додати новий предмет -->
+    <div class="mb-5 p-4 border rounded shadow-sm bg-white">
+        <h2 class="mb-3">2. Add New Subject</h2>
+
+        <button class="btn btn-outline-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#addSubjectForm" aria-expanded="false" aria-controls="addSubjectForm">
+            + Add New Subject
+        </button>
+
+        <div class="collapse" id="addSubjectForm">
+            <form method="post" class="row gy-3">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.help_text %}
+                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary w-100 w-md-auto">Add Subject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Розділ: Усі доступні предмети -->
+    <div class="mb-5 p-4 border rounded shadow-sm bg-light">
+        <h2 class="mb-4">3. All Available Subjects</h2>
+        {% with count=0 %}
+        <div class="row row-cols-1 row-cols-md-2 g-3">
+            {% for subject in subjects %}
+                {% if subject not in my_subjects %}
+                    {% with count=forloop.counter %}
+                    <div class="col">
+                        <div class="list-group-item border rounded p-3 h-100">
+                            <div class="d-flex justify-content-between align-items-start gap-2">
+                                <div>
+                                    <h6 class="mb-1">{{ count }}. {{ subject.name }}</h6>
+                                    <p class="mb-0 text-muted small">{{ subject.description }}</p>
+                                </div>
+                                <a href="{% url 'attach_subject' subject.id %}" class="btn btn-sm btn-outline-success">Attach</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                {% endif %}
             {% endfor %}
-        </ul>
-    {% else %}
-        <p class="text-muted">You have no assigned subjects.</p>
-    {% endif %}
-
-    <hr>
-
-    <h3>Add New Subject</h3>
-    <form method="post" class="mb-4">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Add Subject</button>
-    </form>
-
-    <h4>All Available Subjects</h4>
-    <ul class="list-group">
-        {% for subject in subjects %}
-            {% if subject not in my_subjects %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>{{ subject.name }}</strong><br>
-                        <small>{{ subject.description }}</small>
-                    </div>
-                    <a href="{% url 'attach_subject' subject.id %}" class="btn btn-outline-success btn-sm">Attach</a>
-                </li>
+            {% if count == 0 %}
+                <div class="col">
+                    <div class="list-group-item text-muted">No subjects available.</div>
+                </div>
             {% endif %}
-        {% empty %}
-            <li class="list-group-item">No subjects available.</li>
-        {% endfor %}
-    </ul>
+        </div>
+        {% endwith %}
+    </div>
+
 </div>
 {% endblock %}
