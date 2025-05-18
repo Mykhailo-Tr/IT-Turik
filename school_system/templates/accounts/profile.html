@@ -20,7 +20,7 @@
                 </div>
                 <div class="text-center user-info">
                     {% if user.profile.profile_picture %}
-                        <img src="{{ user.profile.profile_picture.url }}" alt="avatar">
+                        <img src="{{ user.profile.profile_picture.url }}" alt="avatar" class="profile-picture">
                     {% else %}
                         <p>No profile picture available.</p>
                     {% endif %}

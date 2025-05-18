@@ -99,3 +99,18 @@ body {
   font-size: 15px;
   color: var(--primary-color);
 }
+.profile-picture {
+    width: 150px;    
+    height: 150px;      
+    object-fit: cover;    
+    border-radius: 50%;    
+    border: 2px solid #ccc; 
+    margin: 0 auto;        
+}
+.img-preview {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #007bff;
+}

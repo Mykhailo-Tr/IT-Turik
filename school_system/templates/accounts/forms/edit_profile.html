@@ -2,77 +2,77 @@
 {% load static %}
 {% load widget_tweaks %}
 
-{% block title %}Edit Profile{% endblock %}
+{% block title %}Редагувати профіль{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/dashboard/profile.css' %}">
-<style>
-    .img-preview {
-        width: 120px;
-        height: 120px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 2px solid #007bff;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/accounts/edit_profile.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
-            <div class="card shadow-sm border-0 mt-4">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Редагувати профіль</h5>
-                    <a href="{% url 'dashboard_profile' user.id %}" class="text-white">
+            <div class="card shadow-sm border-0">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5>Редагувати профіль</h5>
+                    <a href="{% url 'dashboard_profile' user.id %}" class="text-secondary" aria-label="Назад">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
                             <line x1="19" y1="12" x2="5" y2="12"/>
                             <polyline points="12 19 5 12 12 5"/>
                         </svg>
-                        Назад
                     </a>
                 </div>
                 <div class="card-body">
-
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" enctype="multipart/form-data" novalidate>
                         {% csrf_token %}
 
-                        <div class="mb-3 text-center">
+                        <div class="text-center">
                             <img id="preview" 
                                  src="{{ user.profile.profile_picture.url }}" 
                                  alt="Фото профілю" 
-                                 class="img-preview shadow-sm">
+                                 class="img-preview shadow-sm rounded-circle">
                         </div>
-                        <a href="{% url 'dashboard_delete_profile_photo' %}" class="btn btn-outline-danger btn-sm ms-2"
-                            onclick="return confirm('Ви впевнені, що хочете видалити фото?');">
+
+                        <div class="photo-actions">
+                            <label for="id_profile_picture" class="btn btn-outline-primary mb-2 mb-sm-0" style="cursor:pointer;">
+                                Обрати нове фото
+                            </label>
+                            <input type="file" id="id_profile_picture" name="profile_picture" accept="image/*" class="d-none">
+                            
+                            {% if user.profile.profile_picture %}
+                            <a href="{% url 'dashboard_delete_profile_photo' %}" 
+                               class="btn btn-outline-danger" 
+                               onclick="return confirm('Ви впевнені, що хочете видалити фото?');">
                                 Видалити фото
-                        </a>
-                        <div class="mb-3">
-                            <label class="form-label">Фото профілю</label>
-                            {{ form.profile_picture|add_class:"form-control" }}
+                            </a>
+                            {% endif %}
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Біографія</label>
+                            <label for="{{ form.bio.id_for_label }}">Біографія</label>
                             {{ form.bio|add_class:"form-control" }}
+                            {% for error in form.bio.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Дата народження</label>
-                            {{ form.date_of_birth|add_class:"form-control"|attr:"type:date" }}
+                        <div class="mb-4">
+                            <label for="{{ form.date_of_birth.id_for_label }}">Дата народження</label>
+                            {{ form.date_of_birth|add_class:"form-control" | attr:"type:date" }}
+                            {% for error in form.date_of_birth.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
                         </div>
 
                         <button type="submit" class="btn btn-success w-100">Зберегти зміни</button>
-
                     </form>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- JS для прев’ю зображення -->
 <script>
 document.getElementById("id_profile_picture").addEventListener("change", function (event) {
     const [file] = event.target.files;

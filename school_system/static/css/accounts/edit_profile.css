@@ -1,0 +1,75 @@
+/* Адаптивне прев'ю фото */
+.img-preview {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1.5px solid #dee2e6;
+    box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    display: block;
+    margin: 0 auto 1rem auto;
+}
+
+/* Кнопка видалення фото поруч із прев'ю, але на мобільних окремо */
+.photo-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.photo-actions a.btn {
+    flex-shrink: 0;
+}
+
+/* Заголовок і кнопка назад */
+.card-header {
+    background-color: #f8f9fa; /* світло-сірий фон */
+    border-bottom: 1px solid #dee2e6;
+    color: #212529;
+}
+
+.card-header h5 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.card-header a.text-secondary:hover {
+    text-decoration: none;
+    color: #0d6efd;
+}
+
+/* Стилізація форми */
+form label {
+    font-weight: 500;
+}
+
+.form-control {
+    border-radius: 0.375rem;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Кнопка зберегти */
+button.btn-success {
+    font-weight: 600;
+    border-radius: 0.375rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+}
+
+/* Адаптивність */
+@media (max-width: 576px) {
+    .photo-actions {
+        flex-direction: column;
+    }
+    .photo-actions a.btn {
+        width: 100%;
+    }
+}

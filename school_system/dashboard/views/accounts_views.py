@@ -51,7 +51,7 @@ def profile_view(request, user_id=None):
         'user': user,
         'profile': profile,
     }
-    return render(request, 'dashboard/profile.html', context)
+    return render(request, 'accounts/profile.html', context)
 
 
 @teacher_required(login_url='login')
