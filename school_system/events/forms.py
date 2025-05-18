@@ -7,7 +7,7 @@ from accounts.models import User
 
 class CreateEventForm(forms.ModelForm):
     participants = forms.ModelMultipleChoiceField(
-        queryset=User.objects.none(),  # тимчасово порожній
+        queryset=User.objects.none(),
         widget=forms.CheckboxSelectMultiple,
         required=False,
         help_text="Select participants for the event"
@@ -16,6 +16,11 @@ class CreateEventForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+
+        self.fields['description'].required = False
+        self.fields['end_date'].required = False
+        self.fields['location'].required = False
+        self.fields['tasks'].required = False
 
         if user:
             self.fields['participants'].queryset = User.objects.exclude(id=user.id)
@@ -40,8 +45,6 @@ class CreateEventForm(forms.ModelForm):
         return title
 
     
-
-
 class EventCommentForm(forms.ModelForm):
     class Meta:
         model = EventComment

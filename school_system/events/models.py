@@ -28,8 +28,8 @@ class Event(models.Model):
     event_type = models.CharField(max_length=50, choices=EventType.choices)
     description = models.TextField(blank=True)
     start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    location = models.CharField(max_length=255)
+    end_date = models.DateTimeField(blank=True, null=True)
+    location = models.CharField(max_length=255, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='events_created')
     tasks = models.ManyToManyField('tasks.Task', related_name='events', blank=True)
     
