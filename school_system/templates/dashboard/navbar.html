@@ -1,17 +1,18 @@
-<nav class="navbar navbar-expand-lg shadow-sm mb-4">
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active {% if page == 'dashboard_accounts' %}active{% endif %}">
+<nav class="navbar  shadow-sm mb-4">
+    <div class="container-fluid overflow-auto">
+        <a class="navbar-brand me-3" href="{% url 'dashboard' %}">Dashboard</a>
+        <ul class="navbar-nav flex-row flex-nowrap">
+            <li class="nav-item me-3 {% if page == 'dashboard_accounts' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'dashboard_accounts' %}">Accounts</a>
             </li>
             {% if request.user.role == 'teacher' %}
-            <li class="nav-item active {% if page == 'dashboard_subjects' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'dashboard_subjects' %}">Subjects</a>
-            </li>
+                <li class="nav-item me-3 {% if page == 'dashboard_subjects' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'dashboard_subjects' %}">Subjects</a>
+                </li>
             {% elif request.user.role == 'parent' %}
-            <li class="nav-item active {% if page == 'dashboard_children' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'dashboard_children' %}">Children</a>
-            </li>
+                <li class="nav-item me-3 {% if page == 'dashboard_children' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'dashboard_children' %}">Children</a>
+                </li>
             {% endif %}
         </ul>
     </div>
