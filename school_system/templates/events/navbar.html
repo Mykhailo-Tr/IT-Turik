@@ -1,29 +1,22 @@
-<nav class="navbar navbar-expand-lg shadow-sm mb-4">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="{% url 'events' %}">📅 Events</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#eventsNavbar"
-                aria-controls="eventsNavbar" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="eventsNavbar">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item {% if page == 'create_event' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'create_event' %}">➕ Create Event</a>
+<nav class="navbar shadow-sm mb-4">
+    <div class="container-fluid overflow-auto">
+        <a class="navbar-brand fw-bold me-4" href="{% url 'events' %}">📅 Events</a>
+        <ul class="navbar-nav flex-row flex-nowrap ms-auto">
+            <li class="nav-item me-3 {% if page == 'create_event' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'create_event' %}">➕ Create Event</a>
+            </li>
+            {% if page == 'event_details' and request.user == event.author %}
+                <li class="nav-item me-3">
+                    <a class="nav-link {% if page == 'edit_event' %}active fw-bold{% endif %}" href="{% url 'edit_event' event.id %}">
+                        ✏️ Edit
+                    </a>
                 </li>
-                {% if page == 'event_details' and request.user == event.author %}
-                    <li class="nav-item">
-                        <a class="nav-link {% if page == 'edit_event' %}active fw-bold{% endif %}" href="{% url 'edit_event' event.id %}">
-                            ✏️ Edit
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <button class="nav-link active  text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-event-id="{{ event.id }}">
-                            🗑️ Delete
-                        </button>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
+                <li class="nav-item me-3">
+                    <button class="nav-link text-danger bg-transparent border-0 " data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-event-id="{{ event.id }}">
+                        🗑️ Delete
+                    </button>
+                </li>
+            {% endif %}
+        </ul>
     </div>
 </nav>
