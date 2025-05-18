@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import accounts_views
-from .views.subjects_views import add_subject_ajax, remove_subject_ajax
-from .views.children_views import add_child_ajax, remove_child_ajax
+from .views.subjects_views import add_subject_ajax, remove_subject_ajax, subjects_view
+from .views.children_views import add_child_ajax, remove_child_ajax, children_view
 from accounts.views import edit_profile_view, delete_profile_photo_view
 
 urlpatterns = [
@@ -14,6 +14,8 @@ urlpatterns = [
     path('accounts/<int:user_id>/delete/', accounts_views.delete_account_view, name='dashboard_delete_account'),
     path('accounts/profile/<int:user_id>/', accounts_views.profile_view, name='dashboard_profile'),
     
+    path('subjects/', subjects_view, name='dashboard_subjects'),
+    path('children/', children_view, name='dashboard_children'),
     path('ajax/add-child/', add_child_ajax, name='add_child_ajax'),
     path('ajax/remove-child/', remove_child_ajax, name='remove_child_ajax'),
     path('ajax/add-subject/', add_subject_ajax, name='add_subject_ajax'),

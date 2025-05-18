@@ -1,11 +1,20 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 
 from accounts.models import Student
+from school_system.decorators import parent_required
 from ..forms import AddChildForm
 
+
+@parent_required
+def children_view(request):
+    children = request.user.parent.children.all()
+    form = AddChildForm(user=request.user)
+    return render(request, 'dashboard/children.html', {'form': form, 'children': children})
+
+    
 @login_required
 def add_child_ajax(request):
     if request.method == 'POST':

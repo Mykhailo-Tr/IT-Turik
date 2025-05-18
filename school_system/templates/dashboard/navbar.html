@@ -4,6 +4,15 @@
             <li class="nav-item active {% if page == 'dashboard_accounts' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'dashboard_accounts' %}">Accounts</a>
             </li>
+            {% if request.user.role == 'teacher' %}
+            <li class="nav-item active {% if page == 'dashboard_subjects' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'dashboard_subjects' %}">Subjects</a>
+            </li>
+            {% elif request.user.role == 'parent' %}
+            <li class="nav-item active {% if page == 'dashboard_children' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'dashboard_children' %}">Children</a>
+            </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

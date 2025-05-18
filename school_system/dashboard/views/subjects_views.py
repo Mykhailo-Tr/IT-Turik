@@ -1,11 +1,18 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 
 from accounts.models import Subject
+from school_system.decorators import teacher_required, parent_required
 from ..forms import AddSubjectForm
 
+
+@teacher_required
+def subjects_view(request):
+    subjects = request.user.teacher.subjects.all()
+    form = AddSubjectForm(user=request.user)
+    return render(request, 'dashboard/subjects.html', {'form': form, 'subjects': subjects})
 
 
 @login_required
