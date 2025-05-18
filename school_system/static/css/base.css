@@ -12,8 +12,19 @@
   --shadow-hard-2: rgba(0, 0, 0, 0.12);
   --shadow-hard-3: rgba(0, 0, 0, 0.2);
 
+  --bs-body-bg-rgb: 255, 255, 255; 
+
+
+
 }
 
+[data-bs-theme="dark"] {
+    --bs-body-bg-rgb: 33, 37, 41; /* Bootstrap dark bg */
+}
+
+.theme-aware-bg {
+    background-color: rgba(var(--bs-body-bg-rgb), 0.97) !important;
+}
 
 .theme-toggle-btn {
     position: fixed;
