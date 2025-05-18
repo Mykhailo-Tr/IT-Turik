@@ -48,7 +48,7 @@ class BaseSignUpForm(UserCreationForm):
         if dob > today:
             raise ValidationError("Date of birth cannot be in the future.")
         
-        min_age = 5  # мінімальний вік, наприклад 5 років
+        min_age = 5 
         if dob > today - timedelta(days=min_age * 365):
             raise ValidationError(f"User must be at least {min_age} years old.")
         
@@ -101,7 +101,7 @@ class ParentSignUpForm(BaseSignUpForm):
     def save(self):
         user = self.save_user('parent')
         parent = Parent.objects.create(user=user)
-        parent.children.set(self.cleaned_data['children'])  # Додаємо зв'язок з дітьми
+        parent.children.set(self.cleaned_data['children'])
         return user
 
     
@@ -135,5 +135,3 @@ class UserProfileUpdateForm(forms.ModelForm):
         if commit:
             user_profile.save()
         return user_profile
-
-
