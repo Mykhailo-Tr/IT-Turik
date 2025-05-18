@@ -1,0 +1,14 @@
+<ul class="list-group list-group-flush">
+    {% for subject in user.teacher.subjects.all %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ subject.name }}
+        <form method="post" action="{% url 'remove_subject_ajax' %}" onsubmit="event.preventDefault(); submitAjaxForm('remove-subject-{{ subject.id }}', 'subjects-container')">
+            {% csrf_token %}
+            <input type="hidden" name="subject_id" value="{{ subject.id }}">
+            <button type="submit" class="btn btn-sm btn-outline-danger">&times;</button>
+        </form>
+    </li>
+    {% empty %}
+    <li class="list-group-item">No subjects assigned yet.</li>
+    {% endfor %}
+</ul>

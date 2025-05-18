@@ -1,0 +1,9 @@
+<div class="card shadow-sm mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        Subjects
+        <button class="btn btn-sm btn-success" onclick="showModal('subjectModal')">+ Add</button>
+    </div>
+    <div class="card-body" id="subjects-container">
+        {% include 'accounts/partials/subjects_list.html' %}
+    </div>
+</div>

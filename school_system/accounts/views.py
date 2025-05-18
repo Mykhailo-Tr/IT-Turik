@@ -6,6 +6,9 @@ from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+
 from .models import User, UserProfile, Subject, Student
 from .forms import StudentSignUpForm, TeacherSignUpForm, ParentSignUpForm, UserUpdateForm, UserProfileUpdateForm
 from .forms import AddSubjectForm, CreateSubjectForm, AddChildForm
@@ -112,67 +115,61 @@ class ParentSignUpView(UserSignUpView):
 
 @login_required(login_url='login')
 def account_view(request, user_id=None):
-    user = User.objects.get(id=request.user.id) if not user_id else get_object_or_404(User, id=user_id)
-    user_id = user.id if not user_id else user_id
-    profile_user = get_object_or_404(User, id=user_id) if user_id else user
-    
-    if request.method == "POST":
-        if 'add_subject' in request.POST and user.role == 'teacher':
-            form = AddSubjectForm(request.POST)
-            if form.is_valid():
-                subject = form.cleaned_data['subject']
-                user.teacher.subjects.add(subject)
-                messages.success(request, f"Subject '{subject.name}' added.")
-                return redirect('account')
-
-        elif 'create_subject' in request.POST and user.role == 'teacher':
-            form = CreateSubjectForm(request.POST)
-            if form.is_valid():
-                subject = form.save()
-                user.teacher.subjects.add(subject)
-                messages.success(request, f"Subject '{subject.name}' created and added.")
-                return redirect('account')
-
-        elif 'remove_subject' in request.POST and user.role == 'teacher':
-            subject_id = request.POST.get('subject_id')
-            subject = get_object_or_404(Subject, id=subject_id)
-            user.teacher.subjects.remove(subject)
-            messages.info(request, f"Subject '{subject.name}' removed.")
-            return redirect('account')
-
-        elif 'delete_subject' in request.POST and user.role == 'teacher':
-            subject_id = request.POST.get('subject_id')
-            subject = get_object_or_404(Subject, id=subject_id)
-            user.teacher.subjects.remove(subject)
-            subject.delete()
-            messages.warning(request, f"Subject '{subject.name}' deleted.")
-            return redirect('account')
-
-        elif 'add_child' in request.POST and user.role == 'parent':
-            form = AddChildForm(request.POST, user=request.user)
-            if form.is_valid():
-                child = form.cleaned_data['child']
-                user.parent.children.add(child)
-                messages.success(request, f"Child '{child.user.get_full_name()}' added.")
-                return redirect('account')
-
-        elif 'remove_child' in request.POST and user.role == 'parent':
-            child_id = request.POST.get('child_id')
-            child = get_object_or_404(Student, user_id=child_id)
-            user.parent.children.remove(child)
-            messages.info(request, f"Child '{child.user.get_full_name()}' removed.")
-            return redirect('account')
+    if user_id:
+        user = get_object_or_404(User, id=user_id)
+    else:
+        user = request.user
+    profile_user = get_object_or_404(UserProfile, user=user)
 
     context = {
         'user': user,
-        'user_id': user_id,
+        'user_id': user.id,
         'profile_user': profile_user,
-        'add_subject_form': AddSubjectForm(user=request.user),
+        'add_subject_form': AddSubjectForm(user=user),
         'create_subject_form': CreateSubjectForm(),
-        'add_child_form': AddChildForm(user=request.user),
-        'page': 'account',
+        'add_child_form': AddChildForm(user=user),
     }
+
     return render(request, 'accounts/account.html', context)
+
+
+@login_required
+def add_child_ajax(request):
+    if request.method == 'POST':
+        form = AddChildForm(request.POST, user=request.user)
+        if form.is_valid():
+            child = form.cleaned_data['child']
+            request.user.parent.children.add(child)
+    html = render_to_string('accounts/partials/children_list.html', {'user': request.user})
+    return JsonResponse({'html': html})
+
+@login_required
+def remove_child_ajax(request):
+    if request.method == 'POST':
+        child_id = request.POST.get('child_id')
+        child = get_object_or_404(Student, user_id=child_id)
+        request.user.parent.children.remove(child)
+    html = render_to_string('accounts/partials/children_list.html', {'user': request.user})
+    return JsonResponse({'html': html})
+
+@login_required
+def add_subject_ajax(request):
+    if request.method == 'POST':
+        form = AddSubjectForm(request.POST, user=request.user)
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            request.user.teacher.subjects.add(subject)
+    html = render_to_string('accounts/partials/subjects_list.html', {'user': request.user})
+    return JsonResponse({'html': html})
+
+@login_required
+def remove_subject_ajax(request):
+    if request.method == 'POST':
+        subject_id = request.POST.get('subject_id')
+        subject = get_object_or_404(Subject, id=subject_id)
+        request.user.teacher.subjects.remove(subject)
+    html = render_to_string('accounts/partials/subjects_list.html', {'user': request.user})
+    return JsonResponse({'html': html})
 
 
 @login_required(login_url='login')

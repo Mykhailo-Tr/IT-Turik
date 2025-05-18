@@ -1,0 +1,19 @@
+<div class="modal fade" id="childModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="add-child-form" action="{% url 'add_child_ajax' %}" method="post" enctype="multipart/form-data" onsubmit="event.preventDefault(); submitAjaxForm('add-child-form', 'children-container', 'childModal')">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Child</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    {{ add_child_form.as_p }}
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

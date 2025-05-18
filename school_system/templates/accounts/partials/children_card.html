@@ -1,0 +1,9 @@
+<div class="card shadow-sm mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        Children
+        <button class="btn btn-sm btn-primary" onclick="showModal('childModal')">+ Add</button>
+    </div>
+    <div class="card-body" id="children-container">
+        {% include 'accounts/partials/children_list.html' %}
+    </div>
+</div>

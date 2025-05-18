@@ -1,0 +1,19 @@
+<div class="modal fade" id="subjectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="add-subject-form" action="{% url 'add_subject_ajax' %}" method="post" onsubmit="event.preventDefault(); submitAjaxForm('add-subject-form', 'subjects-container', 'subjectModal')">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Subject</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    {{ add_subject_form.as_p }}
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Add</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -20,6 +20,11 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('profile/edit/', views.edit_profile_view, name='edit_profile'),
     path('profile/delete-photo/', views.delete_profile_photo_view, name='dashboard_delete_profile_photo'),
+    
+    path('ajax/add-child/', views.add_child_ajax, name='add_child_ajax'),
+    path('ajax/remove-child/', views.remove_child_ajax, name='remove_child_ajax'),
+    path('ajax/add-subject/', views.add_subject_ajax, name='add_subject_ajax'),
+    path('ajax/remove-subject/', views.remove_subject_ajax, name='remove_subject_ajax'),
 
 ]
 
