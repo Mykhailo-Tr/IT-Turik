@@ -1,0 +1,38 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+
+{% block title %}Subjects{% endblock %}
+
+
+{% block dashboard_content %}
+<h3>All Subjects</h3>
+<ul>
+    {% for subject in subjects %}
+        <li>{{ subject.name }} - {{ subject.description }}</li>
+    {% empty %}
+        <li>No subjects available.</li>
+    {% endfor %}
+</ul>
+<div class="container mt-5">
+    <h2>Subjects</h2>
+
+    <form id="add-subject-form" class="mb-3">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Add Subject</button>
+    </form>
+
+    <ul class="list-group" id="subject-list">
+        {% for subject in subjects %}
+            <li class="list-group-item d-flex justify-content-between align-items-center" data-id="{{ subject.id }}">
+                <span>{{ subject.name }} - {{ subject.description }}</span>
+                <button class="btn btn-danger btn-sm remove-subject">Remove</button>
+            </li>
+        {% empty %}
+            <li class="list-group-item">No subjects assigned.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<script src="{% static 'js/dashboard/subjects.js' %}"></script>
+{% endblock %}

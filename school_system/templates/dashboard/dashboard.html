@@ -1,29 +1,11 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends "dashboard/base.html" %}
 
-{% block title %}Dashboard{% endblock %}
-
-{% block content %}
-{% include "dashboard/navbar.html" with page="dashboard" %}
-<div class="container mt-5">
-    <div class="alert alert-info d-flex justify-content-between align-items-center" role="alert">
-        <div>
-            <strong>Welcome,</strong> {{ user.get_full_name|default:user.email }}
-            <span class="badge bg-secondary text-uppercase ms-2">{{ user.get_role_display }}</span>
-        </div>
-        <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Logout</a>
-    </div>
-
-    <div class="card shadow-sm border-0 mt-4">
-        <div class="card-body">
-            <h2 class="card-title mb-3">Dashboard</h2>
-            <p class="card-text">
-                You are logged in as <strong>{{ user.first_name|default:user.username }}</strong> ({{ user.email }}).
-            </p>
-            <p class="card-text">
-                <strong>Your role:</strong> {{ user.get_role_display }}
-            </p>
-        </div>
-    </div>
-</div>
+{% block dashboard_content %}
+    <h2 class="card-title mb-3">Dashboard</h2>
+    <p class="card-text">
+        You are logged in as <strong>{{ user.first_name|default:user.username }}</strong> ({{ user.email }}).
+    </p>
+    <p class="card-text">
+        <strong>Your role:</strong> {{ user.get_role_display }}
+    </p>
 {% endblock %}

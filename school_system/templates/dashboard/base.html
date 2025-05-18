@@ -1,0 +1,25 @@
+{# dashboard/base.html #}
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    {% include "dashboard/navbar.html" with page=page %}
+
+    <div class="container mt-5">
+        <div class="alert alert-info d-flex justify-content-between align-items-center" role="alert">
+            <div>
+                <strong>Welcome,</strong> {{ user.get_full_name|default:user.email }}
+                <span class="badge bg-secondary text-uppercase ms-2">{{ user.get_role_display }}</span>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 mt-4">
+            <div class="card-body">
+                {% block dashboard_content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

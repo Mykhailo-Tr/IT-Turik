@@ -1,13 +1,13 @@
-{% extends "base.html" %}
+{% extends "dashboard/base.html" %}
 {% load static %}
 
 {% block title %}Accounts Dashboard{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/accounts/accounts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/accounts/accounts.css' %}">
 {% endblock %}
 
-{% block content %}
+{% block dashboard_content %}
 <div class="container dashboard-header">
     <h1 class="mb-3">Accounts Dashboard</h1>
     <p class="lead">Welcome, <strong>{{ user.first_name }}</strong> | <span class="text-muted">{{ user.email }}</span></p>
@@ -67,3 +67,4 @@
     </div>
 </div>
 {% endblock %}
+
