@@ -39,12 +39,23 @@ class CreateEventForm(forms.ModelForm):
         }
 
     def clean_title(self):
-        title = self.cleaned_data['title']
+        title = self.cleaned_data.get('title')
         if Event.objects.filter(title=title).exclude(id=self.instance.id).exists():
             raise forms.ValidationError("Event with this title already exists.")
         return title
 
-    
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+
+        if start_date and end_date:
+            if start_date > end_date:
+                raise ValidationError("Дата початку не може бути пізніше за дату завершення.")
+
+        return cleaned_data
+
+
 class EventCommentForm(forms.ModelForm):
     class Meta:
         model = EventComment
@@ -54,5 +65,3 @@ class EventCommentForm(forms.ModelForm):
                 'rows': 3, 'class': 'form-control', 'placeholder': 'Write a comment...'
             })
         }
-
-    

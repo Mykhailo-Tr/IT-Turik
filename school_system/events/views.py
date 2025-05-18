@@ -180,7 +180,7 @@ def create_event_view(request):
     else:
         form = CreateEventForm(user=request.user)
 
-    return render(request, 'events/forms/create.html', {'form': form})
+    return render(request, 'events/forms/event_form.html', {'form': form})
 
 
 @login_required(login_url="login")
@@ -233,7 +233,7 @@ def edit_event_view(request, event_id):
         'form': form,
         'event': event,
     }
-    return render(request, 'events/forms/edit.html', context)
+    return render(request, 'events/forms/event_form.html', context)
 
 
 
