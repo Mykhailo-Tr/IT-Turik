@@ -10,9 +10,7 @@
 {% block dashboard_content %}
 <div class="container dashboard-header">
     <h1 class="mb-3">Accounts Dashboard</h1>
-    <p class="lead">Welcome, <strong>{{ user.first_name }}</strong> | <span class="text-muted">{{ user.email }}</span></p>
-    <p>Your role: <span class="badge bg-primary text-uppercase">{{ user.get_role_display }}</span></p>
-    <hr>
+
     <p>Total accounts: <strong>{{ accounts_count }}</strong></p>
 
     {% if user.role == 'teacher' or user.role == 'admin' %}
