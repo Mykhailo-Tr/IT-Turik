@@ -24,6 +24,10 @@ class LoginForm(AuthenticationForm):
     
 
 
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+from datetime import timedelta
+
 class BaseSignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
     first_name = forms.CharField(max_length=30, required=True, label='First Name')
@@ -39,6 +43,19 @@ class BaseSignUpForm(UserCreationForm):
         model = User
         fields = ('email', 'first_name', 'last_name', 'date_of_birth', 'password1', 'password2')
 
+    def clean_date_of_birth(self):
+        dob = self.cleaned_data.get('date_of_birth')
+        today = timezone.now().date()
+
+        if dob > today:
+            raise ValidationError("Date of birth cannot be in the future.")
+        
+        min_age = 5  # мінімальний вік, наприклад 5 років
+        if dob > today - timedelta(days=min_age * 365):
+            raise ValidationError(f"User must be at least {min_age} years old.")
+        
+        return dob
+
     def save_user(self, role):
         user = super().save(commit=False)
         user.role = role
@@ -51,6 +68,7 @@ class BaseSignUpForm(UserCreationForm):
             date_of_birth=self.cleaned_data.get('date_of_birth')
         )
         return user
+
 
 
 class StudentSignUpForm(BaseSignUpForm):
