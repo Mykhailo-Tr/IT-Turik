@@ -1,6 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db import transaction
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+from datetime import timedelta
 from .models import User, Student, Teacher, Parent, Subject, UserProfile
 
 
@@ -22,11 +25,6 @@ class LoginForm(AuthenticationForm):
         widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'})
     )
     
-
-
-from django.core.exceptions import ValidationError
-from django.utils import timezone
-from datetime import timedelta
 
 class BaseSignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
