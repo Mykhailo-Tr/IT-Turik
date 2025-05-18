@@ -8,8 +8,8 @@
 <div class="container mt-4">
 
     <!-- Розділ: Власні предмети -->
-    <div class="mb-5 p-4 border rounded shadow-sm bg-light">
-        <h2 class="mb-4">1. Your Subjects</h2>
+    <div class="mb-5 p-4 border rounded shadow-sm ">
+        <h2 class="mb-4">Your Subjects</h2>
 
         {% if my_subjects %}
             <div class="row row-cols-1 row-cols-md-2 g-3">
@@ -37,9 +37,35 @@
         {% endif %}
     </div>
 
+    <!-- Розділ: Усі доступні предмети -->
+    <div class="mb-5 p-4 border rounded shadow-sm">
+        <h2 class="mb-4">All Available Subjects</h2>
+        {% with count=0 %}
+        <div class="row row-cols-1 row-cols-md-2 g-3">
+            {% for subject in subjects %}
+                {% if subject not in my_subjects %}
+                    {% with count=forloop.counter %}
+                    <div class="col">
+                        <div class="list-group-item border rounded p-3 h-100">
+                            <div class="d-flex justify-content-between align-items-start gap-2">
+                                <div>
+                                    <h6 class="mb-1">{{ count }}. {{ subject.name }}</h6>
+                                    <p class="mb-0 text-muted small">{{ subject.description }}</p>
+                                </div>
+                                <a href="{% url 'attach_subject' subject.id %}" class="btn btn-sm btn-outline-success">Attach</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endwith %}
+    </div>
+
     <!-- Розділ: Додати новий предмет -->
-    <div class="mb-5 p-4 border rounded shadow-sm bg-white">
-        <h2 class="mb-3">2. Add New Subject</h2>
+    <div class="mb-5 p-4 border rounded shadow-sm">
+        <h2 class="mb-3">Add New Subject</h2>
 
         <button class="btn btn-outline-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#addSubjectForm" aria-expanded="false" aria-controls="addSubjectForm">
             + Add New Subject
@@ -67,37 +93,6 @@
                 </div>
             </form>
         </div>
-    </div>
-
-    <!-- Розділ: Усі доступні предмети -->
-    <div class="mb-5 p-4 border rounded shadow-sm bg-light">
-        <h2 class="mb-4">3. All Available Subjects</h2>
-        {% with count=0 %}
-        <div class="row row-cols-1 row-cols-md-2 g-3">
-            {% for subject in subjects %}
-                {% if subject not in my_subjects %}
-                    {% with count=forloop.counter %}
-                    <div class="col">
-                        <div class="list-group-item border rounded p-3 h-100">
-                            <div class="d-flex justify-content-between align-items-start gap-2">
-                                <div>
-                                    <h6 class="mb-1">{{ count }}. {{ subject.name }}</h6>
-                                    <p class="mb-0 text-muted small">{{ subject.description }}</p>
-                                </div>
-                                <a href="{% url 'attach_subject' subject.id %}" class="btn btn-sm btn-outline-success">Attach</a>
-                            </div>
-                        </div>
-                    </div>
-                    {% endwith %}
-                {% endif %}
-            {% endfor %}
-            {% if count == 0 %}
-                <div class="col">
-                    <div class="list-group-item text-muted">No subjects available.</div>
-                </div>
-            {% endif %}
-        </div>
-        {% endwith %}
     </div>
 
 </div>
