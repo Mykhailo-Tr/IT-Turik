@@ -1,0 +1,16 @@
+<!-- Children List -->
+<ul class="list-group list-group-flush">
+    {% for child in user.parent.children.all %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{% url 'account' child.user.id %}">{{ child.user.get_full_name }} ({{ child.user.email }})</a>
+            <form id="remove-child-{{ child.id }}" method="post" action="{% url 'remove_child_ajax' %}"
+                  onsubmit="event.preventDefault(); submitAjaxForm('remove-child-{{ child.id }}', 'children-card-container')">
+                {% csrf_token %}
+                <input type="hidden" name="child_id" value="{{ child.user.id }}">
+                <button type="submit" class="btn btn-sm btn-outline-danger">&times;</button>
+            </form>
+        </li>
+    {% empty %}
+        <li class="list-group-item">No children linked yet.</li>
+    {% endfor %}
+</ul>

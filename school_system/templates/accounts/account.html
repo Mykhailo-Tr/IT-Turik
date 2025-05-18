@@ -14,7 +14,7 @@
 <div class="container mt-4">
     <div class="row">
         <!-- Profile Sidebar -->
-        <div class="col-lg-4">
+        <div class="col">
             <div class="card shadow-sm mb-4">
                 <div class="card-body text-center">
                     {% if user.profile.profile_picture %}
@@ -36,45 +36,75 @@
             {% include "accounts/navbar.html" %}
         </div>
 
-        <!-- Main Info Section -->
-        <div class="col-lg-8">
 
-            {% if user.role == "parent" %}
-                {% if request.user.id == user.id or request.user|is_staff_user %}
-                    {% include 'accounts/partials/children_card.html' %}
-                {% endif %}
-            {% endif %}
-
-            {% if user.role == "teacher" %}
-                {% if request.user.id == user.id or request.user|is_staff_user %}
-                    {% include 'accounts/partials/subjects_card.html' %}
-                {% endif %}
-            {% endif %}
-        </div>
     </div>
 </div>
 
-{% include 'accounts/modals/child_modal.html' %}
-{% include 'accounts/modals/subject_modal.html' %}
 {% endblock %}
 
 
 {% block extrascripts %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<meta name="csrf-token" content="{{ csrf_token }}">
+
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    axios.defaults.headers.common['X-CSRFToken'] = csrfToken;
+
     function showModal(id) {
-        new bootstrap.Modal(document.getElementById(id)).show();
+        const modal = new bootstrap.Modal(document.getElementById(id));
+        modal.show();
     }
 
-    function submitAjaxForm(formId, targetContainer, modalId) {
+    function submitAjaxForm(formId, containerId, modalId = null) {
         const form = document.getElementById(formId);
-        const data = new FormData(form);
-        axios.post(form.action, data)
+        if (!(form instanceof HTMLFormElement)) {
+            console.error("Invalid form element for", formId);
+            return;
+        }
+
+        const formData = new FormData(form);
+        axios.post(form.action, formData)
             .then(response => {
-                document.getElementById(targetContainer).innerHTML = response.data.html;
-                if (modalId) bootstrap.Modal.getInstance(document.getElementById(modalId)).hide();
+                console.log(response);
+                document.getElementById(containerId).innerHTML = response.data.html;
+                if (modalId) {
+                    const modalEl = document.getElementById(modalId);
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    modal.hide();
+                }
+                form.reset();
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error("AJAX form submission failed:", error);
+            });
     }
+
+    window.showModal = showModal;
+    window.submitAjaxForm = submitAjaxForm;
+
+    window.removeChild = function (childId) {
+        if (!confirm("Are you sure you want to remove this child?")) return;
+        axios.post("/ajax/remove-child/", { child_id: childId })
+            .then(response => {
+                document.getElementById("children-container").innerHTML = response.data.html;
+            })
+            .catch(error => {
+                console.error("Remove child failed:", error);
+            });
+    };
+
+    window.removeSubject = function (subjectId) {
+        if (!confirm("Are you sure you want to remove this subject?")) return;
+        axios.post("/ajax/remove-subject/", { subject_id: subjectId })
+            .then(response => {
+                document.getElementById("subjects-container").innerHTML = response.data.html;
+            })
+            .catch(error => {
+                console.error("Remove subject failed:", error);
+            });
+    };
+});
 </script>
 {% endblock %}

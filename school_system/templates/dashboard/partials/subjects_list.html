@@ -1,0 +1,8 @@
+{% for subject in user.teacher.subjects.all %}
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <span>{{ subject.name }}</span>
+        <button onclick="removeSubject({{ subject.id }})" class="btn btn-sm btn-outline-danger">×</button>
+    </div>
+{% empty %}
+    <p class="text-muted">No subjects assigned.</p>
+{% endfor %}

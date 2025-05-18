@@ -6,12 +6,10 @@ from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
-from django.template.loader import render_to_string
+
 
 from .models import User, UserProfile, Subject, Student
 from .forms import StudentSignUpForm, TeacherSignUpForm, ParentSignUpForm, UserUpdateForm, UserProfileUpdateForm
-from .forms import AddSubjectForm, CreateSubjectForm, AddChildForm
 from .forms import LoginForm
 from school_system.decorators import teacher_required, student_required
 import os
@@ -125,51 +123,9 @@ def account_view(request, user_id=None):
         'user': user,
         'user_id': user.id,
         'profile_user': profile_user,
-        'add_subject_form': AddSubjectForm(user=user),
-        'create_subject_form': CreateSubjectForm(),
-        'add_child_form': AddChildForm(user=user),
     }
 
     return render(request, 'accounts/account.html', context)
-
-
-@login_required
-def add_child_ajax(request):
-    if request.method == 'POST':
-        form = AddChildForm(request.POST, user=request.user)
-        if form.is_valid():
-            child = form.cleaned_data['child']
-            request.user.parent.children.add(child)
-    html = render_to_string('accounts/partials/children_list.html', {'user': request.user})
-    return JsonResponse({'html': html})
-
-@login_required
-def remove_child_ajax(request):
-    if request.method == 'POST':
-        child_id = request.POST.get('child_id')
-        child = get_object_or_404(Student, user_id=child_id)
-        request.user.parent.children.remove(child)
-    html = render_to_string('accounts/partials/children_list.html', {'user': request.user})
-    return JsonResponse({'html': html})
-
-@login_required
-def add_subject_ajax(request):
-    if request.method == 'POST':
-        form = AddSubjectForm(request.POST, user=request.user)
-        if form.is_valid():
-            subject = form.cleaned_data['subject']
-            request.user.teacher.subjects.add(subject)
-    html = render_to_string('accounts/partials/subjects_list.html', {'user': request.user})
-    return JsonResponse({'html': html})
-
-@login_required
-def remove_subject_ajax(request):
-    if request.method == 'POST':
-        subject_id = request.POST.get('subject_id')
-        subject = get_object_or_404(Subject, id=subject_id)
-        request.user.teacher.subjects.remove(subject)
-    html = render_to_string('accounts/partials/subjects_list.html', {'user': request.user})
-    return JsonResponse({'html': html})
 
 
 @login_required(login_url='login')
