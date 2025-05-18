@@ -1,35 +1,33 @@
-<nav class="navbar navbar-expand-lg shadow-sm mb-4">
-    <div class="container-fluid">
-      <a class="navbar-brand fw-bold" href="{% url 'tasks' %}">Task Manager</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#taskNavbar" aria-controls="taskNavbar" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-  
-      <div class="collapse navbar-collapse" id="taskNavbar">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item {% if page == 'create_task' %}active{% endif %}">
-            <a class="nav-link" href="{% url 'create_task' %}">Create Task</a>
-          </li>
-        </ul>
-  
-        <form class="d-flex" method="get" action="{% url 'tasks' %}">
-          <input class="form-control me-2" type="search" name="q" placeholder="Search tasks..." aria-label="Search" value="{{ request.GET.q|default:'' }}">
-          
-          <input type="date" name="from_date" value="{{ request.GET.from_date }}" class="form-control me-2">
-          <input type="date" name="to_date" value="{{ request.GET.to_date }}" class="form-control me-2">
-          
-          <select name="author" class="form-select me-2">
-            <option value="">All authors</option>
-            {% for author in users %}
-              <option value="{{ author.id }}" {% if request.GET.author == author.id|stringformat:"s" %}selected{% endif %}>
-                {{ author.email }}
-              </option>
-            {% endfor %}
-          </select>
-  
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-      </div>
-    </div>
-  </nav>
-  
+<nav class="navbar shadow-sm mb-4">
+  <div class="container-fluid d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+    
+    <!-- Назва бренду -->
+    <a class="navbar-brand fw-bold" href="{% url 'tasks' %}">Task Manager</a>
+    
+    <!-- Навігація -->
+    <ul class="navbar-nav flex-row flex-wrap">
+      <li class="nav-item me-3 {% if page == 'create_task' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'create_task' %}">Create Task</a>
+      </li>
+    </ul>
+
+    <!-- Форма фільтрів -->
+    <form class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2" method="get" action="{% url 'tasks' %}">
+      <input class="form-control" type="search" name="q" placeholder="Search tasks..." value="{{ request.GET.q|default:'' }}">
+      <input type="date" name="from_date" value="{{ request.GET.from_date }}" class="form-control">
+      <input type="date" name="to_date" value="{{ request.GET.to_date }}" class="form-control">
+
+      <select name="author" class="form-select">
+        <option value="">All authors</option>
+        {% for author in users %}
+          <option value="{{ author.id }}" {% if request.GET.author == author.id|stringformat:"s" %}selected{% endif %}>
+            {{ author.email }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+
+  </div>
+</nav>
