@@ -5,17 +5,17 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white text-center">
-                    <h4 class="mb-0">Create Account</h4>
+        <div class="col-md-10 col-lg-6">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header text-center bg-transparent border-0 pt-4">
+                    <h2 class="fw-bold mb-1">Create Your Account</h2>
+                    <p class="text-muted">Please fill in your information</p>
                 </div>
-                <div class="card-body">
+                <div class="card-body px-4 py-4">
                     <form method="post" novalidate>
                         {% csrf_token %}
-
                         {% for field in form %}
                             {% if field|widget_type == "checkboxselectmultiple" %}
                                 <div class="mb-3">
@@ -51,15 +51,16 @@
                             {% endif %}
                         {% endfor %}
 
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-success">Register</button>
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill">Create Account</button>
                         </div>
                     </form>
-
-                    <div class="text-center mt-3">
-                        <span>Already have an account?</span>
-                        <a href="{% url 'login' %}">Sign in</a>
-                    </div>
+                </div>
+                <div class="card-footer bg-transparent text-center py-3">
+                    <small class="text-muted">
+                        Already have an account?
+                        <a href="{% url 'login' %}" class="text-decoration-none fw-semibold">Sign in</a>
+                    </small>
                 </div>
             </div>
         </div>

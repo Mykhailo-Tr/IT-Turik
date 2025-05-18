@@ -1,0 +1,11 @@
+.btn-theme-outline {
+    border: 1px solid var(--bs-border-color);
+    color: var(--bs-body-color);
+    background-color: transparent;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-theme-outline:hover {
+    background-color: var(--bs-secondary-bg);
+    color: var(--bs-body-color);
+}

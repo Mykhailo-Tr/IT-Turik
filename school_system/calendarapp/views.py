@@ -26,7 +26,7 @@ class FullCalendarView(LoginRequiredMixin, View):
 
 
 def get_events_json(request):
-    user_events = Event.objects.filter(author=request.user)
+    user_events = Event.objects.filter(author=request.user).exclude(end_date__isnull=True)
     event_list = [
         {
             "id": event.id,
@@ -38,6 +38,7 @@ def get_events_json(request):
         for event in user_events
     ]
     return JsonResponse(event_list, safe=False)
+
 
 
 def event_form_partial(request, event_id=None):
