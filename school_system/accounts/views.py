@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.views import LoginView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404
 
 
@@ -63,8 +63,11 @@ def delete_account_view(request):
         user.delete()
         messages.success(request, 'Your account has been deleted successfully.')
         return redirect('home')
+    
+    previous_url = request.META.get('HTTP_REFERER', reverse('account'))
     context = {
         'page': 'delete_account',
+        'previous_url': previous_url,
     }
     return render(request, 'accounts/forms/delete_account.html', context)
 

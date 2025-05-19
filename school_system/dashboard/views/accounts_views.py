@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.db.models import Q
 
 from school_system.decorators import teacher_required, student_required
@@ -92,8 +92,10 @@ def delete_account_view(request, user_id=None):
         messages.success(request, 'Обліковий запис успішно видалено.')
         return redirect('dashboard_accounts')
     
+    previous_url = request.META.get('HTTP_REFERER', reverse('account'))
     context = {
         'user': user,
+        'previous_url': previous_url,
     }
     return render(request, 'accounts/forms/delete_account.html', context)
     
