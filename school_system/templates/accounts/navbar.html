@@ -12,13 +12,22 @@
                 <i class="feather feather-user me-2"></i> Profile
             </a>
         {% endif %}
-        {% if user_id == request.user.id or request.user.role == 'admin' or request.user.role == 'teacher' %}
+        {% if user_id == request.user.id%}
             <a href="{% url 'edit_account' %}" class="list-group-item list-group-item-action {% if page == 'edit_account' %}active{% endif %}">
                 <i class="feather feather-edit me-2"></i> Edit Account
             </a>
             <a href="{% url 'delete_account' %}" class="list-group-item list-group-item-action {% if page == 'delete_account' %}active{% endif %}">
                 <i class="feather feather-trash-2 me-2"></i> Delete Account
             </a>
+        {% else %}
+            {% if request.user.role == 'teacher' or request.user.role == 'admin' %}
+                <a href="{% url 'dashboard_edit_account' user_id %}" class="list-group-item list-group-item-action {% if page == 'edit_account' %}active{% endif %}">
+                    <i class="feather feather-edit me-2"></i> Edit Account
+                </a>
+                <a href="{% url 'dashboard_delete_account' user_id %}" class="list-group-item list-group-item-action {% if page == 'delete_account' %}active{% endif %}">
+                    <i class="feather feather-trash-2 me-2"></i> Delete Account
+                </a>
+            {% endif %}
         {% endif %}
         {% if user_id == request.user.id %}
             <a href="{% url 'logout' %}" class="list-group-item list-group-item-action">
