@@ -17,8 +17,8 @@ urlpatterns = [
     path('account/edit/', views.AccountUpdateView.as_view(), name='edit_account'),
     path('account/delete/', views.DeleteAccountView.as_view(), name='delete_account'),
     path('profile/', views.ProfileView.as_view(), name='profile'),
-    path('profile/edit/', views.edit_profile_view, name='edit_profile'),
-    path('profile/delete-photo/', views.delete_profile_photo_view, name='delete_profile_photo'),
+    path('profile/edit/', views.ProfileUpdateView.as_view(), name='edit_profile'),
+    path('profile/delete-photo/', views.DeleteProfilePhotoView.as_view(), name='delete_profile_photo'),
 ]
 
 if settings.DEBUG:

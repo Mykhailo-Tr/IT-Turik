@@ -15,8 +15,8 @@ urlpatterns = [
     path('accounts/<int:user_id>/delete/', accounts_views.DeleteAccountView.as_view(), name='delete_account'),
     
     path('profile/<int:user_id>/', accounts_views.ProfileView.as_view(), name='profile'),
-    path('profile/<int:user_id>/edit/', accounts_views.edit_profile_view, name='edit_profile'),
-    path('profile/<int:user_id>/delete-photo/', accounts_views.delete_profile_photo_view, name='delete_profile_photo'),
+    path('profile/<int:user_id>/edit/', accounts_views.ProfileUpdateView.as_view(), name='edit_profile'),
+    path('profile/<int:user_id>/delete-photo/', accounts_views.DeleteProfilePhotoView.as_view(), name='delete_profile_photo'),
     
     path('subjects/', subjects_view, name='dashboard_subjects'),
     path('subjects/attach/<int:subject_id>/', attach_subject_view, name='attach_subject'),

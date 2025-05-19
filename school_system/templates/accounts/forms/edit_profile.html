@@ -41,11 +41,19 @@
                             <input type="file" id="id_profile_picture" name="profile_picture" accept="image/*" class="d-none">
                             
                             {% if user.profile.profile_picture %}
-                            <a href="{% url 'delete_profile_photo' %}" 
-                               class="btn btn-outline-danger" 
-                               onclick="return confirm('Ви впевнені, що хочете видалити фото?');">
-                                Видалити фото
-                            </a>
+                                {% if request.user.id == user.id %}
+                                    <a href="{% url 'delete_profile_photo' %}" 
+                                    class="btn btn-outline-danger" 
+                                    onclick="return confirm('Ви впевнені, що хочете видалити фото?');">
+                                        Видалити фото
+                                    </a>
+                                {% elif request.user.role == 'teacher' or request.user.role == 'admin' %}
+                                    <a href="{% url 'delete_profile_photo' user.id %}" 
+                                    class="btn btn-outline-danger" 
+                                    onclick="return confirm('Ви впевнені, що хочете видалити фото?');">
+                                        Видалити фото
+                                    </a>
+                                {% endif %}
                             {% endif %}
                         </div>
 

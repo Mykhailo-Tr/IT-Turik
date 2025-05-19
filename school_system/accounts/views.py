@@ -10,6 +10,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
 from django.views import View
 from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 from .models import User, UserProfile, Subject, Student
@@ -223,20 +224,44 @@ class AccountUpdateView(View):
         return render(request, 'accounts/forms/edit_account.html', context)
 
 
-@login_required
-def edit_profile_view(request, user_id=None):
-    if user_id:
-        if not (request.user.role == 'admin' or request.user.role == 'teacher'):
+
+@method_decorator(login_required, name='dispatch')
+class ProfileUpdateView(View):
+    def get_target_user(self, request, user_id):
+        """Отримати цільового користувача"""
+        if user_id:
+            if request.user.role not in ['admin', 'teacher']:
+                return None
+            return get_object_or_404(User, id=user_id)
+        return request.user
+
+    def get(self, request, user_id=None):
+        target_user = self.get_target_user(request, user_id)
+        if not target_user:
             return redirect('dashboard_accounts')
-        target_user = get_object_or_404(User, id=user_id)
-    else:
-        target_user = request.user
 
-    profile = get_object_or_404(UserProfile, user=target_user)
-    old_photo = profile.profile_picture.path if profile.profile_picture.name != 'profile_pictures/default.png' else None
+        profile = get_object_or_404(UserProfile, user=target_user)
+        form = UserProfileUpdateForm(instance=profile)
 
-    if request.method == 'POST':
+        return render(request, 'accounts/forms/edit_profile.html', {
+            'form': form,
+            'profile': profile,
+            'user': target_user,
+            'previous_url': request.META.get('HTTP_REFERER', reverse('account'))
+        })
+
+    def post(self, request, user_id=None):
+        target_user = self.get_target_user(request, user_id)
+        if not target_user:
+            return redirect('dashboard_accounts')
+
+        profile = get_object_or_404(UserProfile, user=target_user)
+        old_photo = profile.profile_picture.path if profile.profile_picture.name != 'profile_pictures/default.png' else None
+
         form = UserProfileUpdateForm(request.POST, request.FILES, instance=profile)
+        print("FILES:", request.FILES)
+        print("Form valid:", form.is_valid())
+        print("Form errors:", form.errors)
 
         if form.is_valid():
             if 'profile_picture' in request.FILES and old_photo and os.path.exists(old_photo):
@@ -249,31 +274,30 @@ def edit_profile_view(request, user_id=None):
             else:
                 messages.success(request, 'Your profile has been updated successfully.')
                 return redirect('profile')
-    else:
-        form = UserProfileUpdateForm(instance=profile)
 
-    return render(request, 'accounts/forms/edit_profile.html', {
-        'form': form,
-        'profile': profile,
-        'previous_url': request.META.get('HTTP_REFERER', reverse('account')),
-        'user': target_user
-    })
+        return render(request, 'accounts/forms/edit_profile.html', {
+            'form': form,
+            'profile': profile,
+            'user': target_user,
+            'previous_url': request.META.get('HTTP_REFERER', reverse('account'))
+        })
     
-@login_required
-def delete_profile_photo_view(request, user_id=None):
-    if user_id:
-        if not (request.user.role == 'admin' or request.user.role == 'teacher'):
-            return redirect('dashboard_accounts')
-        target_user = get_object_or_404(User, id=user_id)
-    else:
-        target_user = request.user
+    
+class DeleteProfilePhotoView(LoginRequiredMixin, View):
+    def get(self, request, user_id=None):
+        if user_id:
+            if not (request.user.role == 'admin' or request.user.role == 'teacher'):
+                return redirect('dashboard_accounts')
+            target_user = get_object_or_404(User, id=user_id)
+        else:
+            target_user = request.user
 
-    profile = get_object_or_404(UserProfile, user=target_user)
+        profile = get_object_or_404(UserProfile, user=target_user)
 
-    if profile.profile_picture.name != 'profile_pictures/default.png':
-        if os.path.exists(profile.profile_picture.path):
-            os.remove(profile.profile_picture.path)
-        profile.profile_picture = 'profile_pictures/default.png'
-        profile.save()
+        if profile.profile_picture.name != 'profile_pictures/default.png':
+            if os.path.exists(profile.profile_picture.path):
+                os.remove(profile.profile_picture.path)
+            profile.profile_picture = 'profile_pictures/default.png'
+            profile.save()
 
-    return redirect('profile')
+        return redirect('profile', user_id=target_user.id) if user_id else redirect('profile')
