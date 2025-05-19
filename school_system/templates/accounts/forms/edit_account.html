@@ -26,7 +26,7 @@
                         {% endfor %}
 
                         <div class="d-flex justify-content-between">
-                            <a href="{% url 'home' %}" class="btn btn-outline-secondary">Cancel</a>
+                            <a href="{{ previous_url }}" class="btn btn-outline-secondary">Cancel</a>
                             <button type="submit" class="btn btn-success">Update Account</button>
                         </div>
                     </form>

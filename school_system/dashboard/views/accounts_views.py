@@ -119,6 +119,7 @@ def edit_account_view(request, user_id=None):
         
     context = {
         'page': 'edit_account',
+        'previous_url': request.META.get('HTTP_REFERER', reverse('account')),
         'form': form,
     }
     return render(request, 'accounts/forms/edit_account.html', context)
