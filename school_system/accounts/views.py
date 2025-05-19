@@ -56,17 +56,29 @@ def register_view(request):
 
 
 @login_required(login_url='login')
-def delete_account_view(request):
-    if request.method == 'POST':
+def delete_account_view(request, user_id=None):
+    if user_id:
+        if not (request.user.role == 'admin' or request.user.role == 'teacher'):
+            return redirect('dashboard_accounts')
+        user = User.objects.get(id=user_id)
+    else:
         user = request.user
-        logout(request)
+        
+    if request.method == 'POST':
+        if not user_id:
+            logout(request)
         user.delete()
-        messages.success(request, 'Your account has been deleted successfully.')
-        return redirect('home')
+        if user_id:
+            messages.success(request, f'Account {user.get_full_name()} has been deleted successfully.')
+            return redirect('dashboard_accounts')
+        else:
+            messages.success(request, 'Your account has been deleted successfully.')
+            return redirect('home')
     
     previous_url = request.META.get('HTTP_REFERER', reverse('account'))
     context = {
         'page': 'delete_account',
+        'user': user,
         'previous_url': previous_url,
     }
     return render(request, 'accounts/forms/delete_account.html', context)
@@ -149,15 +161,26 @@ def profile_view(request, user_id=None):
 
 
 @login_required(login_url='login')
-def edit_account_view(request):      
+def edit_account_view(request, user_id=None):
+    if user_id:
+        if not (request.user.role == 'admin' or request.user.role == 'teacher'):
+            return redirect('dashboard_accounts')
+        user = get_object_or_404(User, id=user_id)
+    else:
+        user = request.user    
+          
     if request.method == 'POST':
-        form = UserUpdateForm(request.POST, instance=request.user)
+        form = UserUpdateForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Your account has been updated.')
-            return redirect('account')
+            if user_id:
+                messages.success(request, f'Account {user.get_full_name()} has been updated.')
+                return redirect('account', user_id=user_id)
+            else:
+                messages.success(request, 'Your account has been updated.')
+                return redirect('account')
     else:
-        form = UserUpdateForm(instance=request.user)
+        form = UserUpdateForm(instance=user)
         
     context = {
         'page': 'edit_account',
