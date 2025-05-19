@@ -92,7 +92,7 @@ def delete_account_view(request, user_id=None):
         messages.success(request, 'Обліковий запис успішно видалено.')
         return redirect('dashboard_accounts')
     
-    previous_url = request.META.get('HTTP_REFERER', reverse('account'))
+    previous_url = request.META.get('HTTP_REFERER', reverse('dashboard_accounts'))
     context = {
         'user': user,
         'previous_url': previous_url,
@@ -119,7 +119,7 @@ def edit_account_view(request, user_id=None):
         
     context = {
         'page': 'edit_account',
-        'previous_url': request.META.get('HTTP_REFERER', reverse('account')),
+        'previous_url': request.META.get('HTTP_REFERER', reverse('dashboard_accounts')),
         'form': form,
     }
     return render(request, 'accounts/forms/edit_account.html', context)
@@ -144,6 +144,7 @@ def edit_profile_view(request, user_id=None):
         
     context = {
         'page': 'edit_profile',
+        'previous_url': request.META.get('HTTP_REFERER', reverse('dashboard_accounts')),
         'form': form,
     }
     return render(request, 'accounts/forms/edit_profile.html', context)

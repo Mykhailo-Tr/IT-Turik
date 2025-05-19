@@ -186,6 +186,7 @@ def edit_profile_view(request, user_id=None):
     return render(request, 'accounts/forms/edit_profile.html', {
         'form': form,
         'profile': profile,
+        'previous_url': request.META.get('HTTP_REFERER', reverse('account')),
         'user': target_user
     })
     
