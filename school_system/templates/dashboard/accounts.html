@@ -15,9 +15,9 @@
 
     {% if user.role == 'teacher' or user.role == 'admin' %}
     <div class="mb-3">
-        <a href="{% url 'dashboard_create_account' 'student' %}" class="btn btn-success btn-sm">Create Student</a>
-        <a href="{% url 'dashboard_create_account' 'parent' %}" class="btn btn-info btn-sm">Create Parent</a>
-        <a href="{% url 'dashboard_create_account' 'teacher' %}" class="btn btn-warning btn-sm">Create Teacher</a>
+        <a href="{% url 'create_account' 'student' %}" class="btn btn-success btn-sm">Create Student</a>
+        <a href="{% url 'create_account' 'parent' %}" class="btn btn-info btn-sm">Create Parent</a>
+        <a href="{% url 'create_account' 'teacher' %}" class="btn btn-warning btn-sm">Create Teacher</a>
     </div>
     {% endif %}
     <form method="get" class="mb-3">
@@ -53,9 +53,9 @@
                         </td>
                         {% if user.role == 'teacher' or user.role == 'admin' %}
                         <td class="action-links">
-                            <a href="{% url 'dashboard_edit_account' account.id %}" class="btn btn-outline-primary btn-sm">Edit Account</a>
-                            <a href="{% url 'dashboard_edit_profile' account.id %}" class="btn btn-outline-secondary btn-sm">Edit Profile</a>
-                            <a href="{% url 'dashboard_delete_account' account.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                            <a href="{% url 'edit_account' account.id %}" class="btn btn-outline-primary btn-sm">Edit Account</a>
+                            <a href="{% url 'edit_profile' account.id %}" class="btn btn-outline-secondary btn-sm">Edit Profile</a>
+                            <a href="{% url 'delete_account' account.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
                         </td>
                         {% endif %}
                     </tr>

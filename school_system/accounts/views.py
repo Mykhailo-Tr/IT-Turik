@@ -169,7 +169,6 @@ def edit_account_view(request):
 
 @login_required
 def edit_profile_view(request, user_id=None):
-
     if user_id:
         if not (request.user.role == 'admin' or request.user.role == 'teacher'):
             return redirect('dashboard_accounts')

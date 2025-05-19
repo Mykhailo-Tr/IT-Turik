@@ -21,10 +21,10 @@
             </a>
         {% else %}
             {% if request.user.role == 'teacher' or request.user.role == 'admin' %}
-                <a href="{% url 'dashboard_edit_account' user_id %}" class="list-group-item list-group-item-action {% if page == 'edit_account' %}active{% endif %}">
+                <a href="{% url 'edit_account' user_id %}" class="list-group-item list-group-item-action {% if page == 'edit_account' %}active{% endif %}">
                     <i class="feather feather-edit me-2"></i> Edit Account
                 </a>
-                <a href="{% url 'dashboard_delete_account' user_id %}" class="list-group-item list-group-item-action {% if page == 'delete_account' %}active{% endif %}">
+                <a href="{% url 'delete_account' user_id %}" class="list-group-item list-group-item-action {% if page == 'delete_account' %}active{% endif %}">
                     <i class="feather feather-trash-2 me-2"></i> Delete Account
                 </a>
             {% endif %}
