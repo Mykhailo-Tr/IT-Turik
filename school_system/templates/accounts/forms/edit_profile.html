@@ -41,7 +41,7 @@
                             <input type="file" id="id_profile_picture" name="profile_picture" accept="image/*" class="d-none">
                             
                             {% if user.profile.profile_picture %}
-                            <a href="{% url 'dashboard_delete_profile_photo' %}" 
+                            <a href="{% url 'delete_profile_photo' %}" 
                                class="btn btn-outline-danger" 
                                onclick="return confirm('Ви впевнені, що хочете видалити фото?');">
                                 Видалити фото

@@ -12,7 +12,7 @@ urlpatterns = [
     path('accounts/<int:user_id>/', accounts_views.account_view, name='account'),
     path('accounts/create/<str:role>/', dashboard_views.create_account_view, name='create_account'),
     path('accounts/<int:user_id>/edit/', accounts_views.edit_account_view, name='edit_account'),
-    path('accounts/<int:user_id>/delete/', accounts_views.delete_account_view, name='delete_account'),
+    path('accounts/<int:user_id>/delete/', accounts_views.DeleteAccountView.as_view(), name='delete_account'),
     
     path('profile/<int:user_id>/', accounts_views.profile_view, name='profile'),
     path('profile/<int:user_id>/edit/', accounts_views.edit_profile_view, name='edit_profile'),

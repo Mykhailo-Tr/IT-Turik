@@ -6,6 +6,10 @@ from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404
+from django.views.generic import TemplateView
+from django.contrib.auth.views import LogoutView
+from django.views import View
+from django.utils.decorators import method_decorator
 
 
 from .models import User, UserProfile, Subject, Student
@@ -15,11 +19,13 @@ from school_system.decorators import teacher_required, student_required
 import os
 
 
-def main_page(request):
-    context = {
-        'page': 'home',
-    }
-    return render(request, 'home_page.html', context)
+class HomeView(TemplateView):
+    template_name = 'home_page.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page'] = 'home'
+        return context
 
 
 class UserLoginView(LoginView):
@@ -42,46 +48,59 @@ class UserLoginView(LoginView):
         return redirect('login')
 
 
-@login_required(login_url='login')
-def logout_view(request):
-    logout(request)
-    return redirect('home')
+class UserLogoutView(View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect('home')
 
 
-def register_view(request):
-    context = {
-        'page': 'register',
-    }
-    return render(request, 'accounts/forms/register.html', context)
+class RegisterView(TemplateView):
+    template_name = 'accounts/forms/register.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page'] = 'register'
+        return context
 
 
-@login_required(login_url='login')
-def delete_account_view(request, user_id=None):
-    if user_id:
-        if not (request.user.role == 'admin' or request.user.role == 'teacher'):
-            return redirect('dashboard_accounts')
-        user = User.objects.get(id=user_id)
-    else:
-        user = request.user
-        
-    if request.method == 'POST':
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteAccountView(View):
+    def get(self, request, user_id=None):
+        if user_id:
+            if not (request.user.role == 'admin' or request.user.role == 'teacher'):
+                return redirect('dashboard_accounts')
+            user = get_object_or_404(User, id=user_id)
+        else:
+            user = request.user
+
+        previous_url = request.META.get('HTTP_REFERER', reverse('account'))
+
+        context = {
+            'page': 'delete_account',
+            'user': user,
+            'previous_url': previous_url,
+        }
+        return render(request, 'accounts/forms/delete_account.html', context)
+
+    def post(self, request, user_id=None):
+        if user_id:
+            if not (request.user.role == 'admin' or request.user.role == 'teacher'):
+                return redirect('dashboard_accounts')
+            user = get_object_or_404(User, id=user_id)
+        else:
+            user = request.user
+
         if not user_id:
             logout(request)
+
         user.delete()
+
         if user_id:
             messages.success(request, f'Account {user.get_full_name()} has been deleted successfully.')
             return redirect('dashboard_accounts')
         else:
             messages.success(request, 'Your account has been deleted successfully.')
             return redirect('home')
-    
-    previous_url = request.META.get('HTTP_REFERER', reverse('account'))
-    context = {
-        'page': 'delete_account',
-        'user': user,
-        'previous_url': previous_url,
-    }
-    return render(request, 'accounts/forms/delete_account.html', context)
 
 
 class UserSignUpView(CreateView):
