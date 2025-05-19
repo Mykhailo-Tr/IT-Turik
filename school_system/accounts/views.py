@@ -132,9 +132,17 @@ def account_view(request, user_id=None):
 
 
 @login_required(login_url='login')
-def profile_view(request):
+def profile_view(request, user_id=None):
+    if user_id:
+        if not (request.user.role == 'admin' or request.user.role == 'teacher'):
+            return redirect('dashboard_accounts')
+        target_user = get_object_or_404(User, id=user_id)
+    else:
+        target_user = request.user
+        
     context = {
         'page': 'profile',
+        'user': target_user,
         'profile': request.user.profile,
     }
     return render(request, 'accounts/profile.html', context)
@@ -161,6 +169,7 @@ def edit_account_view(request):
 
 @login_required
 def edit_profile_view(request, user_id=None):
+
     if user_id:
         if not (request.user.role == 'admin' or request.user.role == 'teacher'):
             return redirect('dashboard_accounts')
@@ -179,7 +188,12 @@ def edit_profile_view(request, user_id=None):
                 os.remove(old_photo)
 
             form.save()
-            return redirect('profile')
+            if user_id:
+                messages.success(request, f'Profile {target_user.get_full_name()} has been updated successfully.')
+                return redirect('account', user_id=user_id)
+            else:
+                messages.success(request, 'Your profile has been updated successfully.')
+                return redirect('profile')
     else:
         form = UserProfileUpdateForm(instance=profile)
 

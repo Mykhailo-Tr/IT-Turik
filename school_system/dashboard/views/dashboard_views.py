@@ -42,18 +42,6 @@ def accounts_view(request):
     return render(request, 'dashboard/accounts.html', context)
 
 
-@login_required(login_url='login')
-def profile_view(request, user_id=None):
-    user = User.objects.get(id=user_id)
-    profile = UserProfile.objects.get(user=user)
-    context = {
-        'page': 'dashboard',
-        'user': user,
-        'profile': profile,
-    }
-    return render(request, 'accounts/profile.html', context)
-
-
 @teacher_required(login_url='login')
 def create_account_view(request, role):
     if role == 'student':
@@ -124,27 +112,3 @@ def edit_account_view(request, user_id=None):
     }
     return render(request, 'accounts/forms/edit_account.html', context)
 
-
-@teacher_required(login_url='login')
-def edit_profile_view(request, user_id=None):
-    if user_id:
-        user = User.objects.get(id=user_id)
-    else:
-        messages.error(request, 'Невірний запит.')
-        return redirect('dashboard_accounts')
-        
-    if request.method == 'POST':
-        form = UserProfileUpdateForm(request.POST, request.FILES, instance=user.profile)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your profile has been updated.')
-            return redirect('dashboard_accounts')
-    else:
-        form = UserProfileUpdateForm(instance=user.profile)
-        
-    context = {
-        'page': 'edit_profile',
-        'previous_url': request.META.get('HTTP_REFERER', reverse('dashboard_accounts')),
-        'form': form,
-    }
-    return render(request, 'accounts/forms/edit_profile.html', context)
