@@ -15,7 +15,11 @@
       
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <a href="{% url 'delete_task' task.id %}" class="btn btn-danger">Yes, Delete</a>
+        
+        <form method="post" action="{% url 'delete_task' task.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        </form>
       </div>
     </div>
   </div>
