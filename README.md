@@ -1,4 +1,4 @@
-# 🚀 IT-Turik — School Management System
+# 🚀 SchoolSys — School Management System
 
 ![Project Banner](https://github.com/Mykhailo-Tr/IT-Turik/raw/main/banner.png)
 
@@ -6,7 +6,7 @@
 
 ## 📖 Project Overview
 
-**IT-Turik** is a comprehensive web application designed to automate the educational process in schools. The system supports:
+**SchoolSys** is a comprehensive web application designed to automate the educational process in schools. The system supports:
 - Role-based user management (students, teachers, administrators)
 - Creation, editing, and deletion of tasks and events
 - Subject and child management
