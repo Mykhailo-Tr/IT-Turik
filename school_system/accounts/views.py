@@ -178,16 +178,33 @@ class ProfileView(View):
 
 
 
-@login_required(login_url='login')
-def edit_account_view(request, user_id=None):
-    if user_id:
-        if not (request.user.role == 'admin' or request.user.role == 'teacher'):
+class AccountUpdateView(View):
+    def get_user(self, request, user_id):
+        """Допоміжний метод для отримання користувача з урахуванням ролей"""
+        if user_id:
+            if not (request.user.role in ['admin', 'teacher']):
+                return None
+            return get_object_or_404(User, id=user_id)
+        return request.user
+
+    def get(self, request, user_id=None):
+        user = self.get_user(request, user_id)
+        if not user:
             return redirect('dashboard_accounts')
-        user = get_object_or_404(User, id=user_id)
-    else:
-        user = request.user    
-          
-    if request.method == 'POST':
+
+        form = UserUpdateForm(instance=user)
+        context = {
+            'page': 'edit_account',
+            'form': form,
+            'previous_url': request.META.get('HTTP_REFERER', reverse('account')),
+        }
+        return render(request, 'accounts/forms/edit_account.html', context)
+
+    def post(self, request, user_id=None):
+        user = self.get_user(request, user_id)
+        if not user:
+            return redirect('dashboard_accounts')
+
         form = UserUpdateForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
@@ -197,15 +214,13 @@ def edit_account_view(request, user_id=None):
             else:
                 messages.success(request, 'Your account has been updated.')
                 return redirect('account')
-    else:
-        form = UserUpdateForm(instance=user)
-        
-    context = {
-        'page': 'edit_account',
-        'previous_url': request.META.get('HTTP_REFERER', reverse('account')),
-        'form': form,
-    }
-    return render(request, 'accounts/forms/edit_account.html', context)
+
+        context = {
+            'page': 'edit_account',
+            'form': form,
+            'previous_url': request.META.get('HTTP_REFERER', reverse('account')),
+        }
+        return render(request, 'accounts/forms/edit_account.html', context)
 
 
 @login_required
