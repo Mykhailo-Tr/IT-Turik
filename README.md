@@ -1,82 +1,80 @@
-# 🚀 IT-Turik — Шкільна система управління
+# 🚀 IT-Turik — School Management System
 
 ![Project Banner](https://github.com/Mykhailo-Tr/IT-Turik/raw/main/banner.png)
 
 ---
 
-## 📖 Проект
+## 📖 Project Overview
 
-**IT-Turik** — це комплексний веб-додаток для автоматизації навчального процесу у школі. Система підтримує:
-- Управління користувачами з ролями (учні, вчителі, адміністратори)
-- Створення, редагування, видалення завдань та подій
-- Керування предметами і дітьми
-- Фільтрацію та пошук завдань за різними критеріями
-- Адаптивний та зручний інтерфейс з динамічним оновленням через **AJAX**
-- Інтерактивний календар для роботи з подіями через **FullCalendar**
+**IT-Turik** is a comprehensive web application designed to automate the educational process in schools. The system supports:
+- Role-based user management (students, teachers, administrators)
+- Creation, editing, and deletion of tasks and events
+- Subject and child management
+- Filtering and searching tasks based on various criteria
+- Responsive and user-friendly interface with **AJAX** updates
+- Interactive calendar functionality via **FullCalendar**
 
-Цей проєкт створений з урахуванням кращих практик веб-розробки, щоб допомогти школам підвищити ефективність управління навчанням.
-
----
-
-## 🛠️ Технології та їх використання
-
-| Технологія          | Опис                                        | Використання в проекті                                  |
-|---------------------|---------------------------------------------|---------------------------------------------------------|
-| ![Python](https://img.shields.io/badge/Python-3.13-blue?logo=python&style=flat-square) | Основна мова програмування | Серверна логіка, моделі, обробка запитів                |
-| ![Django](https://img.shields.io/badge/Django-5.2-green?logo=django&style=flat-square) | Веб-фреймворк Python       | Вся архітектура проекту, маршрутизація, ORM, CBV        |
-| ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple?logo=bootstrap&style=flat-square) | CSS фреймворк для UI       | Стилізація, адаптивний дизайн, модальні вікна, кнопки   |
-| ![FullCalendar](https://img.shields.io/badge/FullCalendar-6.1.x-orange?logo=javascript&style=flat-square) | Бібліотека календарів      | Відображення і керування подіями у календарі            |
-| ![SQLite](https://img.shields.io/badge/SQLite-3.39-lightgrey?logo=sqlite&style=flat-square) | База даних за замовчуванням| Зберігання даних користувачів, завдань, статусів        |
-| ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow?logo=javascript&style=flat-square) | Скрипти для динаміки       | AJAX-запити, інтерактивність (прикріплення, видалення)  |
-| ![Crispy Forms](https://img.shields.io/badge/django--crispy--forms-orange?logo=django&style=flat-square) | Гарне відображення форм    | Рендеринг форм з красивим HTML і Bootstrap класами      |
-| ![Git](https://img.shields.io/badge/Git-F05032?logo=git&style=flat-square)           | Контроль версій            | Ведення історії розробки і командна робота              |
+This project follows best web development practices to enhance the efficiency of managing educational workflows.
 
 ---
 
+## 🛠️ Technologies Used
 
-### Основні можливості:
-- Інтеграція з [FullCalendar.io](https://fullcalendar.io/)
-- Події створюються, редагуються і видаляються у модальних вікнах через AJAX
-- Підтримка `all-day` подій, тривалих подій, перетягування
-- Динамічне оновлення календаря після змін
-- Валідація форм і оновлення через partial-шаблони
-
-
-## 🏗 Архітектура
-
-- Проект поділений на окремі додатки Django:
-  - **accounts** — керування користувачами та ролями
-  - **tasks** — робота із завданнями (CRUD, статуси, фільтри)
-  - **events** — події (подібна логіка до завдань)
-  - **calendarapp** — інтеграція з FullCalendar (створення/редагування подій через AJAX)
-  - **dashboard** — основна панель користувача, керування акаунтами
-- Використання **Class-Based Views (CBV)** для організації коду
-- **RESTful** підхід у маршрутах
-- **Рольова модель** з перевіркою доступу
-- **AJAX** для динамічного оновлення даних без перезавантаження сторінок
+| Technology          | Description                                | Usage in Project                                         |
+|---------------------|--------------------------------------------|----------------------------------------------------------|
+| ![Python](https://img.shields.io/badge/Python-3.13-blue?logo=python&style=flat-square) | Main programming language | Server-side logic, models, request handling               |
+| ![Django](https://img.shields.io/badge/Django-5.2-green?logo=django&style=flat-square) | Python web framework       | Project architecture, routing, ORM, CBV                   |
+| ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple?logo=bootstrap&style=flat-square) | CSS framework              | Styling, responsive UI, modals, buttons                   |
+| ![FullCalendar](https://img.shields.io/badge/FullCalendar-6.1.x-orange?logo=javascript&style=flat-square) | Calendar library           | Event rendering and manipulation in the calendar          |
+| ![SQLite](https://img.shields.io/badge/SQLite-3.39-lightgrey?logo=sqlite&style=flat-square) | Default database            | Stores user data, tasks, statuses                         |
+| ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow?logo=javascript&style=flat-square) | Dynamic interaction         | AJAX requests, interactivity                              |
+| ![Crispy Forms](https://img.shields.io/badge/django--crispy--forms-orange?logo=django&style=flat-square) | Form rendering tool         | Beautiful form rendering with Bootstrap                   |
+| ![Git](https://img.shields.io/badge/Git-F05032?logo=git&style=flat-square)           | Version control system      | Code history and team collaboration                      |
 
 ---
 
-## 🧩 Використані патерни програмування
+### Key Features
+- Integration with [FullCalendar.io](https://fullcalendar.io/)
+- Events created, edited, and deleted through AJAX-powered modals
+- Supports all-day and multi-day events with drag-and-drop
+- Calendar refreshes dynamically upon event changes
+- Form validation and partial template updates
 
-- **Decorator (login_required)** — захист приватних сторінок
-- **Mixin (Custom Permission Mixin)** — для повторного використання логіки доступу
-- **Factory Pattern (get_or_create)** — створення або отримання статусів завдань
-- **Template Inheritance** — єдина базова структура UI для всіх сторінок
-- **Command Pattern** — окремі методи для дій, як-от toggle статусів
-- **DRY (Don't Repeat Yourself)** — уникнення дублювання коду через CBV та міксини
+## 🏗 Architecture
+
+- Modular Django structure with separate apps:
+  - **accounts** — user and role management
+  - **tasks** — task CRUD operations, filters, statuses
+  - **events** — event handling
+  - **calendarapp** — AJAX-based FullCalendar integration
+  - **dashboard** — user panel and account control
+- Use of **Class-Based Views (CBV)** for clean logic
+- **RESTful** URL design
+- Role-based access control
+- **AJAX** used for dynamic, non-refresh page updates
 
 ---
 
-## 🛠️ Інструкція для запуску
+## 🧩 Design Patterns Implemented
 
-### Крок 1: Клонування репозиторію
+- **Decorator (login_required)** — restrict access to private views
+- **Mixin (Custom Permission Mixin)** — reusable access logic
+- **Factory Pattern (get_or_create)** — create or retrieve task statuses
+- **Template Inheritance** — unified UI layout via base templates
+- **Command Pattern** — encapsulated logic (e.g., toggle status)
+- **DRY Principle** — eliminate code repetition via CBV and helpers
+
+---
+
+## 🛠️ Project Setup Instructions
+
+### Step 1: Clone the repository
 ```bash
 git clone https://github.com/Mykhailo-Tr/IT-Turik.git
 cd IT-Turik
 ```
 
-### Крок 2: Віртуальне середовище (рекомендується)
+### Step 2: Create a virtual environment (recommended)
 ```bash
 python3 -m venv .venv
 
@@ -86,30 +84,23 @@ source .venv/bin/activate
 .\.venv\Scripts\activate
 ```
 
-### Крок 4: Встановлення залежностей
+### Step 3: Install dependencies
 ```bash
 pip3 install -r requirements.txt
-
 ```
 
-
-### Крок 5: Міграцій
+### Step 4: Run migrations
 ```bash
 python3 manage.py makemigrations
 python3 manage.py migrate
 ```
 
-### Крок 6: Створення суперкористувача
+### Step 5: Create a superuser
 ```bash
 python3 manage.py createsuperuser
 ```
 
-
-
-### Крок 7: Запуск сервера
+### Step 6: Run the development server
 ```bash
-python3 manage.py runserver 127.0.0.0:8000
+python3 manage.py runserver 127.0.0.1:8000
 ```
-
-
-
