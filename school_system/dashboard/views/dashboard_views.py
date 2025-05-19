@@ -53,18 +53,21 @@ def create_account_view(request, role):
     else:
         messages.error(request, 'Невідома роль.')
         return redirect('dashboard')
-    
+
     if request.method == 'POST':
         form = form_class(request.POST)
         if form.is_valid():
-            form.save() 
+            form.save()
             messages.success(request, f'{role.capitalize()} успішно створено.')
             return redirect('dashboard_accounts')
-    
+    else:
+        form = form_class()  # GET запит → пуста форма
+
     context = {
         'page': 'dashboard',
-        'form': form_class(),
+        'form': form,  # ✅ передається актуальна форма з помилками, якщо є
         'role': role,
     }
     return render(request, 'dashboard/forms/create_user.html', context)
+
 

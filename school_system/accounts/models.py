@@ -79,10 +79,9 @@ class UserProfile(models.Model):
         try:
             this = UserProfile.objects.get(pk=self.pk)
             if this.profile_picture != self.profile_picture and this.profile_picture.name != 'profile_pictures/default.png':
-                # Видалити попереднє зображення
                 if default_storage.exists(this.profile_picture.path):
                     default_storage.delete(this.profile_picture.path)
         except UserProfile.DoesNotExist:
-            pass  # новий запис — нічого не видаляємо
+            pass
 
         super().save(*args, **kwargs)

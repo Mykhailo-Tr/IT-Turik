@@ -32,7 +32,7 @@ class BaseSignUpForm(UserCreationForm):
     last_name = forms.CharField(max_length=30, required=True, label='Last Name')
     
     date_of_birth = forms.DateField(
-        required=True,
+        required=False,
         widget=forms.DateInput(attrs={'type': 'date'}),
         label='Date of Birth'
     )
@@ -43,6 +43,9 @@ class BaseSignUpForm(UserCreationForm):
 
     def clean_date_of_birth(self):
         dob = self.cleaned_data.get('date_of_birth')
+        if not dob:
+            return dob  
+
         today = timezone.now().date()
 
         if dob > today:
@@ -53,6 +56,13 @@ class BaseSignUpForm(UserCreationForm):
             raise ValidationError(f"User must be at least {min_age} years old.")
         
         return dob
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("Email already exists.")
+        return email
+
 
     def save_user(self, role):
         user = super().save(commit=False)
@@ -121,7 +131,7 @@ class UserUpdateForm(forms.ModelForm):
 
 class UserProfileUpdateForm(forms.ModelForm):
     date_of_birth = forms.DateField(
-        required=True,
+        required=False,
         widget=forms.DateInput(attrs={'type': 'date'}),
         label='Date of Birth'
     )

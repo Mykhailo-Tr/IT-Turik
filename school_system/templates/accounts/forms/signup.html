@@ -19,7 +19,9 @@
                         {% for field in form %}
                             {% if field|widget_type == "checkboxselectmultiple" %}
                                 <div class="mb-3">
-                                    <label class="form-label d-block">{{ field.label }}</label>
+                                    <label class="form-label d-block">
+                                        {{ field.label }}{% if field.field.required %} *{% endif %}
+                                    </label>
                                     {% for checkbox in field %}
                                         <div class="form-check">
                                             {{ checkbox.tag }}
@@ -34,16 +36,26 @@
                                 </div>
                             {% elif field|widget_type == "selectmultiple" or field|widget_type == "select" %}
                                 <div class="mb-3">
-                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                    <label for="{{ field.id_for_label }}" class="form-label">
+                                        {{ field.label }}{% if field.field.required %} *{% endif %}
+                                    </label>
                                     {{ field|add_class:"form-select" }}
+                                    {% if field.help_text %}
+                                        <div class="form-text text-muted">{{ field.help_text }}</div>
+                                    {% endif %}
                                     {% if field.errors %}
                                         <div class="text-danger small">{{ field.errors.0 }}</div>
                                     {% endif %}
                                 </div>
                             {% else %}
                                 <div class="mb-3">
-                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                    <label for="{{ field.id_for_label }}" class="form-label">
+                                        {{ field.label }}{% if field.field.required %} *{% endif %}
+                                    </label>
                                     {{ field|add_class:"form-control" }}
+                                    {% if field.help_text %}
+                                        <div class="form-text text-muted">{{ field.help_text }}</div>
+                                    {% endif %}
                                     {% if field.errors %}
                                         <div class="text-danger small">{{ field.errors.0 }}</div>
                                     {% endif %}
