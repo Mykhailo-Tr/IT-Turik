@@ -145,38 +145,37 @@ class ParentSignUpView(UserSignUpView):
         return super().get_context_data(**kwargs)
 
 
-@login_required(login_url='login')
-def account_view(request, user_id=None):
-    if user_id:
-        user = get_object_or_404(User, id=user_id)
-    else:
-        user = request.user
-    profile_user = get_object_or_404(UserProfile, user=user)
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class AccountView(View):
+    def get(self, request, user_id=None):
+        user = get_object_or_404(User, id=user_id) if user_id else request.user
+        profile_user = get_object_or_404(UserProfile, user=user)
 
-    context = {
-        'user': user,
-        'user_id': user.id,
-        'profile_user': profile_user,
-    }
-
-    return render(request, 'accounts/account.html', context)
+        context = {
+            'user': user,
+            'user_id': user.id,
+            'profile_user': profile_user,
+        }
+        return render(request, 'accounts/account.html', context)
 
 
-@login_required(login_url='login')
-def profile_view(request, user_id=None):
-    if user_id:
-        if not (request.user.role == 'admin' or request.user.role == 'teacher'):
-            return redirect('dashboard_accounts')
-        target_user = get_object_or_404(User, id=user_id)
-    else:
-        target_user = request.user
-        
-    context = {
-        'page': 'profile',
-        'user': target_user,
-        'profile': request.user.profile,
-    }
-    return render(request, 'accounts/profile.html', context)
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class ProfileView(View):
+    def get(self, request, user_id=None):
+        if user_id:
+            if not (request.user.role == 'admin' or request.user.role == 'teacher'):
+                return redirect('dashboard_accounts')
+            target_user = get_object_or_404(User, id=user_id)
+        else:
+            target_user = request.user
+
+        context = {
+            'page': 'profile',
+            'user': target_user,
+            'profile': target_user.profile,  # важливо — профіль саме того користувача
+        }
+        return render(request, 'accounts/profile.html', context)
+
 
 
 @login_required(login_url='login')

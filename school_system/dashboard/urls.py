@@ -9,12 +9,12 @@ urlpatterns = [
     path('', dashboard_views.dashboard_view, name='dashboard'),
     path('accounts/', dashboard_views.accounts_view, name='dashboard_accounts'),
     
-    path('accounts/<int:user_id>/', accounts_views.account_view, name='account'),
+    path('accounts/<int:user_id>/', accounts_views.AccountView.as_view(), name='account'),
     path('accounts/create/<str:role>/', dashboard_views.create_account_view, name='create_account'),
     path('accounts/<int:user_id>/edit/', accounts_views.edit_account_view, name='edit_account'),
     path('accounts/<int:user_id>/delete/', accounts_views.DeleteAccountView.as_view(), name='delete_account'),
     
-    path('profile/<int:user_id>/', accounts_views.profile_view, name='profile'),
+    path('profile/<int:user_id>/', accounts_views.ProfileView.as_view(), name='profile'),
     path('profile/<int:user_id>/edit/', accounts_views.edit_profile_view, name='edit_profile'),
     path('profile/<int:user_id>/delete-photo/', accounts_views.delete_profile_photo_view, name='delete_profile_photo'),
     
