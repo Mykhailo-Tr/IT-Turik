@@ -19,7 +19,6 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('profile/edit/', views.edit_profile_view, name='edit_profile'),
     path('profile/delete-photo/', views.delete_profile_photo_view, name='dashboard_delete_profile_photo'),
-
 ]
 
 if settings.DEBUG:

@@ -114,19 +114,27 @@ class ParentSignUpForm(BaseSignUpForm):
         parent.children.set(self.cleaned_data['children'])
         return user
 
-    
+
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['email', 'first_name', 'last_name']
-        
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        qs = User.objects.filter(email=email)
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise ValidationError("Email already exists.")
+        return email
+
     @transaction.atomic
     def save(self, commit=True):
         user = super().save(commit=False)
         if commit:
             user.save()
         return user
-        
 
 
 class UserProfileUpdateForm(forms.ModelForm):
@@ -135,13 +143,29 @@ class UserProfileUpdateForm(forms.ModelForm):
         widget=forms.DateInput(attrs={'type': 'date'}),
         label='Date of Birth'
     )
-    
+
     class Meta:
         model = UserProfile
         fields = ['profile_picture', 'bio', 'date_of_birth']
-        
+
+    def clean_date_of_birth(self):
+        dob = self.cleaned_data.get('date_of_birth')
+        if not dob:
+            return dob
+
+        today = timezone.now().date()
+        if dob > today:
+            raise ValidationError("Date of birth cannot be in the future.")
+
+        min_age = 5
+        if dob > today - timedelta(days=min_age * 365):
+            raise ValidationError(f"User must be at least {min_age} years old.")
+
+        return dob
+
+    @transaction.atomic
     def save(self, commit=True):
-        user_profile = super().save(commit=False)
+        profile = super().save(commit=False)
         if commit:
-            user_profile.save()
-        return user_profile
+            profile.save()
+        return profile

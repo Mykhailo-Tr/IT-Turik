@@ -23,6 +23,5 @@ urlpatterns = [
     path('subjects/detach/<int:subject_id>/', detach_subject_view, name='detach_subject'),
     path('subjects/delete/<int:subject_id>/', delete_subject_view, name='delete_subject'),
 
-
     path('children/', children_view, name='dashboard_children'),
 ]
