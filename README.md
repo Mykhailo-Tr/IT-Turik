@@ -68,40 +68,66 @@ This project follows best web development practices to enhance the efficiency of
 
 ## 🛠️ Project Setup Instructions
 
-### Step 1: Clone the repository
+### 🔧 Quick Auto-Setup Script
+### For Linux:
+You can use `setup.sh` to automatically configure and run the project:
+
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+### For Windows: 
+
+Just run `setup.bat`.
+
+---
+
+### Manual Setup
+
+#### Step 1: Clone the repository
 ```bash
 git clone https://github.com/Mykhailo-Tr/IT-Turik.git
 cd IT-Turik
 ```
 
-### Step 2: Create a virtual environment (recommended)
+#### Step 2: Create a virtual environment
+Save this as `setup.bat` (for Windows):
+```bat
+
+```
 ```bash
 python3 -m venv .venv
-
-# Linux/macOS
 source .venv/bin/activate
-# Windows
-.\.venv\Scripts\activate
 ```
 
-### Step 3: Install dependencies
+#### Step 3: Install dependencies
 ```bash
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
-### Step 4: Run migrations & collect static
+#### Step 4: Migrate & Collect Static
 ```bash
-python3 manage.py collectstatic
-python3 manage.py makemigrations
-python3 manage.py migrate
+python manage.py collectstatic --noinput
+python manage.py makemigrations
+python manage.py migrate
 ```
 
-### Step 5: Create a superuser
+#### Step 5: Create superuser
 ```bash
-python3 manage.py createsuperuser
+python manage.py createsuperuser
 ```
 
-### Step 6: Run the development server
+#### Step 6: Run development server
 ```bash
-python3 manage.py runserver 127.0.0.1:8000
+python manage.py runserver 127.0.0.1:8000
 ```
+---
+
+## 🎉 Final Thoughts
+
+We hope you find this project useful and enjoyable! If you have any questions or feedback, don't hesitate to reach out to us at [rohatyn.team@gmail.com](mailto:rohatyn.team@gmail.com).
+
+Best regards, the Rohatyn Team.
+
+Happy coding! 🎓

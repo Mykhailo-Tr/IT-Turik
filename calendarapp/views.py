@@ -22,6 +22,11 @@ class FullCalendarView(LoginRequiredMixin, TemplateView):
         context["form"] = CreateEventForm(user=self.request.user)
         context["page"] = "calendar"
         return context
+    
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        return super().get(request, *args, **kwargs)
 
 
 class EventListJsonView(LoginRequiredMixin, View):
