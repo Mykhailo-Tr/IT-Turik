@@ -124,7 +124,15 @@ python manage.py createsuperuser
 python manage.py runserver 127.0.0.1:8000
 ```
 ---
+## 👥 Team & Roles
 
+| Contributor        | Role & Contribution                                                                 |
+|--------------------|--------------------------------------------------------------------------------------|
+| **Mykhailo Tretiak** ([@Mykhailo-Tr](https://github.com/Mykhailo-Tr)) | Backend architecture, full Django setup, documentation, UI integration             |
+| **Denys Balyuk** ([@Mox1toGH](https://github.com/Mox1toGH))       | Frontend styling, modal integration, testing and polishing UX                         |
+| **Mykhailo Sumik** ([@dsow23](https://github.com/dsow23))         | Frontend styling, system-wide testing, cross-platform compatibility, demo database creation and seeding |
+
+---
 ## 🎉 Final Thoughts
 
 We hope you find this project useful and enjoyable! If you have any questions or feedback, don't hesitate to reach out to us at [rohatyn.team@gmail.com](mailto:rohatyn.team@gmail.com).
