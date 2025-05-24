@@ -92,10 +92,7 @@ cd IT-Turik
 ```
 
 #### Step 2: Create a virtual environment
-Save this as `setup.bat` (for Windows):
-```bat
 
-```
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
