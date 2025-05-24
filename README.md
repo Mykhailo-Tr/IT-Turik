@@ -91,10 +91,14 @@ git clone https://github.com/Mykhailo-Tr/IT-Turik.git
 cd IT-Turik
 ```
 
-#### Step 2: Create a virtual environment
+#### Step 2: Create a virtual environment (optional)
 
 ```bash
-python3 -m venv .venv
+python -m venv .venv
+
+# For Windows:
+call .venv\Scripts\activate
+# For Linux:
 source .venv/bin/activate
 ```
 
@@ -110,7 +114,7 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-#### Step 5: Create superuser
+#### Step 5: Create superuser (optional)
 ```bash
 python manage.py createsuperuser
 ```
