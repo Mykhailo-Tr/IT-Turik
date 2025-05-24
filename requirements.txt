@@ -1,0 +1,6 @@
+Django
+django-crispy-forms
+crispy-bootstrap5
+pytz
+tzdata
+gunicorn  # For deployment

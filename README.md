@@ -89,8 +89,9 @@ source .venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
-### Step 4: Run migrations
+### Step 4: Run migrations & collect static
 ```bash
+python3 manage.py collectstatic
 python3 manage.py makemigrations
 python3 manage.py migrate
 ```
